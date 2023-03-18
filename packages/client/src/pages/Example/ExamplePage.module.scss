@@ -1,0 +1,11 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.container {
+  @include center;
+  @include column;
+  justify-content: space-around;
+  background-color: $base-color;
+  width: 30rem;
+  height: 30rem;
+}
