@@ -1,5 +1,5 @@
 import React, { ErrorInfo, ReactNode } from 'react'
-import s from './ErrorBoundary.module.scss'
+import { ErrorBoundaryInfo } from './ErrorBoundaryInfo'
 
 interface State {
   error: Error | null
@@ -27,19 +27,13 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
-    if (this.state.errorInfo) {
-      return (
-        <div className={s.errorScreen}>
-          <h2>Произошла ошибка. Свяжитесь со службой поддержки.</h2>
-          <details className={s.description}>
-            {this.state.error && this.state.error.toString()}
-            <br />
-            {this.state.errorInfo.componentStack}
-          </details>
-        </div>
-      )
-    }
-
-    return this.props.children
+    return this.state.errorInfo ? (
+      <ErrorBoundaryInfo
+        error={this.state.error}
+        errorInfo={this.state.errorInfo}
+      />
+    ) : (
+      this.props.children
+    )
   }
 }
