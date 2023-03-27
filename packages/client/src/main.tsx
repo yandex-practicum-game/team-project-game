@@ -2,7 +2,6 @@ import './main.scss'
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ErrorBoundary } from './components/ErrorBoundary'
 
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routers'
