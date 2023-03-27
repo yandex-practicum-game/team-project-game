@@ -8,11 +8,12 @@ import { Input } from '../../components/Input'
 import { AuthAPI } from '../../api/Auth/AuthAPI'
 import { ReasonResponse } from '../../api/Auth/types'
 import { Spinner } from '../../components/Spinner'
+import { Link } from 'react-router-dom'
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [loginError, setLoginError] = useState('')
-  const [inputValues, setInputValues] = useState({ login: '', password: '' })
+  const [userData, setUserData] = useState({ login: '', password: '' })
 
   useEffect(() => {
     getUser()
@@ -38,7 +39,7 @@ export const LoginPage = () => {
       event.preventDefault()
       setIsLoading(true)
       try {
-        await AuthAPI.signin(inputValues)
+        await AuthAPI.signin(userData)
         console.log('Success Login, redirect to game page')
       } catch (error) {
         if (request.isAxiosError(error) && error.response) {
@@ -49,7 +50,7 @@ export const LoginPage = () => {
         setIsLoading(false)
       }
     },
-    [inputValues, loginError]
+    [userData]
   )
 
   const onChangeInput = useCallback(
@@ -58,9 +59,9 @@ export const LoginPage = () => {
       const name = target.name
       const value = target.value
 
-      setInputValues({ ...inputValues, [name]: value })
+      setUserData(prevValue => ({ ...prevValue, [name]: value }))
     },
-    [inputValues, setInputValues]
+    []
   )
 
   return (
@@ -78,7 +79,7 @@ export const LoginPage = () => {
               pattern={'^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$'}
               placeholder={'Nickname'}
               type={'text'}
-              value={inputValues.login}
+              value={userData.login}
               isShowError={false}
               onChange={onChangeInput}
             />
@@ -89,16 +90,16 @@ export const LoginPage = () => {
               pattern={'^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$'}
               placeholder={'Password'}
               type={'password'}
-              value={inputValues.password}
+              value={userData.password}
               isShowError={false}
               onChange={onChangeInput}
             />
           </form>
           {loginError && <span className={s.loginError}>{loginError}</span>}
           <Button text={'enter'} onClick={login} form={'login-form'} />
-          <a href="#" className={s.registrationLink}>
+          <Link className={s.registrationLink} to="/registration">
             Don't you have an account yet?
-          </a>
+          </Link>
         </div>
       )}
     </main>
