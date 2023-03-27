@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import s from './Input.module.scss'
 
 export type InputProps = {
@@ -13,7 +13,7 @@ export type InputProps = {
   isShowError: boolean
 }
 
-export const Input: React.FC<InputProps> = props => {
+export const Input: React.FC<InputProps> = memo(props => {
   const {
     error,
     name,
@@ -44,4 +44,4 @@ export const Input: React.FC<InputProps> = props => {
       {isShowError && <span className={s.error}>{error}</span>}
     </div>
   )
-}
+})

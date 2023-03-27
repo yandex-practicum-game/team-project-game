@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import s from './Button.module.scss'
 
 export type ButtonProps = {
@@ -8,7 +8,7 @@ export type ButtonProps = {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const Button: React.FC<ButtonProps> = props => {
+export const Button: React.FC<ButtonProps> = memo(props => {
   const { onClick, text, form, type } = props
 
   return (
@@ -16,4 +16,4 @@ export const Button: React.FC<ButtonProps> = props => {
       {text}
     </button>
   )
-}
+})
