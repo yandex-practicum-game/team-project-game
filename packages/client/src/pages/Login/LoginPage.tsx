@@ -9,6 +9,7 @@ import { AuthAPI } from '../../api/Auth/AuthAPI'
 import { ReasonResponse } from '../../api/Auth/types'
 import { Spinner } from '../../components/Spinner'
 import { Link } from 'react-router-dom'
+import { PATHNAMES } from '../../constants/pathnames'
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -16,22 +17,21 @@ export const LoginPage = () => {
   const [userData, setUserData] = useState({ login: '', password: '' })
 
   useEffect(() => {
-    getUser()
-  }, [])
-
-  const getUser = useCallback(async () => {
-    try {
-      const { data: user } = await AuthAPI.getUser()
-      console.log('user', user)
-      console.log('Success get user, redirect to game page') // TODO
-    } catch (error) {
-      if (request.isAxiosError(error) && error.response) {
-        const data = error.response.data as ReasonResponse
-        console.log('get user error:', data.reason)
-      }
-    } finally {
-      setIsLoading(false)
-    }
+    AuthAPI.getUser()
+      .then(response => {
+        const user = response.data
+        console.log('user', user)
+        console.log('Success get user, redirect to game page') // TODO
+      })
+      .catch(error => {
+        if (request.isAxiosError(error) && error.response) {
+          const data = error.response.data as ReasonResponse
+          console.log('get user error:', data.reason)
+        }
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [])
 
   const login = useCallback(
@@ -97,7 +97,7 @@ export const LoginPage = () => {
           </form>
           {loginError && <span className={s.loginError}>{loginError}</span>}
           <Button text={'enter'} onClick={login} form={'login-form'} />
-          <Link className={s.registrationLink} to="/registration">
+          <Link className={s.registrationLink} to={PATHNAMES.REGISTRATION}>
             Don't you have an account yet?
           </Link>
         </div>
