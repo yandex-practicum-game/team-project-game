@@ -12,18 +12,15 @@ export const routes: RouteObject[] = [
   {
     path: PATHNAMES.ERROR500,
     element: (
-      <ErrorPage
-        errorTitle={'500'}
-        errorSubtitle={'Потеряна связь с космосом.'}
-      />
+      <ErrorPage title={'500'} subtitle={'Потеряна связь с космосом.'} />
     ),
   },
   {
     path: PATHNAMES.ERROR404,
     element: (
       <ErrorPage
-        errorTitle={'404'}
-        errorSubtitle={'Ваш корабль попал в неизведанные просторы космоса.'}
+        title={'404'}
+        subtitle={'Ваш корабль попал в неизведанные просторы космоса.'}
       />
     ),
   },
