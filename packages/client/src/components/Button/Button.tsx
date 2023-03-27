@@ -8,7 +8,7 @@ export type ButtonProps = {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const Button: React.FC<ButtonProps> = memo(props => {
+export const Button = memo<ButtonProps>(props => {
   const { onClick, text, form, type } = props
 
   return (

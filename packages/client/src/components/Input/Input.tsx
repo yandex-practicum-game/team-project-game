@@ -13,7 +13,7 @@ export type InputProps = {
   isShowError: boolean
 }
 
-export const Input: React.FC<InputProps> = memo(props => {
+export const Input = memo<InputProps>(props => {
   const {
     error,
     name,
