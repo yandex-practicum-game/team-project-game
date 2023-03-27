@@ -14,8 +14,17 @@ export type InputProps = {
 }
 
 export const Input: React.FC<InputProps> = props => {
-  const { error, name, onChange, type, value } = props
-  const { pattern, placeholder, isShowError, label } = props
+  const {
+    error,
+    name,
+    onChange,
+    type,
+    value,
+    pattern,
+    placeholder,
+    isShowError,
+    label,
+  } = props
 
   return (
     <div className={s.inputComponent}>
