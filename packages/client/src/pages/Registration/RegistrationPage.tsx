@@ -30,9 +30,9 @@ export const RegistrationPage = () => {
       const name = target.name
       const value = target.value
 
-      setUserData({ ...userData, [name]: value })
+      setUserData(prevValue => ({ ...prevValue, [name]: value }))
     },
-    [userData, setUserData]
+    []
   )
 
   return (
