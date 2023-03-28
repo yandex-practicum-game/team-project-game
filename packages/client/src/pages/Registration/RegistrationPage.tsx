@@ -1,13 +1,23 @@
+import { Formik } from 'formik'
 import React, { useCallback, useState } from 'react'
 
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
-import { validateForm } from '../../utils/validateForm'
 
 import s from './RegistrationPage.module.scss'
 
+type UserData = {
+  email: string
+  login: string
+  first_name: string
+  second_name: string
+  phone: string
+  password: string
+  confirm_password: string
+}
+
 export const RegistrationPage = () => {
-  const [userData, setUserData] = useState({
+  const [userData] = useState<UserData>({
     email: '',
     login: '',
     first_name: '',
@@ -17,110 +27,133 @@ export const RegistrationPage = () => {
     confirm_password: '',
   })
 
-  const createAccount = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault()
+  const createAccount = useCallback((values: UserData) => {
+    console.log('userData:', values)
+  }, [])
 
-      const target = event.target as HTMLButtonElement
-      const isValid = validateForm(target.form!)
+  const validate = useCallback((values: UserData) => {
+    const errors = {} as Record<string, unknown>
 
-      if (isValid) {
-        console.log(userData)
-      }
-    },
-    [userData]
-  )
+    if (!values.email.match('[a-zA-Z\\d-]+@+[a-zA-Z\\d-]+\\.+[a-zA-Z\\d-]*')) {
+      errors.email = 'Invalid email'
+    }
+    if (!values.login.match('^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$')) {
+      errors.login = 'Invalid login'
+    }
+    if (!values.first_name.match('^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*')) {
+      errors.first_name = 'Invalid first name'
+    }
+    if (!values.second_name.match('^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*')) {
+      errors.second_name = 'Invalid second name'
+    }
+    if (!String(values.phone).match('^[\\+]?[0-9]{10,15}$')) {
+      errors.phone = 'Invalid phone'
+    }
+    if (!values.password.match('^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$')) {
+      errors.password = 'Invalid password'
+    }
+    if (
+      !values.confirm_password.match('^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$')
+    ) {
+      errors.confirm_password = 'Invalid confirmpassword'
+    }
 
-  const onChangeInput = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const target = event.target as HTMLInputElement
-      const name = target.name
-      const value = target.value
-
-      target.setCustomValidity('') // error reset when start type
-      setUserData(prevValue => ({ ...prevValue, [name]: value }))
-    },
-    []
-  )
+    return errors
+  }, [])
 
   return (
     <main className={s.registrationPage}>
       <div className={s.registrationForm}>
         <h1 className={s.title}>Create account</h1>
-        <form className={s.form} name="registration form" id="reg-form">
-          <Input
-            label="Email"
-            error={'Invalid Email'}
-            name={'email'}
-            pattern={'[a-zA-Z\\d-]+@+[a-zA-Z\\d-]+\\.+[a-zA-Z\\d-]*'}
-            placeholder={'Email Address'}
-            type={'email'}
-            value={userData.email}
-            onChange={onChangeInput}
-          />
-          <Input
-            label="Nickname"
-            error={'Invalid nickname'}
-            name={'login'}
-            pattern={'^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$'}
-            placeholder={'Nickname'}
-            type={'text'}
-            value={userData.login}
-            onChange={onChangeInput}
-          />
-          <Input
-            label="Phone number"
-            error={'Invalid number'}
-            name={'phone'}
-            pattern={'^[\\+]?[0-9]{10,15}$'}
-            placeholder={'Phone number'}
-            type={'number'}
-            value={userData.phone}
-            onChange={onChangeInput}
-          />
-          <Input
-            label="Name"
-            error={'Invalid name'}
-            name={'first_name'}
-            pattern={'^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*'}
-            placeholder={'Name'}
-            type={'text'}
-            value={userData.first_name}
-            onChange={onChangeInput}
-          />
-          <Input
-            label="Surname"
-            error={'Invalid surname'}
-            name={'second_name'}
-            pattern={'^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*'}
-            placeholder={'Surname'}
-            type={'text'}
-            value={userData.second_name}
-            onChange={onChangeInput}
-          />
+        <Formik
+          initialValues={userData}
+          validate={validate}
+          onSubmit={createAccount}>
+          {({ errors, handleSubmit, handleChange, values }) => {
+            return (
+              <>
+                <form
+                  onSubmit={handleSubmit}
+                  className={s.form}
+                  name="registration form"
+                  id="reg-form">
+                  <Input
+                    label="Email"
+                    error={'Invalid Email'}
+                    name={'email'}
+                    placeholder={'Email Address'}
+                    type={'email'}
+                    value={values.email}
+                    isShowError={!!errors.email}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    label="Nickname"
+                    error={'Invalid nickname'}
+                    name={'login'}
+                    placeholder={'Nickname'}
+                    type={'text'}
+                    value={values.login}
+                    isShowError={!!errors.login}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    label="Phone number"
+                    error={'Invalid number'}
+                    name={'phone'}
+                    placeholder={'Phone number'}
+                    type={'number'}
+                    value={values.phone}
+                    isShowError={!!errors.phone}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    label="Name"
+                    error={'Invalid name'}
+                    name={'first_name'}
+                    placeholder={'Name'}
+                    type={'text'}
+                    value={values.first_name}
+                    isShowError={!!errors.first_name}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    label="Surname"
+                    error={'Invalid surname'}
+                    name={'second_name'}
+                    placeholder={'Surname'}
+                    type={'text'}
+                    value={values.second_name}
+                    isShowError={!!errors.second_name}
+                    onChange={handleChange}
+                  />
 
-          <Input
-            label="Password"
-            error={'Invalid password'}
-            name={'password'}
-            pattern={'^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$'}
-            placeholder={'Password'}
-            type={'password'}
-            value={userData.password}
-            onChange={onChangeInput}
-          />
-          <Input
-            label="Confirm Password"
-            error={'Invalid password'}
-            name={'confirm_password'}
-            pattern={'^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$'}
-            placeholder={'Confirm Password'}
-            type={'password'}
-            value={userData.confirm_password}
-            onChange={onChangeInput}
-          />
-        </form>
-        <Button text="CREATE" onClick={createAccount} form={'reg-form'} />
+                  <Input
+                    label="Password"
+                    error={'Invalid password'}
+                    name={'password'}
+                    placeholder={'Password'}
+                    type={'password'}
+                    value={values.password}
+                    isShowError={!!errors.password}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    label="Confirm Password"
+                    error={'Invalid password'}
+                    name={'confirm_password'}
+                    placeholder={'Confirm Password'}
+                    type={'password'}
+                    value={values.confirm_password}
+                    isShowError={!!errors.confirm_password}
+                    onChange={handleChange}
+                  />
+                </form>
+                <Button text="CREATE" type="submit" form={'reg-form'} />
+              </>
+            )
+          }}
+        </Formik>
       </div>
     </main>
   )

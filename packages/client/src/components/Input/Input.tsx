@@ -5,7 +5,6 @@ export type InputProps = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   label: string
   placeholder: string
-  pattern: string
   error: string
   name: string
   type: string
@@ -20,7 +19,6 @@ export const Input = memo<InputProps>(props => {
     onChange,
     type,
     value,
-    pattern,
     placeholder,
     isShowError = true,
     label,
@@ -35,7 +33,6 @@ export const Input = memo<InputProps>(props => {
         id={name}
         placeholder={placeholder}
         value={value}
-        pattern={pattern}
         onChange={onChange}
       />
       <label htmlFor={name} className={s.label}>
