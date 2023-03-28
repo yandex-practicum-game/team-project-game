@@ -21,7 +21,7 @@ export const ErrorPage: FC<ErrorPageProps> = ({ title, subtitle }) => {
         <h2 className={s.errorPage__title}>{title}</h2>
         <p className={s.errorPage__subtitle}>{subtitle}</p>
         <div className={s.errorPage__action}>
-          <Button text="Назад" onClick={goBack} />
+          <Button text="Go back" onClick={goBack} />
         </div>
       </div>
     </div>

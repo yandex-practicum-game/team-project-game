@@ -11,17 +11,10 @@ export const routes: RouteObject[] = [
   { path: PATHNAMES.REGISTRATION, element: <RegistrationPage /> },
   {
     path: PATHNAMES.ERROR_500,
-    element: (
-      <ErrorPage title={'500'} subtitle={'Потеряна связь с космосом.'} />
-    ),
+    element: <ErrorPage title={'500'} subtitle={'Invalid server error'} />,
   },
   {
     path: PATHNAMES.ERROR_404,
-    element: (
-      <ErrorPage
-        title={'404'}
-        subtitle={'Ваш корабль попал в неизведанные просторы космоса.'}
-      />
-    ),
+    element: <ErrorPage title={'404'} subtitle={'Page is not found'} />,
   },
 ]
