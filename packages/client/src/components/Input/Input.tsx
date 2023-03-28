@@ -28,9 +28,6 @@ export const Input = memo<InputProps>(props => {
 
   return (
     <div className={s.inputComponent}>
-      <label htmlFor={name} className={s.label}>
-        {label}
-      </label>
       <input
         className={s.input}
         type={type}
@@ -41,7 +38,11 @@ export const Input = memo<InputProps>(props => {
         pattern={pattern}
         onChange={onChange}
       />
-      {isShowError && <span className={s.error}>{error}</span>}
+      <label htmlFor={name} className={s.label}>
+        <span> {label}</span>
+
+        {isShowError && <span className={s.error}>{error}</span>}
+      </label>
     </div>
   )
 })

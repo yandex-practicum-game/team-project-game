@@ -10,6 +10,7 @@ import { ReasonResponse } from '../../api/Auth/types'
 import { Spinner } from '../../components/Spinner'
 import { Link } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
+import { validateForm } from '../../utils/validateForm'
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -37,17 +38,23 @@ export const LoginPage = () => {
   const login = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault()
-      setIsLoading(true)
-      try {
-        await AuthAPI.signin(userData)
-        console.log('Success Login, redirect to game page')
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          setLoginError(data.reason)
+
+      const target = event.target as HTMLButtonElement
+      const isValid = validateForm(target.form!)
+
+      if (isValid) {
+        setIsLoading(true)
+        try {
+          await AuthAPI.signin(userData)
+          console.log('Success Login, redirect to game page')
+        } catch (error) {
+          if (request.isAxiosError(error) && error.response) {
+            const data = error.response.data as ReasonResponse
+            setLoginError(data.reason)
+          }
+        } finally {
+          setIsLoading(false)
         }
-      } finally {
-        setIsLoading(false)
       }
     },
     [userData]
@@ -59,6 +66,7 @@ export const LoginPage = () => {
       const name = target.name
       const value = target.value
 
+      target.setCustomValidity('') // error reset when start type
       setUserData(prevValue => ({ ...prevValue, [name]: value }))
     },
     []
@@ -80,7 +88,7 @@ export const LoginPage = () => {
               placeholder={'Nickname'}
               type={'text'}
               value={userData.login}
-              isShowError={false}
+              isShowError={true}
               onChange={onChangeInput}
             />
             <Input
@@ -91,7 +99,7 @@ export const LoginPage = () => {
               placeholder={'Password'}
               type={'password'}
               value={userData.password}
-              isShowError={false}
+              isShowError={true}
               onChange={onChangeInput}
             />
           </form>

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
+import { validateForm } from '../../utils/validateForm'
 
 import s from './RegistrationPage.module.scss'
 
@@ -19,7 +20,13 @@ export const RegistrationPage = () => {
   const createAccount = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault()
-      console.log(userData)
+
+      const target = event.target as HTMLButtonElement
+      const isValid = validateForm(target.form!)
+
+      if (isValid) {
+        console.log(userData)
+      }
     },
     [userData]
   )
@@ -30,6 +37,7 @@ export const RegistrationPage = () => {
       const name = target.name
       const value = target.value
 
+      target.setCustomValidity('') // error reset when start type
       setUserData(prevValue => ({ ...prevValue, [name]: value }))
     },
     []
@@ -48,7 +56,7 @@ export const RegistrationPage = () => {
             placeholder={'Email Address'}
             type={'email'}
             value={userData.email}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -59,7 +67,7 @@ export const RegistrationPage = () => {
             placeholder={'Nickname'}
             type={'text'}
             value={userData.login}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -70,7 +78,7 @@ export const RegistrationPage = () => {
             placeholder={'Phone number'}
             type={'number'}
             value={userData.phone}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -81,7 +89,7 @@ export const RegistrationPage = () => {
             placeholder={'Name'}
             type={'text'}
             value={userData.first_name}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -92,7 +100,7 @@ export const RegistrationPage = () => {
             placeholder={'Surname'}
             type={'text'}
             value={userData.second_name}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
 
@@ -104,7 +112,7 @@ export const RegistrationPage = () => {
             placeholder={'Password'}
             type={'password'}
             value={userData.password}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -115,7 +123,7 @@ export const RegistrationPage = () => {
             placeholder={'Confirm Password'}
             type={'password'}
             value={userData.confirm_password}
-            isShowError={false}
+            isShowError={true}
             onChange={onChangeInput}
           />
         </form>
