@@ -8,7 +8,7 @@
   .registrationForm {
     @include f-center;
     @include f-column;
-    background: rgba(34, 131, 137, 0.54);
+    background: $underLayer;
     box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.25);
     border-radius: 70px;
     padding: 6rem;
