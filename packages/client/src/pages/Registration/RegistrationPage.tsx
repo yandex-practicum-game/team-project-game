@@ -1,6 +1,6 @@
-import { Formik } from 'formik'
 import React, { useCallback, useState } from 'react'
 
+import { Formik } from 'formik'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 
@@ -16,48 +16,52 @@ type UserData = {
   confirm_password: string
 }
 
-export const RegistrationPage = () => {
-  const [userData] = useState<UserData>({
-    email: '',
-    login: '',
-    first_name: '',
-    second_name: '',
-    phone: '',
-    password: '',
-    confirm_password: '',
-  })
+const patterns: Record<string, unknown> = {
+  email: '[a-zA-Z\\d-]+@+[a-zA-Z\\d-]+\\.+[a-zA-Z\\d-]*',
+  login: '^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$',
+  first_name: '^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*',
+  second_name: '^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*',
+  phone: '^[\\+]?[0-9]{10,15}$',
+  password: '^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$',
+  confirm_password: '^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$',
+}
 
-  const createAccount = useCallback((values: UserData) => {
-    console.log('userData:', values)
+const userData = {
+  email: '',
+  login: '',
+  first_name: '',
+  second_name: '',
+  phone: '',
+  password: '',
+  confirm_password: '',
+}
+
+export const RegistrationPage = () => {
+  const [error, setError] = useState('')
+
+  const createAccount = useCallback((userData: UserData) => {
+    if (Object.values(userData).includes('')) {
+      setError('Please fill in all the fields')
+      return
+    }
+
+    setError('')
+    console.log('userData:', userData)
   }, [])
 
-  const validate = useCallback((values: UserData) => {
+  const validate = useCallback((values: Record<string, unknown>) => {
     const errors = {} as Record<string, unknown>
 
-    if (!values.email.match('[a-zA-Z\\d-]+@+[a-zA-Z\\d-]+\\.+[a-zA-Z\\d-]*')) {
-      errors.email = 'Invalid email'
-    }
-    if (!values.login.match('^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$')) {
-      errors.login = 'Invalid login'
-    }
-    if (!values.first_name.match('^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*')) {
-      errors.first_name = 'Invalid first name'
-    }
-    if (!values.second_name.match('^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*')) {
-      errors.second_name = 'Invalid second name'
-    }
-    if (!String(values.phone).match('^[\\+]?[0-9]{10,15}$')) {
-      errors.phone = 'Invalid phone'
-    }
-    if (!values.password.match('^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$')) {
-      errors.password = 'Invalid password'
-    }
-    if (
-      !values.confirm_password.match('^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$')
-    ) {
-      errors.confirm_password = 'Invalid confirmpassword'
-    }
+    for (const key in values) {
+      if (Object.prototype.hasOwnProperty.call(values, key)) {
+        const value = String(values[key]) as string
+        const regx = patterns[key] as string
 
+        if (value && !value.match(regx)) {
+          errors[key] = 'Invalid field'
+        }
+      }
+    }
     return errors
   }, [])
 
@@ -127,7 +131,6 @@ export const RegistrationPage = () => {
                     isShowError={!!errors.second_name}
                     onChange={handleChange}
                   />
-
                   <Input
                     label="Password"
                     error={'Invalid password'}
@@ -149,6 +152,7 @@ export const RegistrationPage = () => {
                     onChange={handleChange}
                   />
                 </form>
+                {error && <span className={s.regError}>{error}</span>}
                 <Button text="CREATE" type="submit" form={'reg-form'} />
               </>
             )

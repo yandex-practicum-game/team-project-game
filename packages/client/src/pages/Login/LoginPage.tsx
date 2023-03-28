@@ -14,10 +14,19 @@ import { Formik } from 'formik'
 
 type UserData = { login: string; password: string }
 
+const patterns: Record<string, unknown> = {
+  login: '^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$',
+  password: '^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$',
+}
+
+const userData = {
+  login: '',
+  password: '',
+}
+
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [loginError, setLoginError] = useState('')
-  const [userData] = useState<UserData>({ login: '', password: '' })
 
   useEffect(() => {
     AuthAPI.getUser()
@@ -37,10 +46,17 @@ export const LoginPage = () => {
       })
   }, [])
 
-  const login = useCallback(async (values: UserData) => {
+  const login = useCallback(async (userData: UserData) => {
+    if (Object.values(userData).includes('')) {
+      setLoginError('Please fill in all the fields')
+      return
+    }
+
+    setLoginError('')
     setIsLoading(true)
+
     try {
-      await AuthAPI.signin(values)
+      await AuthAPI.signin(userData)
       console.log('Success Login, redirect to game page')
     } catch (error) {
       if (request.isAxiosError(error) && error.response) {
@@ -52,16 +68,18 @@ export const LoginPage = () => {
     }
   }, [])
 
-  const validate = useCallback((values: UserData) => {
+  const validate = useCallback((values: Record<string, unknown>) => {
     const errors = {} as Record<string, unknown>
 
-    if (!values.login.match('^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$')) {
-      errors.login = 'Invalid login'
+    for (const key in values) {
+      if (Object.prototype.hasOwnProperty.call(values, key)) {
+        const value = String(values[key]) as string
+        const regx = patterns[key] as string
+        if (value && !value.match(regx)) {
+          errors[key] = 'Invalid field'
+        }
+      }
     }
-    if (!values.password.match('^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$')) {
-      errors.password = 'Invalid password'
-    }
-
     return errors
   }, [])
 
@@ -105,7 +123,7 @@ export const LoginPage = () => {
                   {loginError && (
                     <span className={s.loginError}>{loginError}</span>
                   )}
-                  <Button text={'enter'} type="submit" form={'login-form'} />
+                  <Button text={'ENTER'} type="submit" form={'login-form'} />
                 </>
               )
             }}
