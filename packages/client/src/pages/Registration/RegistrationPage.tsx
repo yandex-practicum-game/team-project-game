@@ -5,6 +5,7 @@ import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 
 import s from './RegistrationPage.module.scss'
+import * as Yup from 'yup'
 
 type UserData = {
   email: string
@@ -16,17 +17,7 @@ type UserData = {
   confirm_password: string
 }
 
-const patterns: Record<string, unknown> = {
-  email: '[a-zA-Z\\d-]+@+[a-zA-Z\\d-]+\\.+[a-zA-Z\\d-]*',
-  login: '^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$',
-  first_name: '^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*',
-  second_name: '^[A-ZА-ЯЁ][^\\d^\\s][a-zа-яё-]*',
-  phone: '^[\\+]?[0-9]{10,15}$',
-  password: '^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$',
-  confirm_password: '^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$',
-}
-
-const userData = {
+const userData: UserData = {
   email: '',
   login: '',
   first_name: '',
@@ -35,6 +26,19 @@ const userData = {
   password: '',
   confirm_password: '',
 }
+
+/* eslint-disable */
+const validationSchema = Yup.object().shape({
+  email: Yup.string().matches(/[a-zA-Z\d-]+@+[a-zA-Z\d-]+\.+[a-zA-Z\d-]*/),
+  login: Yup.string().matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/),
+  first_name: Yup.string().matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/),
+  second_name: Yup.string().matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/),
+  phone: Yup.string().matches(/^[\+]?[0-9]{10,15}$/),
+  password: Yup.string().matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/),
+  confirm_password: Yup.string().matches(
+    /^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/
+  ),
+})
 
 export const RegistrationPage = () => {
   const [error, setError] = useState('')
@@ -49,29 +53,13 @@ export const RegistrationPage = () => {
     console.log('userData:', userData)
   }, [])
 
-  const validate = useCallback((values: Record<string, unknown>) => {
-    const errors = {} as Record<string, unknown>
-
-    for (const key in values) {
-      if (Object.prototype.hasOwnProperty.call(values, key)) {
-        const value = String(values[key]) as string
-        const regx = patterns[key] as string
-
-        if (value && !value.match(regx)) {
-          errors[key] = 'Invalid field'
-        }
-      }
-    }
-    return errors
-  }, [])
-
   return (
     <main className={s.registrationPage}>
       <div className={s.registrationForm}>
         <h1 className={s.title}>Create account</h1>
         <Formik
           initialValues={userData}
-          validate={validate}
+          validationSchema={validationSchema}
           onSubmit={createAccount}>
           {({ errors, handleSubmit, handleChange, values }) => {
             return (

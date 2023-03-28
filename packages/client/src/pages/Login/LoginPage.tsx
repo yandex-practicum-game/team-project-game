@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import request from 'axios'
 
 import s from './LoginPage.module.scss'
+import * as Yup from 'yup'
 
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
@@ -12,17 +13,20 @@ import { Link } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
 
-type UserData = { login: string; password: string }
-
-const patterns: Record<string, unknown> = {
-  login: '^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$',
-  password: '^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$',
+type UserData = {
+  login: string
+  password: string
 }
 
-const userData = {
+const userData: UserData = {
   login: '',
   password: '',
 }
+
+const validationSchema = Yup.object().shape({
+  login: Yup.string().matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/),
+  password: Yup.string().matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/),
+})
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -68,21 +72,6 @@ export const LoginPage = () => {
     }
   }, [])
 
-  const validate = useCallback((values: Record<string, unknown>) => {
-    const errors = {} as Record<string, unknown>
-
-    for (const key in values) {
-      if (Object.prototype.hasOwnProperty.call(values, key)) {
-        const value = String(values[key]) as string
-        const regx = patterns[key] as string
-        if (value && !value.match(regx)) {
-          errors[key] = 'Invalid field'
-        }
-      }
-    }
-    return errors
-  }, [])
-
   return (
     <main className={s.loginPage}>
       {isLoading ? (
@@ -90,7 +79,10 @@ export const LoginPage = () => {
       ) : (
         <div className={s.loginForm}>
           <h1 className={s.title}>Enter to Game</h1>
-          <Formik initialValues={userData} validate={validate} onSubmit={login}>
+          <Formik
+            validationSchema={validationSchema}
+            initialValues={userData}
+            onSubmit={login}>
             {({ errors, handleSubmit, handleChange, values }) => {
               return (
                 <>
