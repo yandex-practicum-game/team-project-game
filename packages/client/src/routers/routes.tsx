@@ -10,13 +10,13 @@ export const routes: RouteObject[] = [
   { path: PATHNAMES.LOGIN, element: <LoginPage /> },
   { path: PATHNAMES.REGISTRATION, element: <RegistrationPage /> },
   {
-    path: PATHNAMES.ERROR500,
+    path: PATHNAMES.ERROR_500,
     element: (
       <ErrorPage title={'500'} subtitle={'Потеряна связь с космосом.'} />
     ),
   },
   {
-    path: PATHNAMES.ERROR404,
+    path: PATHNAMES.ERROR_404,
     element: (
       <ErrorPage
         title={'404'}
