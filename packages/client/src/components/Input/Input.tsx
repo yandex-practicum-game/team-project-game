@@ -10,7 +10,7 @@ export type InputProps = {
   name: string
   type: string
   value: string
-  isShowError: boolean
+  isShowError?: boolean
 }
 
 export const Input = memo<InputProps>(props => {
@@ -22,7 +22,7 @@ export const Input = memo<InputProps>(props => {
     value,
     pattern,
     placeholder,
-    isShowError,
+    isShowError = true,
     label,
   } = props
 

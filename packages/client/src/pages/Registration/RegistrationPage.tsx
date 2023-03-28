@@ -56,7 +56,6 @@ export const RegistrationPage = () => {
             placeholder={'Email Address'}
             type={'email'}
             value={userData.email}
-            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -67,7 +66,6 @@ export const RegistrationPage = () => {
             placeholder={'Nickname'}
             type={'text'}
             value={userData.login}
-            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -78,7 +76,6 @@ export const RegistrationPage = () => {
             placeholder={'Phone number'}
             type={'number'}
             value={userData.phone}
-            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -89,7 +86,6 @@ export const RegistrationPage = () => {
             placeholder={'Name'}
             type={'text'}
             value={userData.first_name}
-            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -100,7 +96,6 @@ export const RegistrationPage = () => {
             placeholder={'Surname'}
             type={'text'}
             value={userData.second_name}
-            isShowError={true}
             onChange={onChangeInput}
           />
 
@@ -112,7 +107,6 @@ export const RegistrationPage = () => {
             placeholder={'Password'}
             type={'password'}
             value={userData.password}
-            isShowError={true}
             onChange={onChangeInput}
           />
           <Input
@@ -123,7 +117,6 @@ export const RegistrationPage = () => {
             placeholder={'Confirm Password'}
             type={'password'}
             value={userData.confirm_password}
-            isShowError={true}
             onChange={onChangeInput}
           />
         </form>

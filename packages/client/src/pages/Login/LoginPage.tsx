@@ -88,7 +88,6 @@ export const LoginPage = () => {
               placeholder={'Nickname'}
               type={'text'}
               value={userData.login}
-              isShowError={true}
               onChange={onChangeInput}
             />
             <Input
@@ -99,7 +98,6 @@ export const LoginPage = () => {
               placeholder={'Password'}
               type={'password'}
               value={userData.password}
-              isShowError={true}
               onChange={onChangeInput}
             />
           </form>
