@@ -29,27 +29,33 @@ const userData: UserData = {
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
-  email: Yup.string().matches(/[a-zA-Z\d-]+@+[a-zA-Z\d-]+\.+[a-zA-Z\d-]*/),
-  login: Yup.string().matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/),
-  first_name: Yup.string().matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/),
-  second_name: Yup.string().matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/),
-  phone: Yup.string().matches(/^[\+]?[0-9]{10,15}$/),
-  password: Yup.string().matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/),
-  confirm_password: Yup.string().matches(
-    /^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/
-  ),
+  email: Yup.string()
+    .required('required')
+    .matches(/[a-zA-Z\d-]+@+[a-zA-Z\d-]+\.+[a-zA-Z\d-]*/, 'Invalid email'),
+  login: Yup.string()
+    .required('required')
+    .matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/, 'Invalid login'),
+  first_name: Yup.string()
+    .required('required')
+    .matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/, 'Invalid first name'),
+  second_name: Yup.string()
+    .required('required')
+    .matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/, 'Invalid second name'),
+  phone: Yup.string()
+    .required('required')
+    .matches(/^[\+]?[0-9]{10,15}$/, 'Invalid phone'),
+  password: Yup.string()
+    .required('required')
+    .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
+  confirm_password: Yup.string()
+    .required('required')
+    .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
 })
 
 export const RegistrationPage = () => {
-  const [error, setError] = useState('')
+  const [error] = useState('')
 
   const createAccount = useCallback((userData: UserData) => {
-    if (Object.values(userData).includes('')) {
-      setError('Please fill in all the fields')
-      return
-    }
-
-    setError('')
     console.log('userData:', userData)
   }, [])
 
@@ -71,72 +77,65 @@ export const RegistrationPage = () => {
                   id="reg-form">
                   <Input
                     label="Email"
-                    error={'Invalid Email'}
+                    error={errors.email}
                     name={'email'}
                     placeholder={'Email Address'}
                     type={'email'}
                     value={values.email}
-                    isShowError={!!errors.email}
                     onChange={handleChange}
                   />
                   <Input
                     label="Nickname"
-                    error={'Invalid nickname'}
+                    error={errors.login}
                     name={'login'}
                     placeholder={'Nickname'}
                     type={'text'}
                     value={values.login}
-                    isShowError={!!errors.login}
                     onChange={handleChange}
                   />
                   <Input
                     label="Phone number"
-                    error={'Invalid number'}
+                    error={errors.phone}
                     name={'phone'}
                     placeholder={'Phone number'}
                     type={'number'}
                     value={values.phone}
-                    isShowError={!!errors.phone}
                     onChange={handleChange}
                   />
                   <Input
                     label="Name"
-                    error={'Invalid name'}
+                    error={errors.first_name}
                     name={'first_name'}
                     placeholder={'Name'}
                     type={'text'}
                     value={values.first_name}
-                    isShowError={!!errors.first_name}
                     onChange={handleChange}
                   />
                   <Input
                     label="Surname"
-                    error={'Invalid surname'}
+                    error={errors.second_name}
                     name={'second_name'}
                     placeholder={'Surname'}
                     type={'text'}
                     value={values.second_name}
-                    isShowError={!!errors.second_name}
                     onChange={handleChange}
                   />
                   <Input
                     label="Password"
-                    error={'Invalid password'}
+                    error={errors.password}
                     name={'password'}
                     placeholder={'Password'}
                     type={'password'}
                     value={values.password}
-                    isShowError={!!errors.password}
                     onChange={handleChange}
                   />
                   <Input
                     label="Confirm Password"
-                    error={'Invalid password'}
+                    error={errors.confirm_password}
                     name={'confirm_password'}
                     placeholder={'Confirm Password'}
                     type={'password'}
                     value={values.confirm_password}
-                    isShowError={!!errors.confirm_password}
                     onChange={handleChange}
                   />
                 </form>

@@ -24,8 +24,12 @@ const userData: UserData = {
 }
 
 const validationSchema = Yup.object().shape({
-  login: Yup.string().matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/),
-  password: Yup.string().matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/),
+  login: Yup.string()
+    .required('required')
+    .matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/, 'Invalid login'),
+  password: Yup.string()
+    .required('required')
+    .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
 })
 
 export const LoginPage = () => {
@@ -51,11 +55,6 @@ export const LoginPage = () => {
   }, [])
 
   const login = useCallback(async (userData: UserData) => {
-    if (Object.values(userData).includes('')) {
-      setLoginError('Please fill in all the fields')
-      return
-    }
-
     setLoginError('')
     setIsLoading(true)
 
@@ -82,8 +81,10 @@ export const LoginPage = () => {
           <Formik
             validationSchema={validationSchema}
             initialValues={userData}
+            validateOnChange
+            validateOnBlur
             onSubmit={login}>
-            {({ errors, handleSubmit, handleChange, values }) => {
+            {({ errors, handleSubmit, handleChange, values, touched }) => {
               return (
                 <>
                   <form
@@ -93,23 +94,21 @@ export const LoginPage = () => {
                     id="login-form">
                     <Input
                       label={'Nickname'}
-                      error={'Invalid Login'}
+                      error={errors.login}
                       name={'login'}
                       placeholder={'Nickname'}
                       type={'text'}
                       value={values.login}
                       onChange={handleChange}
-                      isShowError={!!errors.login}
                     />
                     <Input
                       label={'Password'}
-                      error={'Invalid password'}
+                      error={errors.password}
                       name={'password'}
                       placeholder={'Password'}
                       type={'password'}
                       value={values.password}
                       onChange={handleChange}
-                      isShowError={!!errors.password}
                     />
                   </form>
                   {loginError && (

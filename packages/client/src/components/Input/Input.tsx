@@ -5,24 +5,14 @@ export type InputProps = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   label: string
   placeholder: string
-  error: string
+  error?: string
   name: string
   type: string
   value: string
-  isShowError?: boolean
 }
 
 export const Input = memo<InputProps>(props => {
-  const {
-    error,
-    name,
-    onChange,
-    type,
-    value,
-    placeholder,
-    isShowError = true,
-    label,
-  } = props
+  const { error, name, onChange, type, value, placeholder, label } = props
 
   return (
     <div className={s.inputComponent}>
@@ -38,7 +28,7 @@ export const Input = memo<InputProps>(props => {
       <label htmlFor={name} className={s.label}>
         <span> {label}</span>
 
-        {isShowError && <span className={s.error}>{error}</span>}
+        {error && <span className={s.error}>{error}</span>}
       </label>
     </div>
   )
