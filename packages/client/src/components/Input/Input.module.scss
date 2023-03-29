@@ -3,14 +3,18 @@
 
 .inputComponent {
   @include f-column;
+  flex-direction: column-reverse;
 
   .label {
     color: $text-color;
     margin-left: 1.5rem;
+    display: flex;
+    justify-content: space-between;
   }
 
   .error {
     color: $error-color;
+    margin-right: 1.5rem;
   }
 
   .input {
@@ -21,5 +25,13 @@
     height: 3.5rem;
     background-color: rgba(217, 217, 217, 0.57);
     border: 0;
+
+    &:invalid {
+      border: 1px solid $error-color;
+    }
+  }
+
+  .input:invalid.input:not(:focus) + .label > .error {
+    display: block;
   }
 }

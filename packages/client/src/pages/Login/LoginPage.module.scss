@@ -1,16 +1,16 @@
 @import './../../styles/mixins.scss';
 @import './../../styles/variables.scss';
 
-.registrationPage {
+.loginPage {
   @include f-center;
-  min-height: 100vh;
+  display: flex;
+  height: 100vh;
+  font-family: 'Mina';
 
-  .registrationForm {
+  .loginForm {
     @include f-center;
     @include f-column;
-    background: $underLayer;
-    box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 70px;
+
     padding: 6rem;
 
     .title {
@@ -26,11 +26,18 @@
     .form {
       @include f-column;
       font-size: 1.3rem;
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
       margin-top: 2rem;
     }
 
-    .regError {
+    .registrationLink {
+      color: $text-color;
+      padding: 1rem;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .loginError {
       color: $error-color;
       font-size: 1.5rem;
       text-decoration: none;
