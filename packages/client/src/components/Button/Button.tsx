@@ -5,7 +5,7 @@ export type ButtonProps = {
   text: string
   form?: string
   type?: 'button' | 'submit' | 'reset' | undefined
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const Button = memo<ButtonProps>(props => {

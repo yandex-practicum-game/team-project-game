@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import request from 'axios'
 
 import s from './LoginPage.module.scss'
+import * as Yup from 'yup'
 
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
@@ -10,11 +11,30 @@ import { ReasonResponse } from '../../api/Auth/types'
 import { Spinner } from '../../components/Spinner'
 import { Link } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
+import { Formik } from 'formik'
+
+type UserData = {
+  login: string
+  password: string
+}
+
+const userData: UserData = {
+  login: '',
+  password: '',
+}
+
+const validationSchema = Yup.object().shape({
+  login: Yup.string()
+    .required('required')
+    .matches(/^[^\d][^\s][a-zA-Z\d_-]{1,18}$/, 'Invalid login'),
+  password: Yup.string()
+    .required('required')
+    .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
+})
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [loginError, setLoginError] = useState('')
-  const [userData, setUserData] = useState({ login: '', password: '' })
 
   useEffect(() => {
     AuthAPI.getUser()
@@ -34,35 +54,22 @@ export const LoginPage = () => {
       })
   }, [])
 
-  const login = useCallback(
-    async (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault()
-      setIsLoading(true)
-      try {
-        await AuthAPI.signin(userData)
-        console.log('Success Login, redirect to game page')
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          setLoginError(data.reason)
-        }
-      } finally {
-        setIsLoading(false)
+  const login = useCallback(async (userData: UserData) => {
+    setLoginError('')
+    setIsLoading(true)
+
+    try {
+      await AuthAPI.signin(userData)
+      console.log('Success Login, redirect to game page')
+    } catch (error) {
+      if (request.isAxiosError(error) && error.response) {
+        const data = error.response.data as ReasonResponse
+        setLoginError(data.reason)
       }
-    },
-    [userData]
-  )
-
-  const onChangeInput = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const target = event.target as HTMLInputElement
-      const name = target.name
-      const value = target.value
-
-      setUserData(prevValue => ({ ...prevValue, [name]: value }))
-    },
-    []
-  )
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
 
   return (
     <main className={s.loginPage}>
@@ -71,32 +78,48 @@ export const LoginPage = () => {
       ) : (
         <div className={s.loginForm}>
           <h1 className={s.title}>Enter to Game</h1>
-          <form className={s.form} name="login form" id="login-form">
-            <Input
-              label={'Nickname'}
-              error={'Invalid Login'}
-              name={'login'}
-              pattern={'^[^\\d][^\\s][a-zA-Z\\d_-]{1,18}$'}
-              placeholder={'Nickname'}
-              type={'text'}
-              value={userData.login}
-              isShowError={false}
-              onChange={onChangeInput}
-            />
-            <Input
-              label={'Password'}
-              error={'Invalid password'}
-              name={'password'}
-              pattern={'^(?=^.{8,40}$)(?=.*\\d)(?=.*[A-Z]).*$'}
-              placeholder={'Password'}
-              type={'password'}
-              value={userData.password}
-              isShowError={false}
-              onChange={onChangeInput}
-            />
-          </form>
-          {loginError && <span className={s.loginError}>{loginError}</span>}
-          <Button text={'enter'} onClick={login} form={'login-form'} />
+          <Formik
+            validationSchema={validationSchema}
+            initialValues={userData}
+            validateOnChange
+            validateOnBlur
+            onSubmit={login}>
+            {({ errors, handleSubmit, handleChange, values, touched }) => {
+              return (
+                <>
+                  <form
+                    onSubmit={handleSubmit}
+                    className={s.form}
+                    name="login form"
+                    id="login-form">
+                    <Input
+                      label={'Nickname'}
+                      error={errors.login}
+                      name={'login'}
+                      placeholder={'Nickname'}
+                      type={'text'}
+                      value={values.login}
+                      onChange={handleChange}
+                    />
+                    <Input
+                      label={'Password'}
+                      error={errors.password}
+                      name={'password'}
+                      placeholder={'Password'}
+                      type={'password'}
+                      value={values.password}
+                      onChange={handleChange}
+                    />
+                  </form>
+                  {loginError && (
+                    <span className={s.loginError}>{loginError}</span>
+                  )}
+                  <Button text={'ENTER'} type="submit" form={'login-form'} />
+                </>
+              )
+            }}
+          </Formik>
+
           <Link className={s.registrationLink} to={PATHNAMES.REGISTRATION}>
             Don't you have an account yet?
           </Link>
