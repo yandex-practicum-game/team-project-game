@@ -13,5 +13,5 @@ export const useAnyKeyListener = (handler: () => void) => {
       window.removeEventListener('keyup', eventListener)
       window.removeEventListener('mouseup', eventListener)
     }
-  })
+  }, [])
 }

@@ -5,7 +5,7 @@ export const Crawl = () => {
     <div className={styles.body}>
       <div className={styles.fade}></div>
 
-      <section className={styles['star-wars']}>
+      <section className={styles.starWars}>
         <div className={styles.crawl}>
           <div className={styles.title}>
             <p>Galaxian</p>
