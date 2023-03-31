@@ -1,0 +1,12 @@
+.navbar {
+  display: flex;
+  padding: 21px 36px;
+
+  button {
+    padding: 10px;
+  }
+
+  button:not(:last-child) {
+    margin-right: 16px;
+  }
+}
