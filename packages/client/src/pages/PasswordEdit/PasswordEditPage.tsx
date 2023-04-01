@@ -104,7 +104,9 @@ export const PasswordEditPage = () => {
                       onChange={handleChange}
                     />
                   </form>
-                  {error && <span className={s.regError}>{error}</span>}
+                  {error && (
+                    <span className={s.passwordEdit__error}>{error}</span>
+                  )}
                 </>
               )
             }}

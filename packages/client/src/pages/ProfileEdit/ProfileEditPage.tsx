@@ -2,6 +2,7 @@ import React, {
   BaseSyntheticEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -71,6 +72,11 @@ export const ProfileEditPage = () => {
 
   const navigate = useNavigate()
 
+  const avatarPath = useMemo(
+    () => API_CONFIG.RESOURCES_URL + user.avatar,
+    [user.avatar]
+  )
+
   const onBack = function () {
     navigate(-1)
   }
@@ -91,7 +97,6 @@ export const ProfileEditPage = () => {
         setIsLoading(false)
       })
   }, [])
-  const avatarPath = API_CONFIG.RESOURCES_URL + user.avatar
 
   const updateProfile = useCallback(
     (userData: Omit<UserResponse, 'id' | 'avatar'>) => {
@@ -120,11 +125,11 @@ export const ProfileEditPage = () => {
     setTitle('Upload file')
     setFile(undefined)
   }, [])
+
   useEffect(() => {
     inputElemRef.current?.addEventListener('change', event => {
-      const file: File | null = (
-        (event.currentTarget as HTMLInputElement).files as FileList
-      )[0]
+      const target = event.currentTarget as HTMLInputElement
+      const file: File | null = (target.files as FileList)[0]
       if (file) {
         setTitle('File is loaded')
         setShowDescription(false)
@@ -150,7 +155,6 @@ export const ProfileEditPage = () => {
       setShowDescription(true)
     } else {
       const formData = new FormData()
-      console.log(file)
       formData.append('avatar', file)
       UserAPI.changeUserAvatar(formData)
         .then(response => {

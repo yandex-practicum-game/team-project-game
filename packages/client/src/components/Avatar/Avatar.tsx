@@ -1,9 +1,6 @@
 import React, { FC } from 'react'
 import s from './Avatar.module.scss'
-
 import avatarPlaceholder from '../../assets/images/avatarPlaceholder.svg'
-
-import './Avatar.module.scss'
 
 export type AvatarProps = {
   path?: string
@@ -13,13 +10,19 @@ export type AvatarProps = {
 
 export const Avatar: FC<AvatarProps> = ({ path, onClick, isEditable }) => {
   return (
-    <div className={s.avatar__wrapper} onClick={onClick}>
+    <button
+      className={
+        isEditable
+          ? `${s.avatar__wrapper}`
+          : `${s.avatar__wrapper} ${s.avatar__wrapper_notEditable}`
+      }
+      onClick={onClick}>
       <img
         className={s.avatar__img}
         src={path ? path : avatarPlaceholder}
         alt="Avatar"
       />
       {isEditable && <span className={s.avatar__text}> Поменять аватар </span>}
-    </div>
+    </button>
   )
 }

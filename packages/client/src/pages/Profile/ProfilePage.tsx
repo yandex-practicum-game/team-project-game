@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import s from './ProfilePage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { InfoRow } from '../../components/InfoRow'
@@ -26,6 +26,10 @@ export const ProfilePage = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState(defaultUserData)
+  const avatarPath = useMemo(
+    () => API_CONFIG.RESOURCES_URL + user.avatar,
+    [user.avatar]
+  )
 
   useEffect(() => {
     AuthAPI.getUser()
@@ -43,9 +47,8 @@ export const ProfilePage = () => {
         setIsLoading(false)
       })
   }, [])
-  const avatarPath = API_CONFIG.RESOURCES_URL + user.avatar
 
-  const onLogout = () => {
+  const onLogout = useCallback(() => {
     AuthAPI.logout()
       .then(() => {
         navigate(PATHNAMES.LOGIN)
@@ -56,7 +59,7 @@ export const ProfilePage = () => {
           console.log('get user error:', data.reason)
         }
       })
-  }
+  }, [])
 
   return (
     <main className={s.profilePage}>
