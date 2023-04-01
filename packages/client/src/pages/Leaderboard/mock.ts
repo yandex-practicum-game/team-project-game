@@ -6,6 +6,7 @@ export interface ILeader {
   avatar: string
   userID: number
 }
+
 export const mockLeadersList: ILeader[] = [
   {
     score: 123123,
