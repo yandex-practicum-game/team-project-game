@@ -1,9 +1,9 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
 
 export const useAnyKeyListener = (handler: () => void) => {
-  const eventListener = useCallback(() => {
+  const eventListener = () => {
     handler()
-  }, [])
+  }
 
   useEffect(() => {
     window.addEventListener('keyup', eventListener)
