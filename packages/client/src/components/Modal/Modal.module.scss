@@ -1,0 +1,27 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30rem;
+  background: $text-color;
+  border-radius: 12px;
+  margin: 20rem auto 0;
+  padding: 4rem 3rem;
+
+  &__title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 500;
+    color: $text-black;
+    margin-bottom: 1rem;
+  }
+  &__description {
+    color: $error-color;
+    font-size: 1.4rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+}

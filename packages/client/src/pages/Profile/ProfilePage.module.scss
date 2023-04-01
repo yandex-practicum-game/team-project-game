@@ -1,0 +1,72 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.profilePage {
+  min-height: 100vh;
+  @include f-center;
+
+  &__container {
+    @include f-center;
+    @include f-column;
+    text-align: center;
+    background: $underLayer;
+    box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 70px;
+    padding: 5rem;
+    width: 55%;
+  }
+
+  &__title {
+    color: $text-color;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+  }
+
+  &__info {
+    color: $text-color;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__content_left {
+    @include f-column;
+    margin-right: 2rem;
+    width: 30%;
+    align-items: center;
+  }
+
+  &__content_right {
+    @include f-column;
+    margin-left: 2rem;
+    width: 70%;
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+}
+@include tablet-view {
+  .profilePage {
+    &__info {
+      flex-direction: column;
+    }
+    &__content_left {
+      @include f-column;
+      margin-right: 0;
+      width: 100%;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    &__content_right {
+      @include f-column;
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+}
