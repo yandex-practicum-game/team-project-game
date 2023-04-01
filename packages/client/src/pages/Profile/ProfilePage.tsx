@@ -32,33 +32,33 @@ export const ProfilePage = () => {
   )
 
   useEffect(() => {
-    AuthAPI.getUser()
-      .then(response => {
+    async function fetchUser() {
+      try {
+        const response = await AuthAPI.getUser()
         const user = response.data
         setUser(user)
-      })
-      .catch(error => {
+      } catch (error) {
         if (request.isAxiosError(error) && error.response) {
           const data = error.response.data as ReasonResponse
           console.log('get user error:', data.reason)
         }
-      })
-      .finally(() => {
+      } finally {
         setIsLoading(false)
-      })
+      }
+    }
+    fetchUser()
   }, [])
 
-  const onLogout = useCallback(() => {
-    AuthAPI.logout()
-      .then(() => {
-        navigate(PATHNAMES.LOGIN)
-      })
-      .catch(error => {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
-      })
+  const onLogout = useCallback(async () => {
+    try {
+      await AuthAPI.logout()
+      navigate(PATHNAMES.LOGIN)
+    } catch (error) {
+      if (request.isAxiosError(error) && error.response) {
+        const data = error.response.data as ReasonResponse
+        console.log('get user error:', data.reason)
+      }
+    }
   }, [])
 
   return (

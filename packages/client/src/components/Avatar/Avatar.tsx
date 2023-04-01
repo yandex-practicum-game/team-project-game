@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import s from './Avatar.module.scss'
 import avatarPlaceholder from '../../assets/images/avatarPlaceholder.svg'
+import cn from 'classnames'
 
 export type AvatarProps = {
   path?: string
@@ -13,8 +14,8 @@ export const Avatar: FC<AvatarProps> = ({ path, onClick, isEditable }) => {
     <button
       className={
         isEditable
-          ? `${s.avatar__wrapper}`
-          : `${s.avatar__wrapper} ${s.avatar__wrapper_notEditable}`
+          ? cn(s.avatar__wrapper)
+          : cn(s.avatar__wrapper, s.avatar__wrapper_notEditable)
       }
       onClick={onClick}>
       <img

@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
     .required('required')
     .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
   confirmPassword: Yup.string()
+    .oneOf([Yup.ref('newPassword')], "Passwords don't match!")
     .required('required')
     .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
 })
@@ -42,22 +43,21 @@ export const PasswordEditPage = () => {
     navigate(-1)
   }
 
-  const updatePassword = useCallback((passwordData: PasswordUpdateData) => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError('Passwords are not equal')
-      return
-    }
-    UserAPI.changeUserPassword(passwordData)
-      .then(() => {
+  const updatePassword = useCallback(
+    async (passwordData: PasswordUpdateData) => {
+      try {
+        await UserAPI.changeUserPassword(passwordData)
         navigate(PATHNAMES.PROFILE)
-      })
-      .catch(error => {
+      } catch (error) {
         if (request.isAxiosError(error) && error.response) {
           const data = error.response.data as ReasonResponse
           console.log('change user password error:', data.reason)
+          setError(data.reason)
         }
-      })
-  }, [])
+      }
+    },
+    []
+  )
 
   return (
     <main className={s.passwordEdit}>

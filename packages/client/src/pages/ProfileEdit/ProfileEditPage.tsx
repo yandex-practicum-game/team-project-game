@@ -82,34 +82,34 @@ export const ProfileEditPage = () => {
   }
 
   useEffect(() => {
-    AuthAPI.getUser()
-      .then(response => {
+    async function fetchUser() {
+      try {
+        const response = await AuthAPI.getUser()
         const user = response.data
         setUser(user)
-      })
-      .catch(error => {
+      } catch (error) {
         if (request.isAxiosError(error) && error.response) {
           const data = error.response.data as ReasonResponse
           console.log('get user error:', data.reason)
         }
-      })
-      .finally(() => {
+      } finally {
         setIsLoading(false)
-      })
+      }
+    }
+    fetchUser()
   }, [])
 
   const updateProfile = useCallback(
-    (userData: Omit<UserResponse, 'id' | 'avatar'>) => {
-      UserAPI.changeUserData(userData)
-        .then(() => {
-          navigate(PATHNAMES.PROFILE)
-        })
-        .catch(error => {
-          if (request.isAxiosError(error) && error.response) {
-            const data = error.response.data as ReasonResponse
-            console.log('get user error:', data.reason)
-          }
-        })
+    async (userData: Omit<UserResponse, 'id' | 'avatar'>) => {
+      try {
+        await UserAPI.changeUserData(userData)
+        navigate(PATHNAMES.PROFILE)
+      } catch (error) {
+        if (request.isAxiosError(error) && error.response) {
+          const data = error.response.data as ReasonResponse
+          console.log('get user error:', data.reason)
+        }
+      }
     },
     []
   )

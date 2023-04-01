@@ -10,18 +10,20 @@ type PopupProps = PropsWithChildren & {
   buttonText: string
 }
 
-export const Modal = forwardRef<HTMLInputElement, PopupProps>(function Modal(
-  { title, buttonText, onClick, children, showDescription, descriptionText },
-  ref
-) {
-  return (
-    <div ref={ref} className={s.modal}>
-      <p className={s.modal__title}>{title}</p>
-      {children}
-      <Button text={buttonText} onClick={onClick}></Button>
-      {showDescription && (
-        <p className={s.modal__description}> {descriptionText} </p>
-      )}
-    </div>
-  )
-})
+export const Modal = forwardRef<HTMLInputElement, PopupProps>(
+  (
+    { title, buttonText, onClick, children, showDescription, descriptionText },
+    ref
+  ) => {
+    return (
+      <div ref={ref} className={s.modal}>
+        <p className={s.modal__title}>{title}</p>
+        {children}
+        <Button text={buttonText} onClick={onClick}></Button>
+        {showDescription && (
+          <p className={s.modal__description}> {descriptionText} </p>
+        )}
+      </div>
+    )
+  }
+)

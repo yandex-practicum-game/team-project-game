@@ -6,10 +6,12 @@ export type UserUpdateRequest = {
   email: string
   phone: string
 }
+
 export type ChangePasswordRequest = {
   oldPassword: string
   newPassword: string
 }
+
 export type UserResponse = {
   id: number
   first_name: string
