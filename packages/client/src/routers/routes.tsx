@@ -4,6 +4,7 @@ import { LoginPage } from '../pages/Login'
 import { PATHNAMES } from '../constants/pathnames'
 import { RegistrationPage } from '../pages/Registration'
 import { ErrorPage } from '../pages/Error'
+import { LeaderboardPage } from '../pages/Leaderboard'
 import { PasswordEditPage } from '../pages/PasswordEdit'
 import { ProfileEditPage } from '../pages/ProfileEdit'
 import { ProfilePage } from '../pages/Profile'
@@ -20,6 +21,7 @@ export const routes: RouteObject[] = [
     path: PATHNAMES.ERROR_404,
     element: <ErrorPage title={'404'} subtitle={'Page is not found'} />,
   },
+  { path: PATHNAMES.LEADERBOARD, element: <LeaderboardPage /> },
   { path: PATHNAMES.PROFILE, element: <ProfilePage /> },
   { path: PATHNAMES.PROFILE_EDIT, element: <ProfileEditPage /> },
   { path: PATHNAMES.PASSWORD_EDIT, element: <PasswordEditPage /> },
