@@ -21,9 +21,15 @@ export const HomePage = () => {
   return (
     <header>
       <nav className={s.navbar}>
-        <button onClick={goLoginPage}>Go to Login page</button>
-        <button onClick={goToGameStartPage}>Go to Game page</button>
-        <button onClick={goToGameOverPage}>Go to Game over page</button>
+        <button onClick={goLoginPage} className={s.navbar__item}>
+          Go to Login page
+        </button>
+        <button onClick={goToGameStartPage} className={s.navbar__item}>
+          Go to Game page
+        </button>
+        <button onClick={goToGameOverPage} className={s.navbar__item}>
+          Go to Game over page
+        </button>
       </nav>
     </header>
   )

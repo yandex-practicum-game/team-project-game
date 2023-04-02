@@ -2,11 +2,11 @@
   display: flex;
   padding: 21px 36px;
 
-  button {
+  .navbar__item {
     padding: 10px;
   }
 
-  button:not(:last-child) {
+  .navbar__item:not(:last-child) {
     margin-right: 16px;
   }
 }

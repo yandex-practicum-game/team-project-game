@@ -8,7 +8,7 @@
 
   .leftSide {
     @include f-column;
-    button:not(:last-child) {
+    .button:not(:last-child) {
       margin-bottom: 48px;
     }
   }
