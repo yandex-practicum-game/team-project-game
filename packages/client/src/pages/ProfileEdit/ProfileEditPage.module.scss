@@ -65,6 +65,7 @@
     font-size: 1.5rem;
   }
 }
+
 @include tablet-view {
   .profilePageEdit {
     &__info {
