@@ -12,11 +12,9 @@ export type AvatarProps = {
 export const Avatar: FC<AvatarProps> = ({ path, onClick, isEditable }) => {
   return (
     <button
-      className={
-        isEditable
-          ? cn(s.avatar__wrapper)
-          : cn(s.avatar__wrapper, s.avatar__wrapper_notEditable)
-      }
+      className={cn(s.avatar__wrapper, {
+        [s.avatar__wrapper_notEditable]: !isEditable,
+      })}
       onClick={onClick}>
       <img
         className={s.avatar__img}
