@@ -11,7 +11,7 @@ export const HomePage = () => {
   }
 
   const goToGameStartPage = () => {
-    navigate(PATHNAMES.GALAXIA)
+    navigate(PATHNAMES.GALAXIAN)
   }
 
   const goToGameOverPage = () => {
@@ -19,12 +19,12 @@ export const HomePage = () => {
   }
 
   return (
-    <div>
-      <div className={s.navbar}>
+    <header>
+      <nav className={s.navbar}>
         <button onClick={goLoginPage}>Go to Login page</button>
         <button onClick={goToGameStartPage}>Go to Game page</button>
         <button onClick={goToGameOverPage}>Go to Game over page</button>
-      </div>
-    </div>
+      </nav>
+    </header>
   )
 }

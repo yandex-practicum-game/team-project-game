@@ -12,14 +12,14 @@ export const GameOver = () => {
   }
 
   const goStartPage = () => {
-    navigate(PATHNAMES.GALAXIA)
+    navigate(PATHNAMES.GALAXIAN)
   }
 
   return (
     <GameWrapper>
       <h1 className={s.title}>Game Over</h1>
-      <div className={s.pageContainer}>
-        <div className={s.leftSide}>
+      <main className={s.pageContainer}>
+        <nav className={s.leftSide}>
           <Button text={'Home'} onClick={goHomePage} className={s.button} />
           <Button text={'Leaderboard'} className={s.button} />
           <Button
@@ -27,15 +27,15 @@ export const GameOver = () => {
             onClick={goStartPage}
             className={s.button}
           />
-        </div>
-        <div className={s.rightSide}>
+        </nav>
+        <aside className={s.rightSide}>
           <div className={s.scoreContainer}>
             <p className={s.score}>FINAL SCORE</p>
             <div className={s.score}>5000</div>
           </div>
           <Button text={'Save score'} className={s.button} />
-        </div>
-      </div>
+        </aside>
+      </main>
     </GameWrapper>
   )
 }

@@ -6,12 +6,7 @@ export const StartGame = () => {
   return (
     <GameWrapper>
       <h1 className={s.title}>Start Game</h1>
-      <Button
-        text={'Start'}
-        type="submit"
-        form={'login-form'}
-        className={s.button}
-      />
+      <Button text={'Start'} type="submit" className={s.button} />
     </GameWrapper>
   )
 }
