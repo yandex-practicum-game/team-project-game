@@ -11,7 +11,7 @@ export const routes: RouteObject[] = [
   { path: PATHNAMES.HOME, element: <HomePage /> },
   { path: PATHNAMES.LOGIN, element: <LoginPage /> },
   { path: PATHNAMES.REGISTRATION, element: <RegistrationPage /> },
-  { path: PATHNAMES.GALAXIA, element: <StartGame /> },
+  { path: PATHNAMES.GALAXIAN, element: <StartGame /> },
   { path: PATHNAMES.GAMEOVER, element: <GameOver /> },
   {
     path: PATHNAMES.ERROR_500,
