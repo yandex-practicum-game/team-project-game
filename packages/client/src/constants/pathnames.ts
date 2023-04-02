@@ -5,4 +5,5 @@ export enum PATHNAMES {
   ERROR_500 = '/500',
   ERROR_404 = '*',
   LEADERBOARD = '/leaderboard',
+  FORUM = '/forum',
 }
