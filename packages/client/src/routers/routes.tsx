@@ -4,6 +4,8 @@ import { LoginPage } from '../pages/Login'
 import { PATHNAMES } from '../constants/pathnames'
 import { RegistrationPage } from '../pages/Registration'
 import { ErrorPage } from '../pages/Error'
+import { StartGame } from '../pages/StartGame/StartGame'
+import { GameOver } from '../pages/GameOver'
 import { LeaderboardPage } from '../pages/Leaderboard'
 import { PasswordEditPage } from '../pages/PasswordEdit'
 import { ProfileEditPage } from '../pages/ProfileEdit'
@@ -13,6 +15,8 @@ export const routes: RouteObject[] = [
   { path: PATHNAMES.HOME, element: <HomePage /> },
   { path: PATHNAMES.LOGIN, element: <LoginPage /> },
   { path: PATHNAMES.REGISTRATION, element: <RegistrationPage /> },
+  { path: PATHNAMES.GALAXIAN, element: <StartGame /> },
+  { path: PATHNAMES.GAMEOVER, element: <GameOver /> },
   {
     path: PATHNAMES.ERROR_500,
     element: <ErrorPage title={'500'} subtitle={'Invalid server error'} />,
