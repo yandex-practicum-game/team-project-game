@@ -30,30 +30,33 @@
     align-items: center;
     width: 100%;
   }
-  &__avatar {
-  }
+
   &__content_left {
     @include f-column;
     margin-right: 2rem;
     width: 30%;
     align-items: center;
   }
+
   &__content_right {
     @include f-column;
     margin-left: 2rem;
     width: 70%;
   }
+
   &__actions {
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 2rem;
   }
+
   &__inputFile {
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
   }
+
   &__errorMessage {
     display: flex;
     align-self: center;
@@ -67,6 +70,7 @@
     &__info {
       flex-direction: column;
     }
+
     &__content_left {
       @include f-column;
       margin-right: 0;
@@ -74,6 +78,7 @@
       align-items: center;
       margin-bottom: 2rem;
     }
+
     &__content_right {
       @include f-column;
       margin-left: 0;

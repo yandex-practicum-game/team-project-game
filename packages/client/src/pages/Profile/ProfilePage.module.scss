@@ -56,6 +56,7 @@
     &__info {
       flex-direction: column;
     }
+
     &__content_left {
       @include f-column;
       margin-right: 0;
@@ -63,6 +64,7 @@
       align-items: center;
       margin-bottom: 2rem;
     }
+
     &__content_right {
       @include f-column;
       margin-left: 0;
