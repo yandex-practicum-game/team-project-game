@@ -21,11 +21,11 @@ export const ForumPage = () => {
             <p>topics</p>
             <p>answers</p>
           </li>
-          {mockForumList.map((forum: IForum, item: number) => (
-            <li className={s.ForumPage__item} key={item}>
-              <p>{forum.topic}</p>
-              <p>{forum.count}</p>
-              <p>{forum.answers}</p>
+          {mockForumList.map((item: IForum, index: number) => (
+            <li className={s.ForumPage__item} key={index}>
+              <p>{item.topic}</p>
+              <p>{item.count}</p>
+              <p>{item.answers}</p>
             </li>
           ))}
         </ul>
