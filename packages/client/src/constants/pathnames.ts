@@ -4,5 +4,7 @@ export enum PATHNAMES {
   REGISTRATION = '/registration',
   ERROR_500 = '/500',
   ERROR_404 = '*',
+  GALAXIAN = '/galaxian',
+  GAMEOVER = '/gameover',
   LEADERBOARD = '/leaderboard',
 }
