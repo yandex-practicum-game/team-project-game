@@ -5,7 +5,7 @@ import { PATHNAMES } from '../constants/pathnames'
 import { RegistrationPage } from '../pages/Registration'
 import { ErrorPage } from '../pages/Error'
 import { LeaderboardPage } from '../pages/Leaderboard'
-import { ForumPage } from '../pages/Forum/ForumPage'
+import { ForumPage } from '../pages/Forum'
 
 export const routes: RouteObject[] = [
   { path: PATHNAMES.HOME, element: <HomePage /> },
