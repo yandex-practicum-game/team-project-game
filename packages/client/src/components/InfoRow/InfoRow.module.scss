@@ -1,0 +1,10 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  width: 100%;
+  border-bottom: 1px solid $light-gray;
+}
