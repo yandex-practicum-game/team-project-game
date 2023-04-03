@@ -7,6 +7,7 @@ import { ErrorPage } from '../pages/Error'
 import { StartGame } from '../pages/StartGame/StartGame'
 import { GameOver } from '../pages/GameOver'
 import { LeaderboardPage } from '../pages/Leaderboard'
+import { ForumPage } from '../pages/Forum'
 import { PasswordEditPage } from '../pages/PasswordEdit'
 import { ProfileEditPage } from '../pages/ProfileEdit'
 import { ProfilePage } from '../pages/Profile'
@@ -26,6 +27,7 @@ export const routes: RouteObject[] = [
     element: <ErrorPage title={'404'} subtitle={'Page is not found'} />,
   },
   { path: PATHNAMES.LEADERBOARD, element: <LeaderboardPage /> },
+  { path: PATHNAMES.FORUM, element: <ForumPage /> },
   { path: PATHNAMES.PROFILE, element: <ProfilePage /> },
   { path: PATHNAMES.PROFILE_EDIT, element: <ProfileEditPage /> },
   { path: PATHNAMES.PASSWORD_EDIT, element: <PasswordEditPage /> },
