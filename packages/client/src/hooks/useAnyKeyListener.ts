@@ -1,17 +1,13 @@
 import { useEffect } from 'react'
 
 export const useAnyKeyListener = (handler: () => void) => {
-  const eventListener = () => {
-    handler()
-  }
-
   useEffect(() => {
-    window.addEventListener('keyup', eventListener)
-    window.addEventListener('mouseup', eventListener)
+    window.addEventListener('keyup', handler)
+    window.addEventListener('mouseup', handler)
 
     return () => {
-      window.removeEventListener('keyup', eventListener)
-      window.removeEventListener('mouseup', eventListener)
+      window.removeEventListener('keyup', handler)
+      window.removeEventListener('mouseup', handler)
     }
   }, [])
 }
