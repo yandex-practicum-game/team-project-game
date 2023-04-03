@@ -11,6 +11,7 @@ import { ForumPage } from '../pages/Forum'
 import { PasswordEditPage } from '../pages/PasswordEdit'
 import { ProfileEditPage } from '../pages/ProfileEdit'
 import { ProfilePage } from '../pages/Profile'
+import { PresentationPage } from '../pages/PresentationPage'
 
 export const routes: RouteObject[] = [
   { path: PATHNAMES.HOME, element: <HomePage /> },
@@ -31,4 +32,5 @@ export const routes: RouteObject[] = [
   { path: PATHNAMES.PROFILE, element: <ProfilePage /> },
   { path: PATHNAMES.PROFILE_EDIT, element: <ProfileEditPage /> },
   { path: PATHNAMES.PASSWORD_EDIT, element: <PasswordEditPage /> },
+  { path: PATHNAMES.PRESENTATION, element: <PresentationPage /> },
 ]
