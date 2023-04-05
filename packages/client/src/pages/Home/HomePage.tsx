@@ -18,6 +18,10 @@ export const HomePage = () => {
     navigate(PATHNAMES.GAMEOVER)
   }
 
+  const goToGamePage = () => {
+    navigate(PATHNAMES.GAME)
+  }
+
   return (
     <header>
       <nav className={s.navbar}>
@@ -25,10 +29,13 @@ export const HomePage = () => {
           Go to Login page
         </button>
         <button onClick={goToGameStartPage} className={s.navbar__item}>
-          Go to Game page
+          Go to Game start page
         </button>
         <button onClick={goToGameOverPage} className={s.navbar__item}>
           Go to Game over page
+        </button>
+        <button onClick={goToGamePage} className={s.navbar__item}>
+          Go to Game page
         </button>
       </nav>
     </header>
