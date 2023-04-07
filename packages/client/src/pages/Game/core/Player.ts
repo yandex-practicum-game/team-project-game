@@ -1,13 +1,14 @@
 import playerImage from './images/player.png'
 
 export class Player {
+  private image = new Image()
+  private speed = 4.5
+
   public animationId = 0
-  private target = new Image()
-  private speed = 3.5
-  private x = 0
-  private y = 0
-  private w = 60
-  private h = 60
+  public x = 0
+  public y = 0
+  public w = 60
+  public h = 60
 
   constructor(
     private ctx: CanvasRenderingContext2D,
@@ -23,9 +24,9 @@ export class Player {
     this.x = this.board.w / 2 - this.w / 2
     this.y = this.board.h - 100
 
-    this.target.src = playerImage
-    this.target.onload = () => {
-      this.ctx.drawImage(this.target, this.x, this.y, this.w, this.h)
+    this.image.src = playerImage
+    this.image.onload = () => {
+      this.ctx.drawImage(this.image, this.x, this.y, this.w, this.h)
     }
   }
 
@@ -36,9 +37,10 @@ export class Player {
     }
 
     this.ctx.clearRect(this.x, this.y, this.w + this.speed, this.h)
-    this.ctx.drawImage(this.target, this.x - this.speed, this.y, this.w, this.h)
+    this.ctx.drawImage(this.image, this.x - this.speed, this.y, this.w, this.h)
     this.x -= this.speed
-    this.animationId = requestAnimationFrame(() => {
+
+    this.animationId = window.requestAnimationFrame(() => {
       this.moveLeft()
     })
   }
@@ -50,15 +52,16 @@ export class Player {
     }
 
     this.ctx.clearRect(this.x, this.y, this.w - this.speed, this.h)
-    this.ctx.drawImage(this.target, this.x + this.speed, this.y, this.w, this.h)
+    this.ctx.drawImage(this.image, this.x + this.speed, this.y, this.w, this.h)
     this.x += this.speed
-    this.animationId = requestAnimationFrame(() => {
+
+    this.animationId = window.requestAnimationFrame(() => {
       this.moveRight()
     })
   }
 
   stop() {
-    cancelAnimationFrame(this.animationId)
+    window.cancelAnimationFrame(this.animationId)
     this.animationId = 0
   }
 

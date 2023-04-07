@@ -2,6 +2,7 @@ import s from './GamePage.module.scss'
 
 import { useRef, useEffect } from 'react'
 import { Game } from './core/Game'
+import { Emitter } from './core/Emitter'
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -11,12 +12,13 @@ export const GamePage = () => {
 
   useEffect(() => {
     const context = ref.current?.getContext('2d')
+    const emitter = new Emitter()
 
     if (!context) {
       return
     }
 
-    Game.start(context)
+    Game.start(context, emitter)
   }, [])
 
   return (

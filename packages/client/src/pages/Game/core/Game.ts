@@ -1,23 +1,35 @@
 import { KEYS } from '../../../constants/keys'
+import { Emitter } from './Emitter'
+import { Enemy } from './Enemy'
+import { EVENTS } from './Events'
 import { Player } from './Player'
 
 export class Game {
   private static instance: Game
+
   private player: Player
+  private enemy: Enemy
   private board = {
     w: window.innerWidth,
     h: window.innerHeight,
   }
 
-  private constructor(private ctx: CanvasRenderingContext2D) {
+  private constructor(
+    private ctx: CanvasRenderingContext2D,
+    private emitter: Emitter
+  ) {
     this.player = new Player(this.ctx, this.board)
+    this.enemy = new Enemy(this.emitter, this.ctx, this.player, this.board)
+
     this.clearScreen()
     this.addKeyListenter()
+
+    this.emitter.on(EVENTS.STOP_GAME, this.stop.bind(this))
   }
 
-  public static start(ctx: CanvasRenderingContext2D) {
+  public static start(ctx: CanvasRenderingContext2D, emitter: Emitter) {
     if (!Game.instance) {
-      Game.instance = new Game(ctx)
+      Game.instance = new Game(ctx, emitter)
     }
 
     return Game.instance
@@ -58,5 +70,16 @@ export class Game {
     if (e.key === KEYS.ARROW_RIGHT) {
       this.player.stop()
     }
+  }
+
+  private stop() {
+    this.emitter.off(EVENTS.STOP_GAME, this.stop.bind(this))
+
+    this.player.stop()
+    this.enemy.stop()
+
+    this.enemy.rockets.forEach(rocket => {
+      rocket.stop()
+    })
   }
 }
