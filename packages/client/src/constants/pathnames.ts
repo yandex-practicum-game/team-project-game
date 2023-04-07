@@ -12,4 +12,5 @@ export enum PATHNAMES {
   PROFILE_EDIT = '/profile/edit',
   PASSWORD_EDIT = '/profile/password',
   PRESENTATION = '/presentation',
+  GAME = '/game',
 }
