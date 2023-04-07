@@ -2,63 +2,61 @@ import { KEYS } from '../../../constants/keys'
 import { Player } from './Player'
 
 export class Game {
-  private static isStart: boolean
-  private static player: Player
-  private static ctx: CanvasRenderingContext2D
-  private static board = {
+  private static instance: Game
+  private player: Player
+  private board = {
     w: window.innerWidth,
     h: window.innerHeight,
   }
 
+  private constructor(private ctx: CanvasRenderingContext2D) {
+    this.player = new Player(this.ctx, this.board)
+    this.clearScreen()
+    this.addKeyListenter()
+  }
+
   public static start(ctx: CanvasRenderingContext2D) {
-    // сделано для strict mode, useEffect запускается два раза
-    if (Game.isStart) {
-      return
+    if (!Game.instance) {
+      Game.instance = new Game(ctx)
     }
 
-    Game.isStart = true
-    Game.ctx = ctx
-
-    Game.clearScreen()
-    Game.addKeyListenter()
-
-    Game.player = new Player(Game.ctx, Game.board)
+    return Game.instance
   }
 
   // устанавливает слушатели на кнопки-стрелки
-  private static addKeyListenter() {
-    document.addEventListener('keydown', Game.keyDownCallback.bind(this))
-    document.addEventListener('keyup', Game.keyUpCallback.bind(this))
+  private addKeyListenter() {
+    document.addEventListener('keydown', this.keyDownCallback.bind(this))
+    document.addEventListener('keyup', this.keyUpCallback.bind(this))
   }
 
   // очистка экрана
-  private static clearScreen() {
-    Game.ctx.clearRect(0, 0, Game.board.w, Game.board.h)
+  private clearScreen() {
+    this.ctx.clearRect(0, 0, this.board.w, this.board.h)
   }
 
   // при нажатии кнопки влево/вправо
-  private static keyDownCallback(e: KeyboardEvent) {
-    if (Game.player.animationId !== 0) {
+  private keyDownCallback(e: KeyboardEvent) {
+    if (this.player.animationId !== 0) {
       return
     }
 
     if (e.key === KEYS.ARROW_LEFT) {
-      Game.player.moveLeft()
+      this.player.moveLeft()
     }
 
     if (e.key === KEYS.ARROW_RIGHT) {
-      Game.player.moveRight()
+      this.player.moveRight()
     }
   }
 
   // при отжатии кнопки влево/вправо
-  private static keyUpCallback(e: KeyboardEvent) {
+  private keyUpCallback(e: KeyboardEvent) {
     if (e.key === KEYS.ARROW_LEFT) {
-      Game.player.stop()
+      this.player.stop()
     }
 
     if (e.key === KEYS.ARROW_RIGHT) {
-      Game.player.stop()
+      this.player.stop()
     }
   }
 }
