@@ -1,13 +1,13 @@
 import playerImage from './images/player.png'
 
 export class Player {
-  animationId = 0
-  target = new Image()
-  speed = 3.5
-  x = 0
-  y = 0
-  w = 60
-  h = 60
+  public animationId = 0
+  private target = new Image()
+  private speed = 3.5
+  private x = 0
+  private y = 0
+  private w = 60
+  private h = 60
 
   constructor(
     private ctx: CanvasRenderingContext2D,
@@ -22,6 +22,7 @@ export class Player {
   renderPlayer() {
     this.x = this.board.w / 2 - this.w / 2
     this.y = this.board.h - 100
+
     this.target.src = playerImage
     this.target.onload = () => {
       this.ctx.drawImage(this.target, this.x, this.y, this.w, this.h)
@@ -33,6 +34,7 @@ export class Player {
       this.stop()
       return
     }
+
     this.ctx.clearRect(this.x, this.y, this.w + this.speed, this.h)
     this.ctx.drawImage(this.target, this.x - this.speed, this.y, this.w, this.h)
     this.x -= this.speed
@@ -46,6 +48,7 @@ export class Player {
       this.stop()
       return
     }
+
     this.ctx.clearRect(this.x, this.y, this.w - this.speed, this.h)
     this.ctx.drawImage(this.target, this.x + this.speed, this.y, this.w, this.h)
     this.x += this.speed

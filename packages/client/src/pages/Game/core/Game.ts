@@ -1,10 +1,11 @@
+import { KEYS } from '../../../constants/keys'
 import { Player } from './Player'
 
 export class Game {
-  static isStart: boolean
-  static player: Player
-  static ctx: CanvasRenderingContext2D
-  static board = {
+  private static isStart: boolean
+  private static player: Player
+  private static ctx: CanvasRenderingContext2D
+  private static board = {
     w: window.innerWidth,
     h: window.innerHeight,
   }
@@ -26,8 +27,8 @@ export class Game {
 
   // устанавливает слушатели на кнопки-стрелки
   private static addKeyListenter() {
-    addEventListener('keydown', Game.keyDownCallback.bind(this))
-    addEventListener('keyup', Game.keyUpCallback.bind(this))
+    document.addEventListener('keydown', Game.keyDownCallback.bind(this))
+    document.addEventListener('keyup', Game.keyUpCallback.bind(this))
   }
 
   // очистка экрана
@@ -40,20 +41,23 @@ export class Game {
     if (Game.player.animationId !== 0) {
       return
     }
-    if (e.key === 'ArrowLeft') {
+
+    if (e.key === KEYS.ARROW_LEFT) {
       Game.player.moveLeft()
     }
-    if (e.key === 'ArrowRight') {
+
+    if (e.key === KEYS.ARROW_RIGHT) {
       Game.player.moveRight()
     }
   }
 
   // при отжатии кнопки влево/вправо
   private static keyUpCallback(e: KeyboardEvent) {
-    if (e.key === 'ArrowLeft') {
+    if (e.key === KEYS.ARROW_LEFT) {
       Game.player.stop()
     }
-    if (e.key === 'ArrowRight') {
+
+    if (e.key === KEYS.ARROW_RIGHT) {
       Game.player.stop()
     }
   }
