@@ -6,16 +6,22 @@ import { Player } from './Player'
 
 export class Game {
   private static instance: Game
-  private player: Player
-  private enemy: Enemy
+  private player!: Player
+  private enemy!: Enemy
   private board = {
     w: window.innerWidth,
     h: window.innerHeight,
   }
 
   constructor(private ctx: CanvasRenderingContext2D, private emitter: Emitter) {
+    if (Game.instance) {
+      return Game.instance
+    }
+
     this.player = new Player(this.ctx, this.board)
     this.enemy = new Enemy(this.emitter, this.ctx, this.player, this.board)
+
+    Game.instance = this
   }
 
   public start() {
