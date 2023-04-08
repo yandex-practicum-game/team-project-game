@@ -6,6 +6,8 @@ import { Player } from './Player'
 
 export class Game {
   private static instance: Game
+
+  private isStart = false
   private player!: Player
   private enemy!: Enemy
   private board = {
@@ -13,19 +15,27 @@ export class Game {
     h: window.innerHeight,
   }
 
-  constructor(private ctx: CanvasRenderingContext2D, private emitter: Emitter) {
-    if (Game.instance) {
-      return Game.instance
+  private constructor(private emitter: Emitter) {}
+
+  public static init(ctx: CanvasRenderingContext2D, emitter: Emitter) {
+    if (!Game.instance) {
+      Game.instance = new Game(emitter)
     }
 
-    this.player = new Player(this.ctx, this.board)
-    this.enemy = new Enemy(this.emitter, this.ctx, this.player, this.board)
-
-    Game.instance = this
+    Game.instance.start(ctx)
   }
 
-  public start() {
-    this.clearScreen()
+  public start(ctx: CanvasRenderingContext2D) {
+    // для strict mode
+    if (this.isStart) {
+      return
+    }
+
+    this.isStart = true
+
+    this.player = new Player(ctx, this.board)
+    this.enemy = new Enemy(this.emitter, ctx, this.player, this.board)
+
     this.addKeyListenter()
 
     this.emitter.on(EVENTS.STOP_GAME, this.stop.bind(this))
@@ -35,11 +45,6 @@ export class Game {
   private addKeyListenter() {
     document.addEventListener('keydown', this.keyDownCallback.bind(this))
     document.addEventListener('keyup', this.keyUpCallback.bind(this))
-  }
-
-  // очистка экрана
-  private clearScreen() {
-    this.ctx.clearRect(0, 0, this.board.w, this.board.h)
   }
 
   // при нажатии кнопки влево/вправо
@@ -69,6 +74,7 @@ export class Game {
   }
 
   private stop() {
+    this.isStart = false
     this.emitter.off(EVENTS.STOP_GAME, this.stop.bind(this))
 
     this.player.stop()

@@ -18,8 +18,7 @@ export const GamePage = () => {
       return
     }
 
-    const game = new Game(context, emitter)
-    game.start()
+    Game.init(context, emitter)
   }, [])
 
   return (
