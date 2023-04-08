@@ -65,14 +65,14 @@ export class Player {
     this.animationId = 0
   }
 
-  //проверка на левый край экрана
+  // проверка на левый край экрана
   isLeftEdgeScreen() {
     if (this.x <= 0) {
       return true
     }
   }
 
-  //проверка на правый край экрана
+  // проверка на правый край экрана
   isRightEdgeScreen() {
     if (this.x >= this.board.w - this.w) {
       return true

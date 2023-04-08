@@ -19,19 +19,21 @@ export class Game {
   ) {
     this.player = new Player(this.ctx, this.board)
     this.enemy = new Enemy(this.emitter, this.ctx, this.player, this.board)
-
-    this.clearScreen()
-    this.addKeyListenter()
-
-    this.emitter.on(EVENTS.STOP_GAME, this.stop.bind(this))
   }
 
-  public static start(ctx: CanvasRenderingContext2D, emitter: Emitter) {
+  public static getInstance(ctx: CanvasRenderingContext2D, emitter: Emitter) {
     if (!Game.instance) {
       Game.instance = new Game(ctx, emitter)
     }
 
     return Game.instance
+  }
+
+  public start() {
+    this.clearScreen()
+    this.addKeyListenter()
+
+    this.emitter.on(EVENTS.STOP_GAME, this.stop.bind(this))
   }
 
   // устанавливает слушатели на кнопки-стрелки

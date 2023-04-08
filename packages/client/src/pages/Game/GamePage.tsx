@@ -12,13 +12,14 @@ export const GamePage = () => {
 
   useEffect(() => {
     const context = ref.current?.getContext('2d')
-    const emitter = new Emitter()
+    const emitter = Emitter.getInstance()
 
     if (!context) {
       return
     }
 
-    Game.start(context, emitter)
+    const game = Game.getInstance(context, emitter)
+    game.start()
   }, [])
 
   return (

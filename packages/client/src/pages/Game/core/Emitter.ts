@@ -25,9 +25,12 @@ export class Emitter {
       throw new Error(`Нет события: ${event}`)
     }
 
-    this.listeners[event] = this.listeners[event].filter(
-      listener => listener !== callback
-    )
+    this.listeners[event] = this.listeners[event].filter(listener => {
+      if (listener !== callback) {
+        return true
+      }
+      return false
+    })
   }
 
   emit(event: string, ...args: unknown[]) {
