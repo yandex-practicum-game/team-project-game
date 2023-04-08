@@ -13,20 +13,9 @@ export class Game {
     h: window.innerHeight,
   }
 
-  private constructor(
-    private ctx: CanvasRenderingContext2D,
-    private emitter: Emitter
-  ) {
+  constructor(private ctx: CanvasRenderingContext2D, private emitter: Emitter) {
     this.player = new Player(this.ctx, this.board)
     this.enemy = new Enemy(this.emitter, this.ctx, this.player, this.board)
-  }
-
-  public static getInstance(ctx: CanvasRenderingContext2D, emitter: Emitter) {
-    if (!Game.instance) {
-      Game.instance = new Game(ctx, emitter)
-    }
-
-    return Game.instance
   }
 
   public start() {

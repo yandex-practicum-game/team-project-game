@@ -18,7 +18,7 @@ export const GamePage = () => {
       return
     }
 
-    const game = Game.getInstance(context, emitter)
+    const game = new Game(context, emitter)
     game.start()
   }, [])
 
