@@ -23,6 +23,7 @@ export class Rocket {
 
   // отрисовка и запуск ракеты
   init() {
+    this.setStartPosition()
     this.renderRocket()
     this.launch()
     return this
@@ -30,8 +31,6 @@ export class Rocket {
 
   // отрисовка ракеты
   renderRocket() {
-    this.reload()
-
     this.image.src = rocketImage
     this.image.onload = () => {
       this.ctx.drawImage(this.image, this.x, this.y, this.w, this.h)
@@ -39,7 +38,7 @@ export class Rocket {
   }
 
   // установка ракеты на начальное место запуска
-  reload() {
+  setStartPosition() {
     this.x = this.owner.x + this.startX
     this.y = 250
   }
@@ -47,7 +46,7 @@ export class Rocket {
   // запуск ракеты
   launch() {
     if (this.y > this.board.h + 5) {
-      this.reload()
+      this.setStartPosition()
     }
 
     this.ctx.clearRect(this.x, this.y - this.speed, this.w, this.h)

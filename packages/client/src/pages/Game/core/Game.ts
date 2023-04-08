@@ -6,7 +6,6 @@ import { Player } from './Player'
 
 export class Game {
   private static instance: Game
-
   private player: Player
   private enemy: Enemy
   private board = {
