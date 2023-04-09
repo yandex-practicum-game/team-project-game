@@ -1,37 +1,50 @@
 import { KEYS } from '../../../constants/keys'
+import { Emitter } from './Emitter'
+import { Enemy } from './Enemy'
+import { EVENTS } from './Events'
 import { Player } from './Player'
 
 export class Game {
   private static instance: Game
-  private player: Player
+
+  private isStart = false
+  private player!: Player
+  private enemy!: Enemy
   private board = {
     w: window.innerWidth,
     h: window.innerHeight,
   }
 
-  private constructor(private ctx: CanvasRenderingContext2D) {
-    this.player = new Player(this.ctx, this.board)
-    this.clearScreen()
-    this.addKeyListenter()
-  }
+  private constructor(private emitter: Emitter) {}
 
-  public static start(ctx: CanvasRenderingContext2D) {
+  public static init(ctx: CanvasRenderingContext2D, emitter: Emitter) {
     if (!Game.instance) {
-      Game.instance = new Game(ctx)
+      Game.instance = new Game(emitter)
     }
 
-    return Game.instance
+    Game.instance.start(ctx)
+  }
+
+  public start(ctx: CanvasRenderingContext2D) {
+    // для strict mode
+    if (this.isStart) {
+      return
+    }
+
+    this.isStart = true
+
+    this.player = new Player(ctx, this.board)
+    this.enemy = new Enemy(this.emitter, ctx, this.player, this.board)
+
+    this.addKeyListenter()
+
+    this.emitter.on(EVENTS.STOP_GAME, this.stop.bind(this))
   }
 
   // устанавливает слушатели на кнопки-стрелки
   private addKeyListenter() {
     document.addEventListener('keydown', this.keyDownCallback.bind(this))
     document.addEventListener('keyup', this.keyUpCallback.bind(this))
-  }
-
-  // очистка экрана
-  private clearScreen() {
-    this.ctx.clearRect(0, 0, this.board.w, this.board.h)
   }
 
   // при нажатии кнопки влево/вправо
@@ -58,5 +71,17 @@ export class Game {
     if (e.key === KEYS.ARROW_RIGHT) {
       this.player.stop()
     }
+  }
+
+  private stop() {
+    this.isStart = false
+    this.emitter.off(EVENTS.STOP_GAME, this.stop.bind(this))
+
+    this.player.stop()
+    this.enemy.stop()
+
+    this.enemy.rockets.forEach(rocket => {
+      rocket.stop()
+    })
   }
 }
