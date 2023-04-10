@@ -1,17 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import request from 'axios'
+import React, { useCallback, useState } from 'react'
 
 import s from './LoginPage.module.scss'
 import * as Yup from 'yup'
 
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
-import { AuthAPI } from '../../api/Auth/AuthAPI'
-import { ReasonResponse } from '../../api/Auth/types'
 import { Spinner } from '../../components/Spinner'
 import { Link } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
+import { useGetUserQuery, useSignInMutation } from '../../store/user/user.api'
 
 type UserData = {
   login: string
@@ -33,43 +31,18 @@ const validationSchema = Yup.object().shape({
 })
 
 export const LoginPage = () => {
-  const [isLoading, setIsLoading] = useState(true)
   const [loginError, setLoginError] = useState('')
+  const { isLoading: isGetUserLoading } = useGetUserQuery('')
+  const [signIn, { isLoading: isLoginLoading }] = useSignInMutation()
 
-  useEffect(() => {
-    AuthAPI.getUser()
-      .then(response => {
-        const user = response.data
-        console.log('user', user)
-        console.log('Success get user, redirect to game page') // TODO
-      })
-      .catch(error => {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
-
-  const login = useCallback(async (userData: UserData) => {
+  const login = useCallback((userData: UserData) => {
     setLoginError('')
-    setIsLoading(true)
 
-    try {
-      await AuthAPI.signin(userData)
-      console.log('Success Login, redirect to game page')
-    } catch (error) {
-      if (request.isAxiosError(error) && error.response) {
-        const data = error.response.data as ReasonResponse
-        setLoginError(data.reason)
-      }
-    } finally {
-      setIsLoading(false)
-    }
+    // TODO: async await or promise for redirect
+    signIn(userData)
   }, [])
+
+  const isLoading = isGetUserLoading || isLoginLoading
 
   return (
     <main className={s.loginPage}>
@@ -84,7 +57,7 @@ export const LoginPage = () => {
             validateOnChange
             validateOnBlur
             onSubmit={login}>
-            {({ errors, handleSubmit, handleChange, values, touched }) => {
+            {({ errors, handleSubmit, handleChange, values }) => {
               return (
                 <>
                   <form
