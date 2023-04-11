@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 import { Button } from '../../components/Button'
 import { Input } from '../../components/Input'
 import { Spinner } from '../../components/Spinner'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
 import { useGetUserQuery, useSignInMutation } from '../../store/user/user.api'
@@ -34,12 +34,15 @@ export const LoginPage = () => {
   const [loginError, setLoginError] = useState('')
   const { isLoading: isGetUserLoading } = useGetUserQuery('')
   const [signIn, { isLoading: isLoginLoading }] = useSignInMutation()
+  const navigate = useNavigate()
 
-  const login = useCallback((userData: UserData) => {
+  const login = useCallback(async (userData: UserData) => {
     setLoginError('')
 
-    // TODO: async await or promise for redirect
-    signIn(userData)
+    const result = await signIn(userData).unwrap()
+    if (result === 'OK') {
+      navigate('/')
+    }
   }, [])
 
   const isLoading = isGetUserLoading || isLoginLoading
