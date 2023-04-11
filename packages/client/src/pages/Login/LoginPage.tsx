@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
 
 export const LoginPage = () => {
   const [loginError, setLoginError] = useState('')
-  const { isLoading: isGetUserLoading } = useGetUserQuery('')
+  const { isLoading: isGetUserLoading, refetch } = useGetUserQuery('')
   const [signIn, { isLoading: isLoginLoading }] = useSignInMutation()
   const navigate = useNavigate()
 
@@ -41,6 +41,7 @@ export const LoginPage = () => {
 
     const result = await signIn(userData).unwrap()
     if (result === 'OK') {
+      refetch()
       navigate('/')
     }
   }, [])
