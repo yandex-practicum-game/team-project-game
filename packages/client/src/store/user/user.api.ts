@@ -6,8 +6,8 @@ export const userApi = createApi({
   reducerPath: 'user/api',
   baseQuery: fetchBaseQuery({
     baseUrl: API_CONFIG.BASE_URL,
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
+    // headers: { 'Content-Type': 'application/json' },
+    // credentials: 'include',
   }),
   endpoints: build => ({
     changeUserData: build.mutation({
@@ -15,9 +15,21 @@ export const userApi = createApi({
         url: '/user/profile',
         method: 'PUT',
         body: data,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      }),
+    }),
+    changeUserAvatar: build.mutation({
+      query: (data: FormData) => ({
+        url: '/user/profile/avatar',
+        method: 'PUT',
+        body: data,
+        credentials: 'include',
+        // headers: { 'Content-Type': 'multipart/form-data' },
       }),
     }),
   }),
 })
 
-export const { useChangeUserDataMutation } = userApi
+export const { useChangeUserDataMutation, useChangeUserAvatarMutation } =
+  userApi

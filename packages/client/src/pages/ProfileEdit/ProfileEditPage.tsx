@@ -9,30 +9,22 @@ import React, {
 import s from './ProfileEditPage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
-import { AuthAPI } from '../../api/Auth/AuthAPI'
-import request from 'axios'
-import { ReasonResponse, UserResponse } from '../../api/Auth/types'
+import { UserResponse } from '../../api/Auth/types'
 import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import * as Yup from 'yup'
 import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import { Spinner } from '../../components/Spinner'
-import { UserAPI } from '../../api/User/UserAPI'
 import { PATHNAMES } from '../../constants/pathnames'
 import { OverlayBlur } from '../../components/OverlayBlur'
 import { Modal } from '../../components/Modal'
-
-const defaultUserData: UserResponse = {
-  id: 0,
-  first_name: '',
-  second_name: '',
-  display_name: '',
-  login: '',
-  email: '',
-  phone: '',
-  avatar: '',
-}
+import { DEFAULT_USER_DATA } from '../../constants/userData'
+import { useGetUserQuery } from '../../store/auth/auth.api'
+import {
+  useChangeUserAvatarMutation,
+  useChangeUserDataMutation,
+} from '../../store/user/user.api'
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
@@ -59,8 +51,13 @@ const validationSchema = Yup.object().shape({
 
 export const ProfileEditPage = () => {
   const [error] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState(defaultUserData)
+  const {
+    data: user = DEFAULT_USER_DATA,
+    isLoading,
+    refetch: refetchGetUser,
+  } = useGetUserQuery(null)
+  const [changeUserData] = useChangeUserDataMutation()
+  const [changeUserAvatar] = useChangeUserAvatarMutation()
   const [title, setTitle] = useState('Upload file')
   const [showDescription, setShowDescription] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -81,34 +78,13 @@ export const ProfileEditPage = () => {
     navigate(-1)
   }
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await AuthAPI.getUser()
-        const user = response.data
-        setUser(user)
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchUser()
-  }, [])
-
   const updateProfile = useCallback(
     async (userData: Omit<UserResponse, 'id' | 'avatar'>) => {
       try {
-        await UserAPI.changeUserData(userData)
+        await changeUserData(userData)
         navigate(PATHNAMES.PROFILE)
       } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
+        console.log('get user error:', error)
       }
     },
     []
@@ -150,29 +126,24 @@ export const ProfileEditPage = () => {
     }
   }, [])
 
-  const handleModalSubmit = useCallback(() => {
+  const handleModalSubmit = useCallback(async () => {
     if (!file) {
       setShowDescription(true)
     } else {
       const formData = new FormData()
       formData.append('avatar', file)
-      UserAPI.changeUserAvatar(formData)
-        .then(response => {
-          const user = response.data
-          if (user) {
-            setUser(user)
-            handleAvatarClose()
-          } else {
-            setModalError(true)
-          }
-        })
-        .catch(error => {
-          if (request.isAxiosError(error) && error.response) {
-            const data = error.response.data as ReasonResponse
-            console.log('change user avatar error:', data.reason)
-            setModalError(true)
-          }
-        })
+      try {
+        const result = (await changeUserAvatar(formData)) as { data: unknown }
+        if (result.data) {
+          refetchGetUser()
+          handleAvatarClose()
+        } else {
+          setModalError(true)
+        }
+      } catch (error) {
+        console.log('change user avatar error:', error)
+        setModalError(true)
+      }
     }
   }, [file, handleAvatarClose])
 
