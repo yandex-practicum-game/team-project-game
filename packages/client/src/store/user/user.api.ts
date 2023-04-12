@@ -1,13 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { API_CONFIG } from '../../api/config'
-import { UserUpdateRequest } from '../../api/User/types'
+import { ChangePasswordRequest, UserUpdateRequest } from '../../api/User/types'
 
 export const userApi = createApi({
   reducerPath: 'user/api',
   baseQuery: fetchBaseQuery({
     baseUrl: API_CONFIG.BASE_URL,
-    // headers: { 'Content-Type': 'application/json' },
-    // credentials: 'include',
+    credentials: 'include',
   }),
   endpoints: build => ({
     changeUserData: build.mutation({
@@ -16,7 +15,6 @@ export const userApi = createApi({
         method: 'PUT',
         body: data,
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
       }),
     }),
     changeUserAvatar: build.mutation({
@@ -24,12 +22,26 @@ export const userApi = createApi({
         url: '/user/profile/avatar',
         method: 'PUT',
         body: data,
-        credentials: 'include',
-        // headers: { 'Content-Type': 'multipart/form-data' },
+      }),
+    }),
+    changeUserPassword: build.mutation({
+      query: (data: ChangePasswordRequest) => ({
+        url: '/user/password',
+        method: 'PUT',
+        body: data,
+        responseHandler: response => {
+          if (response.ok) {
+            return response.text()
+          }
+          return response.json()
+        },
       }),
     }),
   }),
 })
 
-export const { useChangeUserDataMutation, useChangeUserAvatarMutation } =
-  userApi
+export const {
+  useChangeUserDataMutation,
+  useChangeUserAvatarMutation,
+  useChangeUserPasswordMutation,
+} = userApi
