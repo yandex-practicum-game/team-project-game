@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { SigninRequest } from '../../api/Auth/types'
 import { API_CONFIG } from '../../api/config'
+import { UserUpdateRequest } from '../../api/User/types'
 
 export const userApi = createApi({
   reducerPath: 'user/api',
@@ -10,27 +10,14 @@ export const userApi = createApi({
     credentials: 'include',
   }),
   endpoints: build => ({
-    getUser: build.query({
-      query: () => ({
-        url: '/auth/user',
-      }),
-    }),
-    signIn: build.mutation({
-      query: (data: SigninRequest) => ({
-        url: '/auth/signin',
-        method: 'POST',
+    changeUserData: build.mutation({
+      query: (data: UserUpdateRequest) => ({
+        url: '/user/profile',
+        method: 'PUT',
         body: data,
-        responseHandler: response => response.text(),
-      }),
-    }),
-    logout: build.mutation({
-      query: () => ({
-        url: '/auth/logout',
-        method: 'POST',
-        responseHandler: response => response.text(),
       }),
     }),
   }),
 })
 
-export const { useGetUserQuery, useSignInMutation, useLogoutMutation } = userApi
+export const { useChangeUserDataMutation } = userApi

@@ -3,27 +3,16 @@ import s from './ProfilePage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { InfoRow } from '../../components/InfoRow'
 import { Button } from '../../components/Button'
-import { UserResponse } from '../../api/Auth/types'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import { Spinner } from '../../components/Spinner'
-import { useGetUserQuery, useLogoutMutation } from '../../store/user/user.api'
-
-const defaultUserData: UserResponse = {
-  id: 0,
-  first_name: '',
-  second_name: '',
-  display_name: '',
-  login: '',
-  email: '',
-  phone: '',
-  avatar: '',
-}
+import { useGetUserQuery, useLogoutMutation } from '../../store/auth/auth.api'
+import { DEFAULT_USER_DATA } from '../../constants/userData'
 
 export const ProfilePage = () => {
   const navigate = useNavigate()
-  const { data: user = defaultUserData, isLoading } = useGetUserQuery(null)
+  const { data: user = DEFAULT_USER_DATA, isLoading } = useGetUserQuery(null)
   const [logout] = useLogoutMutation()
   const avatarPath = useMemo(
     () => API_CONFIG.RESOURCES_URL + user.avatar,
