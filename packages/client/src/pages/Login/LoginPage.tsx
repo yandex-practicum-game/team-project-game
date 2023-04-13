@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
 import { useGetUserQuery, useSignInMutation } from '../../store/auth/auth.api'
-import { ERROR_TEXT } from '../../constants/requests'
+import { ERROR_HANDLERS } from '../../constants/requests'
 
 type UserData = {
   login: string
@@ -44,7 +44,7 @@ export const LoginPage = () => {
       await signIn(userData).unwrap()
       navigate('/')
     } catch {
-      setLoginError(ERROR_TEXT)
+      setLoginError(ERROR_HANDLERS.ERROR_TEXT)
     }
   }, [])
 

@@ -7,7 +7,7 @@ import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useChangeUserPasswordMutation } from '../../store/user/user.api'
-import { ERROR_TEXT } from '../../constants/requests'
+import { ERROR_HANDLERS } from '../../constants/requests'
 
 type PasswordUpdateData = {
   oldPassword: string
@@ -49,7 +49,7 @@ export const PasswordEditPage = () => {
       if ('data' in result) {
         navigate(PATHNAMES.PROFILE)
       } else {
-        setError(ERROR_TEXT)
+        setError(ERROR_HANDLERS.ERROR_TEXT)
       }
     },
     []

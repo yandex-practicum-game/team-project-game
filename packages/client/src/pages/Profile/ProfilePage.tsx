@@ -9,7 +9,7 @@ import { API_CONFIG } from '../../api/config'
 import { Spinner } from '../../components/Spinner'
 import { useGetUserQuery, useLogoutMutation } from '../../store/auth/auth.api'
 import { useAlert } from 'react-alert'
-import { ERROR_TEXT, OK_STATUS } from '../../constants/requests'
+import { ERROR_HANDLERS } from '../../constants/requests'
 
 export const ProfilePage = () => {
   const navigate = useNavigate()
@@ -23,10 +23,10 @@ export const ProfilePage = () => {
 
   const onLogout = useCallback(async () => {
     const result = await logout(null).unwrap()
-    if (result === OK_STATUS) {
+    if (result === ERROR_HANDLERS.OK_STATUS) {
       navigate(PATHNAMES.LOGIN)
     } else {
-      alert.show(ERROR_TEXT)
+      alert.show(ERROR_HANDLERS.ERROR_TEXT)
     }
   }, [])
 

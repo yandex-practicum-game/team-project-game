@@ -1,2 +1,4 @@
-export const OK_STATUS = 'OK'
-export const ERROR_TEXT = 'Ошибка'
+export enum ERROR_HANDLERS {
+  OK_STATUS = 'OK',
+  ERROR_TEXT = 'Ошибка',
+}
