@@ -7,6 +7,7 @@ import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useChangeUserPasswordMutation } from '../../store/user/user.api'
+import { ERROR_TEXT } from '../../constants/requests'
 
 type PasswordUpdateData = {
   oldPassword: string
@@ -48,9 +49,7 @@ export const PasswordEditPage = () => {
       if ('data' in result) {
         navigate(PATHNAMES.PROFILE)
       } else {
-        console.log('change user password error:', result)
-        const castedResult = result as { error: { data: { reason: string } } }
-        setError(castedResult.error.data.reason)
+        setError(ERROR_TEXT)
       }
     },
     []

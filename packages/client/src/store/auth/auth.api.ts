@@ -9,11 +9,13 @@ export const authApi = createApi({
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   }),
+  tagTypes: ['User'],
   endpoints: build => ({
     getUser: build.query({
       query: () => ({
         url: '/auth/user',
       }),
+      providesTags: ['User'],
     }),
     signIn: build.mutation({
       query: (data: SigninRequest) => ({
@@ -22,6 +24,7 @@ export const authApi = createApi({
         body: data,
         responseHandler: response => response.text(),
       }),
+      invalidatesTags: ['User'],
     }),
     logout: build.mutation({
       query: () => ({

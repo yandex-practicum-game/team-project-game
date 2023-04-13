@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
 import { useGetUserQuery, useSignInMutation } from '../../store/auth/auth.api'
+import { ERROR_TEXT, OK_STATUS } from '../../constants/requests'
 
 type UserData = {
   login: string
@@ -32,7 +33,7 @@ const validationSchema = Yup.object().shape({
 
 export const LoginPage = () => {
   const [loginError, setLoginError] = useState('')
-  const { isLoading: isGetUserLoading, refetch } = useGetUserQuery(null)
+  const { isLoading: isGetUserLoading } = useGetUserQuery(null)
   const [signIn, { isLoading: isLoginLoading }] = useSignInMutation()
   const navigate = useNavigate()
 
@@ -40,9 +41,10 @@ export const LoginPage = () => {
     setLoginError('')
 
     const result = await signIn(userData).unwrap()
-    if (result === 'OK') {
-      refetch()
+    if (result === OK_STATUS) {
       navigate('/')
+    } else {
+      setLoginError(ERROR_TEXT)
     }
   }, [])
 

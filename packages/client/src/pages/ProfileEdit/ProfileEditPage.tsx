@@ -132,15 +132,14 @@ export const ProfileEditPage = () => {
       const formData = new FormData()
       formData.append('avatar', file)
       try {
-        const result = (await changeUserAvatar(formData)) as { data: unknown }
-        if (result.data) {
+        const result = await changeUserAvatar(formData)
+        if ('data' in result && result.data) {
           refetchGetUser()
           handleAvatarClose()
         } else {
           setModalError(true)
         }
       } catch (error) {
-        console.log('change user avatar error:', error)
         setModalError(true)
       }
     }

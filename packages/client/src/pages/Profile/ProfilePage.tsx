@@ -8,6 +8,8 @@ import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import { Spinner } from '../../components/Spinner'
 import { useGetUserQuery, useLogoutMutation } from '../../store/auth/auth.api'
+import { useAlert } from 'react-alert'
+import { ERROR_TEXT, OK_STATUS } from '../../constants/requests'
 
 export const ProfilePage = () => {
   const navigate = useNavigate()
@@ -17,13 +19,14 @@ export const ProfilePage = () => {
     () => API_CONFIG.RESOURCES_URL + user?.avatar,
     [user?.avatar]
   )
+  const alert = useAlert()
 
   const onLogout = useCallback(async () => {
     const result = await logout(null).unwrap()
-    if (result === 'OK') {
+    if (result === OK_STATUS) {
       navigate(PATHNAMES.LOGIN)
     } else {
-      console.log('get user error:', result)
+      alert.show(ERROR_TEXT)
     }
   }, [])
 
@@ -36,10 +39,7 @@ export const ProfilePage = () => {
           <div className={s.profilePage__title}>Profile</div>
           <div className={s.profilePage__info}>
             <div className={s.profilePage__content_left}>
-              <Avatar
-                path={user?.avatar ? avatarPath : ''}
-                isEditable={false}
-              />
+              <Avatar path={user?.avatar ? avatarPath : ''} />
               <div className={s.profilePage__displayName}>
                 {user?.display_name ?? user?.login}
               </div>
