@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
 import { useGetUserQuery, useSignInMutation } from '../../store/auth/auth.api'
-import { ERROR_TEXT, OK_STATUS } from '../../constants/requests'
+import { ERROR_TEXT } from '../../constants/requests'
 
 type UserData = {
   login: string
@@ -40,10 +40,10 @@ export const LoginPage = () => {
   const login = useCallback(async (userData: UserData) => {
     setLoginError('')
 
-    const result = await signIn(userData).unwrap()
-    if (result === OK_STATUS) {
+    try {
+      await signIn(userData).unwrap()
       navigate('/')
-    } else {
+    } catch {
       setLoginError(ERROR_TEXT)
     }
   }, [])
