@@ -24,6 +24,8 @@ import {
   useChangeUserAvatarMutation,
   useChangeUserDataMutation,
 } from '../../store/user/user.api'
+import { useAlert } from 'react-alert'
+import { TEXTS } from '../../constants/requests'
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
@@ -62,6 +64,7 @@ export const ProfileEditPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalError, setModalError] = useState(false)
   const [file, setFile] = useState<File | undefined>(undefined)
+  const alert = useAlert()
 
   const popupElemRef = useRef<HTMLInputElement>(null)
   const inputElemRef = useRef<HTMLInputElement>(null)
@@ -82,8 +85,8 @@ export const ProfileEditPage = () => {
       try {
         await changeUserData(userData)
         navigate(PATHNAMES.PROFILE)
-      } catch (error) {
-        console.log('get user error:', error)
+      } catch {
+        alert.show(TEXTS.ERROR)
       }
     },
     []
