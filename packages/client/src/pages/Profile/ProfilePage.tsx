@@ -7,9 +7,9 @@ import { PATHNAMES } from '../../constants/pathnames'
 import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import { Spinner } from '../../components/Spinner'
-import { useGetUserQuery, useLogoutMutation } from '../../store/auth/auth.api'
+import { useGetUserQuery, useLogoutMutation } from '../../store/base.api'
 import { useAlert } from 'react-alert'
-import { STATUSES, TEXTS } from '../../constants/requests'
+import { TEXTS } from '../../constants/requests'
 
 export const ProfilePage = () => {
   const navigate = useNavigate()
@@ -22,10 +22,10 @@ export const ProfilePage = () => {
   const alert = useAlert()
 
   const onLogout = useCallback(async () => {
-    const result = await logout(null).unwrap()
-    if (result === STATUSES.OK) {
+    try {
+      await logout(null).unwrap()
       navigate(PATHNAMES.LOGIN)
-    } else {
+    } catch {
       alert.show(TEXTS.ERROR)
     }
   }, [])

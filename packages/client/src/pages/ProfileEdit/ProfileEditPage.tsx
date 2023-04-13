@@ -19,11 +19,11 @@ import { Spinner } from '../../components/Spinner'
 import { PATHNAMES } from '../../constants/pathnames'
 import { OverlayBlur } from '../../components/OverlayBlur'
 import { Modal } from '../../components/Modal'
-import { useGetUserQuery } from '../../store/auth/auth.api'
 import {
+  useGetUserQuery,
   useChangeUserAvatarMutation,
   useChangeUserDataMutation,
-} from '../../store/user/user.api'
+} from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
 
@@ -52,11 +52,7 @@ const validationSchema = Yup.object().shape({
 
 export const ProfileEditPage = () => {
   const [error] = useState('')
-  const {
-    data: user,
-    isLoading,
-    refetch: refetchGetUser,
-  } = useGetUserQuery(null)
+  const { data: user, isLoading } = useGetUserQuery(null)
   const [changeUserData] = useChangeUserDataMutation()
   const [changeUserAvatar] = useChangeUserAvatarMutation()
   const [title, setTitle] = useState('Upload file')
@@ -135,14 +131,9 @@ export const ProfileEditPage = () => {
       const formData = new FormData()
       formData.append('avatar', file)
       try {
-        const result = await changeUserAvatar(formData)
-        if ('data' in result && result.data) {
-          refetchGetUser()
-          handleAvatarClose()
-        } else {
-          setModalError(true)
-        }
-      } catch (error) {
+        await changeUserAvatar(formData).unwrap()
+        handleAvatarClose()
+      } catch {
         setModalError(true)
       }
     }

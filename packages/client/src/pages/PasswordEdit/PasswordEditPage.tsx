@@ -6,7 +6,7 @@ import { PATHNAMES } from '../../constants/pathnames'
 import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { useChangeUserPasswordMutation } from '../../store/user/user.api'
+import { useChangeUserPasswordMutation } from '../../store/base.api'
 import { TEXTS } from '../../constants/requests'
 
 type PasswordUpdateData = {
@@ -45,10 +45,10 @@ export const PasswordEditPage = () => {
 
   const updatePassword = useCallback(
     async (passwordData: PasswordUpdateData) => {
-      const result = await changeUserPassword(passwordData)
-      if ('data' in result) {
+      try {
+        await changeUserPassword(passwordData).unwrap()
         navigate(PATHNAMES.PROFILE)
-      } else {
+      } catch {
         setError(TEXTS.ERROR)
       }
     },

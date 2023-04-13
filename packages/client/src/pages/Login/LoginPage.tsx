@@ -9,7 +9,7 @@ import { Spinner } from '../../components/Spinner'
 import { Link, useNavigate } from 'react-router-dom'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Formik } from 'formik'
-import { useGetUserQuery, useSignInMutation } from '../../store/auth/auth.api'
+import { useGetUserQuery, useSignInMutation } from '../../store/base.api'
 import { TEXTS } from '../../constants/requests'
 
 type UserData = {
