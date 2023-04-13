@@ -19,7 +19,6 @@ import { Spinner } from '../../components/Spinner'
 import { PATHNAMES } from '../../constants/pathnames'
 import { OverlayBlur } from '../../components/OverlayBlur'
 import { Modal } from '../../components/Modal'
-import { DEFAULT_USER_DATA } from '../../constants/userData'
 import { useGetUserQuery } from '../../store/auth/auth.api'
 import {
   useChangeUserAvatarMutation,
@@ -52,7 +51,7 @@ const validationSchema = Yup.object().shape({
 export const ProfileEditPage = () => {
   const [error] = useState('')
   const {
-    data: user = DEFAULT_USER_DATA,
+    data: user,
     isLoading,
     refetch: refetchGetUser,
   } = useGetUserQuery(null)
@@ -70,8 +69,8 @@ export const ProfileEditPage = () => {
   const navigate = useNavigate()
 
   const avatarPath = useMemo(
-    () => API_CONFIG.RESOURCES_URL + user.avatar,
-    [user.avatar]
+    () => API_CONFIG.RESOURCES_URL + user?.avatar,
+    [user?.avatar]
   )
 
   const onBack = function () {
@@ -157,12 +156,12 @@ export const ProfileEditPage = () => {
           <div className={s.profilePageEdit__info}>
             <div className={s.profilePageEdit__content_left}>
               <Avatar
-                path={user.avatar ? avatarPath : ''}
+                path={user?.avatar ? avatarPath : ''}
                 onClick={handleAvatarClick}
                 isEditable={true}
               />
               <div className={s.profilePageEdit__displayName}>
-                {user.display_name ?? user.login}
+                {user?.display_name ?? user?.login}
               </div>
             </div>
             <div className={s.profilePageEdit__content_right}>

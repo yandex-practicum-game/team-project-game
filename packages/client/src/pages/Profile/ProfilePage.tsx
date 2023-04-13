@@ -8,15 +8,14 @@ import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import { Spinner } from '../../components/Spinner'
 import { useGetUserQuery, useLogoutMutation } from '../../store/auth/auth.api'
-import { DEFAULT_USER_DATA } from '../../constants/userData'
 
 export const ProfilePage = () => {
   const navigate = useNavigate()
-  const { data: user = DEFAULT_USER_DATA, isLoading } = useGetUserQuery(null)
+  const { data: user, isLoading } = useGetUserQuery(null)
   const [logout] = useLogoutMutation()
   const avatarPath = useMemo(
-    () => API_CONFIG.RESOURCES_URL + user.avatar,
-    [user.avatar]
+    () => API_CONFIG.RESOURCES_URL + user?.avatar,
+    [user?.avatar]
   )
 
   const onLogout = useCallback(async () => {
@@ -37,17 +36,20 @@ export const ProfilePage = () => {
           <div className={s.profilePage__title}>Profile</div>
           <div className={s.profilePage__info}>
             <div className={s.profilePage__content_left}>
-              <Avatar path={user.avatar ? avatarPath : ''} isEditable={false} />
+              <Avatar
+                path={user?.avatar ? avatarPath : ''}
+                isEditable={false}
+              />
               <div className={s.profilePage__displayName}>
-                {user.display_name ?? user.login}
+                {user?.display_name ?? user?.login}
               </div>
             </div>
             <div className={s.profilePage__content_right}>
-              <InfoRow name={'Email'} value={user.email} />
-              <InfoRow name={'Login'} value={user.login} />
-              <InfoRow name={'First Name'} value={user.first_name} />
-              <InfoRow name={'Second Name'} value={user.second_name} />
-              <InfoRow name={'Phone'} value={user.phone} />
+              <InfoRow name={'Email'} value={user?.email} />
+              <InfoRow name={'Login'} value={user?.login} />
+              <InfoRow name={'First Name'} value={user?.first_name} />
+              <InfoRow name={'Second Name'} value={user?.second_name} />
+              <InfoRow name={'Phone'} value={user?.phone} />
             </div>
           </div>
           <div className={s.profilePage__actions}>
