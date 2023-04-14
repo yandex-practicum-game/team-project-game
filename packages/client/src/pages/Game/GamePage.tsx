@@ -22,6 +22,10 @@ export const GamePage = () => {
   const actions = useActions()
 
   useEffect(() => {
+    actions.resetScore()
+  }, [])
+
+  useEffect(() => {
     const context = ref.current?.getContext('2d')
     const emitter = Emitter.getInstance()
 
@@ -47,7 +51,6 @@ export const GamePage = () => {
     Game.init(context, emitter)
 
     return () => {
-      actions.resetScore()
       window.clearInterval(game.scoreInterval)
       emitter.off(EVENTS.START_GAME, startGame)
       emitter.off(EVENTS.STOP_GAME, stopGame)
