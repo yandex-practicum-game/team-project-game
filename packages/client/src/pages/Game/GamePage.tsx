@@ -22,10 +22,6 @@ export const GamePage = () => {
   const actions = useActions()
 
   useEffect(() => {
-    actions.resetScore()
-  }, [])
-
-  useEffect(() => {
     const context = ref.current?.getContext('2d')
     const emitter = Emitter.getInstance()
 
@@ -37,6 +33,7 @@ export const GamePage = () => {
       const interval = window.setInterval(() => {
         actions.accrueScore()
       }, 1000)
+      actions.resetScore()
       actions.setScoreInterval(interval)
     }
 
