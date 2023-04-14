@@ -1,63 +1,32 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import s from './ProfilePage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { InfoRow } from '../../components/InfoRow'
 import { Button } from '../../components/Button'
-import { AuthAPI } from '../../api/Auth/AuthAPI'
-import request from 'axios'
-import { ReasonResponse, UserResponse } from '../../api/Auth/types'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import { Spinner } from '../../components/Spinner'
-
-const defaultUserData: UserResponse = {
-  id: 0,
-  first_name: '',
-  second_name: '',
-  display_name: '',
-  login: '',
-  email: '',
-  phone: '',
-  avatar: '',
-}
+import { useGetUserQuery, useLogoutMutation } from '../../store/base.api'
+import { useAlert } from 'react-alert'
+import { TEXTS } from '../../constants/requests'
 
 export const ProfilePage = () => {
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState(defaultUserData)
+  const { data: user, isLoading } = useGetUserQuery(null)
+  const [logout] = useLogoutMutation()
   const avatarPath = useMemo(
-    () => API_CONFIG.RESOURCES_URL + user.avatar,
-    [user.avatar]
+    () => API_CONFIG.RESOURCES_URL + user?.avatar,
+    [user?.avatar]
   )
-
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await AuthAPI.getUser()
-        const user = response.data
-        setUser(user)
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchUser()
-  }, [])
+  const alert = useAlert()
 
   const onLogout = useCallback(async () => {
     try {
-      await AuthAPI.logout()
+      await logout(null).unwrap()
       navigate(PATHNAMES.LOGIN)
-    } catch (error) {
-      if (request.isAxiosError(error) && error.response) {
-        const data = error.response.data as ReasonResponse
-        console.log('get user error:', data.reason)
-      }
+    } catch {
+      alert.show(TEXTS.ERROR)
     }
   }, [])
 
@@ -70,17 +39,17 @@ export const ProfilePage = () => {
           <div className={s.profilePage__title}>Profile</div>
           <div className={s.profilePage__info}>
             <div className={s.profilePage__content_left}>
-              <Avatar path={user.avatar ? avatarPath : ''} isEditable={false} />
+              <Avatar path={user?.avatar ? avatarPath : ''} />
               <div className={s.profilePage__displayName}>
-                {user.display_name ?? user.login}
+                {user?.display_name ?? user?.login}
               </div>
             </div>
             <div className={s.profilePage__content_right}>
-              <InfoRow name={'Email'} value={user.email} />
-              <InfoRow name={'Login'} value={user.login} />
-              <InfoRow name={'First Name'} value={user.first_name} />
-              <InfoRow name={'Second Name'} value={user.second_name} />
-              <InfoRow name={'Phone'} value={user.phone} />
+              <InfoRow name={'Email'} value={user?.email} />
+              <InfoRow name={'Login'} value={user?.login} />
+              <InfoRow name={'First Name'} value={user?.first_name} />
+              <InfoRow name={'Second Name'} value={user?.second_name} />
+              <InfoRow name={'Phone'} value={user?.phone} />
             </div>
           </div>
           <div className={s.profilePage__actions}>
