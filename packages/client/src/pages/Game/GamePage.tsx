@@ -9,16 +9,17 @@ import { PATHNAMES } from '../../constants/pathnames'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { actions } from '../../store'
+import { useActions } from '../../hooks/useActions'
 
 const width = window.innerWidth
 const height = window.innerHeight
 
 export const GamePage = () => {
   const nav = useNavigate()
-  const dispatch = useAppDispatch()
   const ref = useRef<HTMLCanvasElement | null>(null)
 
   const game = useAppSelector(state => state.game)
+  const actions = useActions()
 
   useEffect(() => {
     const context = ref.current?.getContext('2d')
@@ -30,9 +31,9 @@ export const GamePage = () => {
 
     const startGame = () => {
       const interval = window.setInterval(() => {
-        dispatch(actions.accrueScore())
+        actions.accrueScore()
       }, 1000)
-      dispatch(actions.setScoreInterval(interval))
+      actions.setScoreInterval(interval)
     }
 
     const stopGame = () => {
@@ -46,7 +47,7 @@ export const GamePage = () => {
     Game.init(context, emitter)
 
     return () => {
-      dispatch(actions.resetScore())
+      actions.resetScore()
       window.clearInterval(game.scoreInterval)
       emitter.off(EVENTS.START_GAME, startGame)
       emitter.off(EVENTS.STOP_GAME, stopGame)
