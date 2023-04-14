@@ -2,13 +2,12 @@ import React, { useCallback, useState } from 'react'
 import s from './PasswordEdit.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
-import request from 'axios'
-import { ReasonResponse } from '../../api/Auth/types'
 import { PATHNAMES } from '../../constants/pathnames'
 import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { UserAPI } from '../../api/User/UserAPI'
+import { useChangeUserPasswordMutation } from '../../store/base.api'
+import { TEXTS } from '../../constants/requests'
 
 type PasswordUpdateData = {
   oldPassword: string
@@ -37,6 +36,7 @@ const validationSchema = Yup.object().shape({
 
 export const PasswordEditPage = () => {
   const [error, setError] = useState('')
+  const [changeUserPassword] = useChangeUserPasswordMutation()
 
   const navigate = useNavigate()
   const onBack = function () {
@@ -46,14 +46,10 @@ export const PasswordEditPage = () => {
   const updatePassword = useCallback(
     async (passwordData: PasswordUpdateData) => {
       try {
-        await UserAPI.changeUserPassword(passwordData)
+        await changeUserPassword(passwordData).unwrap()
         navigate(PATHNAMES.PROFILE)
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('change user password error:', data.reason)
-          setError(data.reason)
-        }
+      } catch {
+        setError(TEXTS.ERROR)
       }
     },
     []

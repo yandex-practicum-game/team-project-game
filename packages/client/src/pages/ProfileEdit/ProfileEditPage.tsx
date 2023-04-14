@@ -9,30 +9,23 @@ import React, {
 import s from './ProfileEditPage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
-import { AuthAPI } from '../../api/Auth/AuthAPI'
-import request from 'axios'
-import { ReasonResponse, UserResponse } from '../../api/Auth/types'
+import { UserResponse } from '../../api/Auth/types'
 import { Avatar } from '../../components/Avatar'
 import { API_CONFIG } from '../../api/config'
 import * as Yup from 'yup'
 import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import { Spinner } from '../../components/Spinner'
-import { UserAPI } from '../../api/User/UserAPI'
 import { PATHNAMES } from '../../constants/pathnames'
 import { OverlayBlur } from '../../components/OverlayBlur'
 import { Modal } from '../../components/Modal'
-
-const defaultUserData: UserResponse = {
-  id: 0,
-  first_name: '',
-  second_name: '',
-  display_name: '',
-  login: '',
-  email: '',
-  phone: '',
-  avatar: '',
-}
+import {
+  useGetUserQuery,
+  useChangeUserAvatarMutation,
+  useChangeUserDataMutation,
+} from '../../store/base.api'
+import { useAlert } from 'react-alert'
+import { TEXTS } from '../../constants/requests'
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
@@ -59,13 +52,15 @@ const validationSchema = Yup.object().shape({
 
 export const ProfileEditPage = () => {
   const [error] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState(defaultUserData)
+  const { data: user, isLoading } = useGetUserQuery(null)
+  const [changeUserData] = useChangeUserDataMutation()
+  const [changeUserAvatar] = useChangeUserAvatarMutation()
   const [title, setTitle] = useState('Upload file')
   const [showDescription, setShowDescription] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalError, setModalError] = useState(false)
   const [file, setFile] = useState<File | undefined>(undefined)
+  const alert = useAlert()
 
   const popupElemRef = useRef<HTMLInputElement>(null)
   const inputElemRef = useRef<HTMLInputElement>(null)
@@ -73,42 +68,21 @@ export const ProfileEditPage = () => {
   const navigate = useNavigate()
 
   const avatarPath = useMemo(
-    () => API_CONFIG.RESOURCES_URL + user.avatar,
-    [user.avatar]
+    () => API_CONFIG.RESOURCES_URL + user?.avatar,
+    [user?.avatar]
   )
 
   const onBack = function () {
     navigate(-1)
   }
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await AuthAPI.getUser()
-        const user = response.data
-        setUser(user)
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchUser()
-  }, [])
-
   const updateProfile = useCallback(
     async (userData: Omit<UserResponse, 'id' | 'avatar'>) => {
       try {
-        await UserAPI.changeUserData(userData)
+        await changeUserData(userData)
         navigate(PATHNAMES.PROFILE)
-      } catch (error) {
-        if (request.isAxiosError(error) && error.response) {
-          const data = error.response.data as ReasonResponse
-          console.log('get user error:', data.reason)
-        }
+      } catch {
+        alert.show(TEXTS.ERROR)
       }
     },
     []
@@ -150,29 +124,18 @@ export const ProfileEditPage = () => {
     }
   }, [])
 
-  const handleModalSubmit = useCallback(() => {
+  const handleModalSubmit = useCallback(async () => {
     if (!file) {
       setShowDescription(true)
     } else {
       const formData = new FormData()
       formData.append('avatar', file)
-      UserAPI.changeUserAvatar(formData)
-        .then(response => {
-          const user = response.data
-          if (user) {
-            setUser(user)
-            handleAvatarClose()
-          } else {
-            setModalError(true)
-          }
-        })
-        .catch(error => {
-          if (request.isAxiosError(error) && error.response) {
-            const data = error.response.data as ReasonResponse
-            console.log('change user avatar error:', data.reason)
-            setModalError(true)
-          }
-        })
+      try {
+        await changeUserAvatar(formData).unwrap()
+        handleAvatarClose()
+      } catch {
+        setModalError(true)
+      }
     }
   }, [file, handleAvatarClose])
 
@@ -186,12 +149,12 @@ export const ProfileEditPage = () => {
           <div className={s.profilePageEdit__info}>
             <div className={s.profilePageEdit__content_left}>
               <Avatar
-                path={user.avatar ? avatarPath : ''}
+                path={user?.avatar ? avatarPath : ''}
                 onClick={handleAvatarClick}
                 isEditable={true}
               />
               <div className={s.profilePageEdit__displayName}>
-                {user.display_name ?? user.login}
+                {user?.display_name ?? user?.login}
               </div>
             </div>
             <div className={s.profilePageEdit__content_right}>
