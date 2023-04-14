@@ -7,8 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import { EVENTS } from './core/Events'
 import { PATHNAMES } from '../../constants/pathnames'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { actions } from '../../store'
 import { useActions } from '../../hooks/useActions'
 
 const width = window.innerWidth
