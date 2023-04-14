@@ -1,7 +1,7 @@
 type Callback = (...args: unknown[]) => void
 
 export class Emitter {
-  private listeners: Record<string, Callback[]> = {}
+  listeners: Record<string, Callback[]> = {}
   private static instance: Emitter
 
   public static getInstance(): Emitter {
