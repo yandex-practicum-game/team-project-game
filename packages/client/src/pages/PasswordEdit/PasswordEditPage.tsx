@@ -8,6 +8,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useChangeUserPasswordMutation } from '../../store/base.api'
 import { TEXTS } from '../../constants/requests'
+import { withAuth } from '../../hocs/withAuth'
 
 type PasswordUpdateData = {
   oldPassword: string
@@ -34,7 +35,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
 })
 
-export const PasswordEditPage = () => {
+const PasswordEditPage = () => {
   const [error, setError] = useState('')
   const [changeUserPassword] = useChangeUserPasswordMutation()
 
@@ -119,3 +120,5 @@ export const PasswordEditPage = () => {
     </main>
   )
 }
+
+export default withAuth(PasswordEditPage)

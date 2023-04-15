@@ -8,11 +8,12 @@ import { EVENTS } from './core/Events'
 import { PATHNAMES } from '../../constants/pathnames'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
+import { withAuth } from '../../hocs/withAuth'
 
 const width = window.innerWidth
 const height = window.innerHeight
 
-export const GamePage = () => {
+const GamePage = () => {
   const nav = useNavigate()
   const ref = useRef<HTMLCanvasElement | null>(null)
 
@@ -61,3 +62,5 @@ export const GamePage = () => {
     </div>
   )
 }
+
+export default withAuth(GamePage)

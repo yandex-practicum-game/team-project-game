@@ -6,6 +6,7 @@ import { mockLeadersList } from './mock'
 import { LeaderBoardCard } from '../../components/LeaderBoardCard'
 import { API_CONFIG } from '../../api/config'
 import avatarPlaceholder from '../../assets/images/avatarPlaceholder.svg'
+import { withAuth } from '../../hocs/withAuth'
 
 export const LeaderboardPage = () => {
   const navigate = useNavigate()
@@ -41,3 +42,5 @@ export const LeaderboardPage = () => {
     </div>
   )
 }
+
+export default withAuth(LeaderboardPage)

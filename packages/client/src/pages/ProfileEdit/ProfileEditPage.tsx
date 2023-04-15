@@ -1,5 +1,6 @@
 import React, {
   BaseSyntheticEvent,
+  FC,
   useCallback,
   useEffect,
   useMemo,
@@ -26,6 +27,7 @@ import {
 } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
+import { withAuth, WithAuthProps } from '../../hocs/withAuth'
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
@@ -50,9 +52,8 @@ const validationSchema = Yup.object().shape({
     .matches(/^[\+]?[0-9]{10,15}$/, 'Invalid phone'),
 })
 
-export const ProfileEditPage = () => {
+const ProfileEditPage: FC<WithAuthProps> = ({ user, isLoading }) => {
   const [error] = useState('')
-  const { data: user, isLoading } = useGetUserQuery(null)
   const [changeUserData] = useChangeUserDataMutation()
   const [changeUserAvatar] = useChangeUserAvatarMutation()
   const [title, setTitle] = useState('Upload file')
@@ -264,3 +265,5 @@ export const ProfileEditPage = () => {
     </main>
   )
 }
+
+export default withAuth(ProfileEditPage)

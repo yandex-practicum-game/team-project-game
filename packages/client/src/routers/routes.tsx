@@ -4,7 +4,7 @@ import { LoginPage } from '../pages/Login'
 import { PATHNAMES } from '../constants/pathnames'
 import { RegistrationPage } from '../pages/Registration'
 import { ErrorPage } from '../pages/Error'
-import { StartGame } from '../pages/StartGame/StartGame'
+import { StartGame } from '../pages/StartGame/index'
 import { GameOver } from '../pages/GameOver'
 import { LeaderboardPage } from '../pages/Leaderboard'
 import { ForumPage } from '../pages/Forum'
@@ -12,7 +12,7 @@ import { PasswordEditPage } from '../pages/PasswordEdit'
 import { ProfileEditPage } from '../pages/ProfileEdit'
 import { ProfilePage } from '../pages/Profile'
 import { PresentationPage } from '../pages/PresentationPage'
-import { GamePage } from '../pages/Game/GamePage'
+import { GamePage } from '../pages/Game/index'
 
 export const routes: RouteObject[] = [
   { path: PATHNAMES.HOME, element: <HomePage /> },

@@ -1,1 +1,2 @@
-export { LeaderboardPage } from './LeaderboardPage'
+import LeaderboardPage from './LeaderboardPage'
+export { LeaderboardPage }
