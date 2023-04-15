@@ -31,9 +31,7 @@ export const LeaderboardPage = () => {
         }).unwrap()
 
         if (!leaderData) return
-        const leaders: LeaderData[] = leaderData.map(
-          (leader: { data: LeaderData }): LeaderData => leader.data
-        )
+        const leaders: LeaderData[] = leaderData.map(leader => leader.data)
 
         actions.setLeaders(leaders)
       } catch {

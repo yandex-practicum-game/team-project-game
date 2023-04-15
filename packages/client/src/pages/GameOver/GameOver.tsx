@@ -41,11 +41,7 @@ export const GameOver = () => {
 
       if (!leaderData) return
 
-      const leaders: LeaderData[] = leaderData.map(
-        (leader: { data: LeaderData }): LeaderData => {
-          return leader.data
-        }
-      )
+      const leaders: LeaderData[] = leaderData.map(leader => leader.data)
 
       actions.setLeaders(leaders)
     } catch {
