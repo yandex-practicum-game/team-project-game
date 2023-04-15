@@ -9,9 +9,10 @@ import {
   useSetLeaderMutation,
 } from '../../store/lidearboard.api'
 import { TEXTS } from '../../constants/requests'
-import { LeaderData } from '../../api/Leaderboard/types'
+import { LeaderData } from '../../types/leaderboard.types'
 import { useActions } from '../../hooks/useActions'
 import { useState } from 'react'
+import { useAlert } from 'react-alert'
 
 export const GameOver = () => {
   const score = useAppSelector(state => state.game.score)
@@ -20,6 +21,7 @@ export const GameOver = () => {
   const [getLeaders] = useGetLeadersMutation()
   const [setLeader] = useSetLeaderMutation()
   const actions = useActions()
+  const alert = useAlert()
 
   const saveScore = async () => {
     try {
@@ -28,32 +30,26 @@ export const GameOver = () => {
         login: user.login,
         score: score,
         avatar: user.avatar,
-      })
-        .unwrap()
-        .then(async () => {
-          setHint('Your score is saved')
-          try {
-            await getLeaders({
-              ratingFieldName: 'score',
-              cursor: 0,
-              limit: 100,
-            })
-              .unwrap()
-              .then(res => {
-                if (!res) return
-                const leaders: LeaderData[] = res.map(
-                  (leader: { data: LeaderData }): LeaderData => {
-                    return leader.data
-                  }
-                )
-                actions.setLeaders(leaders)
-              })
-          } catch {
-            console.error(TEXTS.ERROR)
-          }
-        })
+      }).unwrap()
+      setHint('Your score is saved')
+
+      const leaderData = await getLeaders({
+        ratingFieldName: 'score',
+        cursor: 0,
+        limit: 100,
+      }).unwrap()
+
+      if (!leaderData) return
+
+      const leaders: LeaderData[] = leaderData.map(
+        (leader: { data: LeaderData }): LeaderData => {
+          return leader.data
+        }
+      )
+
+      actions.setLeaders(leaders)
     } catch {
-      console.error(TEXTS.ERROR)
+      alert.show(TEXTS.ERROR)
     }
   }
 

@@ -3,47 +3,43 @@ import { useNavigate } from 'react-router-dom'
 import s from './LeaderboardPage.module.scss'
 import { Button } from '../../components/Button'
 import { LeaderBoardCard } from '../../components/LeaderBoardCard'
-import { API_CONFIG } from '../../api/config'
 import avatarPlaceholder from '../../assets/images/avatarPlaceholder.svg'
-import { LeaderData } from '../../api/Leaderboard/types'
+import { LeaderData } from '../../types/leaderboard.types'
 import { TEXTS } from '../../constants/requests'
 import { useGetLeadersMutation } from '../../store/lidearboard.api'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
 import { Spinner } from '../../components/Spinner'
+import { API_CONFIG } from '../../constants/apiConfig'
+import { useAlert } from 'react-alert'
 
 export const LeaderboardPage = () => {
   const navigate = useNavigate()
-  const [getLeaders, { isLoading: isLeaderboardLoading }] =
-    useGetLeadersMutation()
+  const [getLeaders, { isLoading }] = useGetLeadersMutation()
   const leadersList = useAppSelector(state => state.leaderboard.leadersList)
   const actions = useActions()
+  const alert = useAlert()
 
   useEffect(() => {
-    console.log(leadersList)
-    if (leadersList?.length === 0) {
-      ;(async () => {
-        try {
-          await getLeaders({
-            ratingFieldName: 'score',
-            cursor: 0,
-            limit: 100,
-          })
-            .unwrap()
-            .then(res => {
-              if (!res) return
-              const leaders: LeaderData[] = res.map(
-                (leader: { data: LeaderData }): LeaderData => {
-                  return leader.data
-                }
-              )
-              actions.setLeaders(leaders)
-            })
-        } catch {
-          console.error(TEXTS.ERROR)
-        }
-      })()
-    }
+    if (leadersList?.length !== 0) return
+    ;(async () => {
+      try {
+        const leaderData = await getLeaders({
+          ratingFieldName: 'score',
+          cursor: 0,
+          limit: 100,
+        }).unwrap()
+
+        if (!leaderData) return
+        const leaders: LeaderData[] = leaderData.map(
+          (leader: { data: LeaderData }): LeaderData => leader.data
+        )
+
+        actions.setLeaders(leaders)
+      } catch {
+        alert.show(TEXTS.ERROR)
+      }
+    })()
   }, [])
 
   const goBack = function () {
@@ -53,7 +49,7 @@ export const LeaderboardPage = () => {
   return (
     <div className={s.LeaderboardPage}>
       <div className={s.LeaderboardPage__container}>
-        {isLeaderboardLoading ? (
+        {isLoading ? (
           <Spinner />
         ) : (
           <>

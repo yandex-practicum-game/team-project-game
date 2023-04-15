@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { LeaderData } from '../api/Leaderboard/types'
+import { LeaderData } from '../types/leaderboard.types'
 
 export interface ILeadersState {
   leadersList: Array<LeaderData>

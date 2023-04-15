@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { API_CONFIG } from '../api/config'
-import { LeaderboardRequest, LeaderData } from '../api/Leaderboard/types'
+import { LeaderboardRequest, LeaderData } from '../types/leaderboard.types'
+import { API_CONFIG } from '../constants/apiConfig'
 
 export const leaderboardApi = createApi({
   reducerPath: 'leaderboardApi',
