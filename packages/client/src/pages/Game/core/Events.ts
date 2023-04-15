@@ -1,3 +1,4 @@
 export enum EVENTS {
   STOP_GAME = 'STOP_GAME',
+  START_GAME = 'START_GAME',
 }

@@ -5,7 +5,7 @@ import { EVENTS } from './Events'
 import { Player } from './Player'
 
 export class Game {
-  private static instance: Game
+  public static instance: Game
 
   private isStart = false
   private player!: Player
@@ -25,20 +25,30 @@ export class Game {
     Game.instance.start(ctx)
   }
 
-  public start(ctx: CanvasRenderingContext2D) {
+  private start(ctx: CanvasRenderingContext2D) {
     // для strict mode
     if (this.isStart) {
       return
     }
 
+    // запускаем подсчет очков в компоненте
     this.isStart = true
+    this.emitter.emit(EVENTS.START_GAME)
 
+    // создаем игрока и противника
     this.player = new Player(ctx, this.board)
     this.enemy = new Enemy(this.emitter, ctx, this.player, this.board)
 
+    // навешиваем слушаетелей на кнопки
     this.addKeyListenter()
 
-    this.emitter.on(EVENTS.STOP_GAME, this.stop.bind(this))
+    // подписываемся на стоп игру
+    const stopGame = () => {
+      this.stop()
+      this.emitter.off(EVENTS.STOP_GAME, stopGame)
+    }
+
+    this.emitter.on(EVENTS.STOP_GAME, stopGame)
   }
 
   // устанавливает слушатели на кнопки-стрелки
@@ -75,8 +85,6 @@ export class Game {
 
   private stop() {
     this.isStart = false
-    this.emitter.off(EVENTS.STOP_GAME, this.stop.bind(this))
-
     this.player.stop()
     this.enemy.stop()
 

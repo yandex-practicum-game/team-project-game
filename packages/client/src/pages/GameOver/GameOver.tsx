@@ -12,7 +12,7 @@ export const GameOver = () => {
   }
 
   const goStartPage = () => {
-    navigate(PATHNAMES.GALAXIAN)
+    navigate(PATHNAMES.GAME)
   }
 
   return (
