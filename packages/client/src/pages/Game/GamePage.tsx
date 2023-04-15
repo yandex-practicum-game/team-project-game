@@ -58,6 +58,9 @@ export const GamePage = () => {
         <h1>Canvas not supported</h1>
       </canvas>
       <div className={s.score}>SCORE: {game.score}</div>
+      <div className={s.fullscreenHint}>
+        Press <strong>F</strong> to set fullscreen mode
+      </div>
     </div>
   )
 }
