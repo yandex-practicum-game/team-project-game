@@ -21,7 +21,10 @@ export const LeaderboardPage = () => {
   const alert = useAlert()
 
   useEffect(() => {
-    if (leadersList?.length !== 0) return
+    if (leadersList?.length !== 0) {
+      return
+    }
+
     ;(async () => {
       try {
         const leaderData = await getLeaders({
@@ -30,7 +33,10 @@ export const LeaderboardPage = () => {
           limit: 100,
         }).unwrap()
 
-        if (!leaderData) return
+        if (!leaderData) {
+          return
+        }
+
         const leaders: LeaderData[] = leaderData.map(leader => leader.data)
 
         actions.setLeaders(leaders)

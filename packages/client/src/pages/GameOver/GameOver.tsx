@@ -31,6 +31,7 @@ export const GameOver = () => {
         score: score,
         avatar: user.avatar,
       }).unwrap()
+
       setHint('Your score is saved')
 
       const leaderData = await getLeaders({
@@ -39,7 +40,9 @@ export const GameOver = () => {
         limit: 100,
       }).unwrap()
 
-      if (!leaderData) return
+      if (!leaderData) {
+        return
+      }
 
       const leaders: LeaderData[] = leaderData.map(leader => leader.data)
 
