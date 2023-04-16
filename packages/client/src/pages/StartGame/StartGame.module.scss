@@ -2,15 +2,30 @@
 
 .title {
   color: $text-color;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
   text-shadow: 12px 4px 11px rgba(0, 0, 0, 0.25);
   font-style: normal;
   font-weight: 400;
   font-size: 54px;
   text-align: center;
-  margin-bottom: 65px;
+}
+
+.description {
+  color: $text-color;
+  margin-bottom: 3rem;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .button {
   min-width: 205px;
+  text-align: center;
 }

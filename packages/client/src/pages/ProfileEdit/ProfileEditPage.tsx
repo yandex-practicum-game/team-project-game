@@ -9,9 +9,8 @@ import React, {
 import s from './ProfileEditPage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
-import { UserResponse } from '../../api/Auth/types'
+import { UserResponse } from '../../types/auth.types'
 import { Avatar } from '../../components/Avatar'
-import { API_CONFIG } from '../../api/config'
 import * as Yup from 'yup'
 import { Input } from '../../components/Input'
 import { Formik } from 'formik'
@@ -26,6 +25,7 @@ import {
 } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
+import { API_CONFIG } from '../../constants/apiConfig'
 import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
 
