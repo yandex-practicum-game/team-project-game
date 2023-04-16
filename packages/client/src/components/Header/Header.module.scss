@@ -1,0 +1,22 @@
+@import './../../styles/variables.scss';
+@import './../../styles/mixins.scss';
+
+.header {
+  width: 100%;
+  background-color: $underLayer;
+}
+
+.list {
+  @include f-center;
+  flex-wrap: wrap;
+}
+
+.item {
+  margin: 1.4rem;
+}
+
+.link {
+  color: $text-color;
+  font-size: 1.8rem;
+  text-decoration: none;
+}

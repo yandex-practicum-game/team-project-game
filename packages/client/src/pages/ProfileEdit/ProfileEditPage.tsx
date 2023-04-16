@@ -27,6 +27,7 @@ import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
 import { API_CONFIG } from '../../constants/apiConfig'
 import { withAuth } from '../../hocs/withAuth'
+import { Layout } from '../../components/Layout'
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
@@ -141,128 +142,130 @@ const ProfileEditPage = () => {
   }, [file, handleAvatarClose])
 
   return (
-    <main className={s.profilePageEdit}>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className={s.profilePageEdit__container}>
-          <div className={s.profilePageEdit__title}>Edit Profile</div>
-          <div className={s.profilePageEdit__info}>
-            <div className={s.profilePageEdit__content_left}>
-              <Avatar
-                path={user?.avatar ? avatarPath : ''}
-                onClick={handleAvatarClick}
-                isEditable={true}
-              />
-              <div className={s.profilePageEdit__displayName}>
-                {user?.display_name ?? user?.login}
+    <Layout>
+      <main className={s.profilePageEdit}>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className={s.profilePageEdit__container}>
+            <div className={s.profilePageEdit__title}>Edit Profile</div>
+            <div className={s.profilePageEdit__info}>
+              <div className={s.profilePageEdit__content_left}>
+                <Avatar
+                  path={user?.avatar ? avatarPath : ''}
+                  onClick={handleAvatarClick}
+                  isEditable={true}
+                />
+                <div className={s.profilePageEdit__displayName}>
+                  {user?.display_name ?? user?.login}
+                </div>
+              </div>
+              <div className={s.profilePageEdit__content_right}>
+                <Formik
+                  initialValues={user}
+                  validationSchema={validationSchema}
+                  onSubmit={updateProfile}>
+                  {({ errors, handleSubmit, handleChange, values }) => {
+                    return (
+                      <>
+                        <form
+                          onSubmit={handleSubmit}
+                          className={s.form}
+                          name="profile edit form"
+                          id="profile-edit-form">
+                          <Input
+                            label="Email"
+                            error={errors.email}
+                            name={'email'}
+                            placeholder={'Email Address'}
+                            type={'email'}
+                            value={values.email}
+                            onChange={handleChange}
+                          />
+                          <Input
+                            label="Login"
+                            error={errors.login}
+                            name={'login'}
+                            placeholder={'Login'}
+                            type={'text'}
+                            value={values.login}
+                            onChange={handleChange}
+                          />
+                          <Input
+                            label="Display name"
+                            error={errors.display_name}
+                            name={'display_name'}
+                            placeholder={'Display name'}
+                            type={'text'}
+                            value={values.display_name ?? ''}
+                            onChange={handleChange}
+                          />
+                          <Input
+                            label="Phone number"
+                            error={errors.phone}
+                            name={'phone'}
+                            placeholder={'Phone number'}
+                            type={'number'}
+                            value={values.phone}
+                            onChange={handleChange}
+                          />
+                          <Input
+                            label="Name"
+                            error={errors.first_name}
+                            name={'first_name'}
+                            placeholder={'Name'}
+                            type={'text'}
+                            value={values.first_name}
+                            onChange={handleChange}
+                          />
+                          <Input
+                            label="Surname"
+                            error={errors.second_name}
+                            name={'second_name'}
+                            placeholder={'Surname'}
+                            type={'text'}
+                            value={values.second_name}
+                            onChange={handleChange}
+                          />
+                        </form>
+                        {error && <span className={s.regError}>{error}</span>}
+                      </>
+                    )
+                  }}
+                </Formik>
               </div>
             </div>
-            <div className={s.profilePageEdit__content_right}>
-              <Formik
-                initialValues={user}
-                validationSchema={validationSchema}
-                onSubmit={updateProfile}>
-                {({ errors, handleSubmit, handleChange, values }) => {
-                  return (
-                    <>
-                      <form
-                        onSubmit={handleSubmit}
-                        className={s.form}
-                        name="profile edit form"
-                        id="profile-edit-form">
-                        <Input
-                          label="Email"
-                          error={errors.email}
-                          name={'email'}
-                          placeholder={'Email Address'}
-                          type={'email'}
-                          value={values.email}
-                          onChange={handleChange}
-                        />
-                        <Input
-                          label="Login"
-                          error={errors.login}
-                          name={'login'}
-                          placeholder={'Login'}
-                          type={'text'}
-                          value={values.login}
-                          onChange={handleChange}
-                        />
-                        <Input
-                          label="Display name"
-                          error={errors.display_name}
-                          name={'display_name'}
-                          placeholder={'Display name'}
-                          type={'text'}
-                          value={values.display_name ?? ''}
-                          onChange={handleChange}
-                        />
-                        <Input
-                          label="Phone number"
-                          error={errors.phone}
-                          name={'phone'}
-                          placeholder={'Phone number'}
-                          type={'number'}
-                          value={values.phone}
-                          onChange={handleChange}
-                        />
-                        <Input
-                          label="Name"
-                          error={errors.first_name}
-                          name={'first_name'}
-                          placeholder={'Name'}
-                          type={'text'}
-                          value={values.first_name}
-                          onChange={handleChange}
-                        />
-                        <Input
-                          label="Surname"
-                          error={errors.second_name}
-                          name={'second_name'}
-                          placeholder={'Surname'}
-                          type={'text'}
-                          value={values.second_name}
-                          onChange={handleChange}
-                        />
-                      </form>
-                      {error && <span className={s.regError}>{error}</span>}
-                    </>
-                  )
-                }}
-              </Formik>
+            <div className={s.profilePageEdit__actions}>
+              <Button text={'Go Back'} type="button" onClick={onBack}></Button>
+              <Button
+                text={'Save'}
+                type="submit"
+                form={'profile-edit-form'}></Button>
             </div>
           </div>
-          <div className={s.profilePageEdit__actions}>
-            <Button text={'Go Back'} type="button" onClick={onBack}></Button>
-            <Button
-              text={'Save'}
-              type="submit"
-              form={'profile-edit-form'}></Button>
-          </div>
-        </div>
-      )}
-      {isModalVisible && (
-        <OverlayBlur onClick={handleOverlayClick}>
-          <Modal
-            ref={popupElemRef}
-            onClick={handleModalSubmit}
-            title={title}
-            buttonText="Update Avatar"
-            showDescription={showDescription}
-            descriptionText="Choose file">
-            <label className={s.profilePageEdit__inputFile}>
-              <input ref={inputElemRef} type="file" />
-            </label>
-            {modalError && (
-              <p className={s.profilePageEdit__errorMessage}>
-                Couldn't save avatar!
-              </p>
-            )}
-          </Modal>
-        </OverlayBlur>
-      )}
-    </main>
+        )}
+        {isModalVisible && (
+          <OverlayBlur onClick={handleOverlayClick}>
+            <Modal
+              ref={popupElemRef}
+              onClick={handleModalSubmit}
+              title={title}
+              buttonText="Update Avatar"
+              showDescription={showDescription}
+              descriptionText="Choose file">
+              <label className={s.profilePageEdit__inputFile}>
+                <input ref={inputElemRef} type="file" />
+              </label>
+              {modalError && (
+                <p className={s.profilePageEdit__errorMessage}>
+                  Couldn't save avatar!
+                </p>
+              )}
+            </Modal>
+          </OverlayBlur>
+        )}
+      </main>
+    </Layout>
   )
 }
 

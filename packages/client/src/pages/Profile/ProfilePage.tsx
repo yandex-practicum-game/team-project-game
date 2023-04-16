@@ -11,6 +11,7 @@ import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
 import { API_CONFIG } from '../../constants/apiConfig'
 import { withAuth } from '../../hocs/withAuth'
+import { Layout } from '../../components/Layout'
 
 const ProfilePage = () => {
   const navigate = useNavigate()
@@ -32,35 +33,37 @@ const ProfilePage = () => {
   }, [])
 
   return (
-    <main className={s.profilePage}>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className={s.profilePage__container}>
-          <div className={s.profilePage__title}>Profile</div>
-          <div className={s.profilePage__info}>
-            <div className={s.profilePage__content_left}>
-              <Avatar path={user?.avatar ? avatarPath : ''} />
-              <div className={s.profilePage__displayName}>
-                {user?.display_name ?? user?.login}
+    <Layout>
+      <main className={s.profilePage}>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className={s.profilePage__container}>
+            <div className={s.profilePage__title}>Profile</div>
+            <div className={s.profilePage__info}>
+              <div className={s.profilePage__content_left}>
+                <Avatar path={user?.avatar ? avatarPath : ''} />
+                <div className={s.profilePage__displayName}>
+                  {user?.display_name ?? user?.login}
+                </div>
+              </div>
+              <div className={s.profilePage__content_right}>
+                <InfoRow name={'Email'} value={user?.email} />
+                <InfoRow name={'Login'} value={user?.login} />
+                <InfoRow name={'First Name'} value={user?.first_name} />
+                <InfoRow name={'Second Name'} value={user?.second_name} />
+                <InfoRow name={'Phone'} value={user?.phone} />
               </div>
             </div>
-            <div className={s.profilePage__content_right}>
-              <InfoRow name={'Email'} value={user?.email} />
-              <InfoRow name={'Login'} value={user?.login} />
-              <InfoRow name={'First Name'} value={user?.first_name} />
-              <InfoRow name={'Second Name'} value={user?.second_name} />
-              <InfoRow name={'Phone'} value={user?.phone} />
+            <div className={s.profilePage__actions}>
+              <Button text={'Edit Profile'} path={PATHNAMES.PROFILE_EDIT} />
+              <Button text={'Change Password'} path={PATHNAMES.PASSWORD_EDIT} />
+              <Button text={'Logout'} onClick={onLogout} />
             </div>
           </div>
-          <div className={s.profilePage__actions}>
-            <Button text={'Edit Profile'} path={PATHNAMES.PROFILE_EDIT} />
-            <Button text={'Change Password'} path={PATHNAMES.PASSWORD_EDIT} />
-            <Button text={'Logout'} onClick={onLogout} />
-          </div>
-        </div>
-      )}
-    </main>
+        )}
+      </main>
+    </Layout>
   )
 }
 
