@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { SigninRequest } from '../api/Auth/types'
-import { API_CONFIG } from '../api/config'
-import { ChangePasswordRequest, UserUpdateRequest } from '../api/User/types'
+import { SigninRequest } from '../types/auth.types'
+import { ChangePasswordRequest, UserUpdateRequest } from '../types/user.types'
+import { API_CONFIG } from '../constants/apiConfig'
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
