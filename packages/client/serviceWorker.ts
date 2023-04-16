@@ -1,7 +1,25 @@
-const CACHE_NAME = 'cache-v1'
-const URLS = ['/', '/login']
+/// <reference lib="WebWorker" />
+export type {}
+declare const self: ServiceWorkerGlobalScope
 
-this.addEventListener('install', (event: any) => {
+const CACHE_NAME = 'cache-v2'
+const URLS = [
+  '/',
+  '/login',
+  '/registration',
+  '/500',
+  '/galaxian',
+  '/gameover',
+  '/leaderboard',
+  '/forum',
+  '/profile',
+  '/profile/edit',
+  '/profile/password',
+  '/presentation',
+  '/game',
+]
+
+self.addEventListener('install', event => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -16,20 +34,20 @@ this.addEventListener('install', (event: any) => {
   )
 })
 
-this.addEventListener('activate', (event: any) => {
+self.addEventListener('activate', event => {
   console.log('activate')
   event.waitUntil(
     caches.keys().then(cachesNames => {
       return Promise.all(
         cachesNames
-          .filter(name => name === CACHE_NAME)
+          .filter(name => name !== CACHE_NAME)
           .map(name => caches.delete(name))
       )
     })
   )
 })
 
-this.addEventListener('fetch', (event: any) => {
+self.addEventListener('fetch', event => {
   if (
     event.request.url.startsWith('chrome-extension') ||
     event.request.url.includes('extension')
