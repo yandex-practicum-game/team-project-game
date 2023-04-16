@@ -1,1 +1,2 @@
-export { ForumPage } from './ForumPage'
+import ForumPage from './ForumPage'
+export { ForumPage }

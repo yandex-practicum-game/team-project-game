@@ -3,8 +3,9 @@ import s from './GameOver.module.scss'
 import { Button } from '../../components/Button'
 import { PATHNAMES } from '../../constants/pathnames'
 import { useNavigate } from 'react-router-dom'
+import { withAuth } from '../../hocs/withAuth'
 
-export const GameOver = () => {
+const GameOver = () => {
   const navigate = useNavigate()
 
   const goHomePage = () => {
@@ -39,3 +40,5 @@ export const GameOver = () => {
     </GameWrapper>
   )
 }
+
+export default withAuth(GameOver)

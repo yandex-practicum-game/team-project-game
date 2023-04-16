@@ -26,6 +26,7 @@ import {
 } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
+import { withAuth } from '../../hocs/withAuth'
 
 /* eslint-disable */
 const validationSchema = Yup.object().shape({
@@ -50,7 +51,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[\+]?[0-9]{10,15}$/, 'Invalid phone'),
 })
 
-export const ProfileEditPage = () => {
+const ProfileEditPage = () => {
   const [error] = useState('')
   const { data: user, isLoading } = useGetUserQuery(null)
   const [changeUserData] = useChangeUserDataMutation()
@@ -264,3 +265,5 @@ export const ProfileEditPage = () => {
     </main>
   )
 }
+
+export default withAuth(ProfileEditPage)

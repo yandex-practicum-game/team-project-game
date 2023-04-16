@@ -1,1 +1,2 @@
-export { PasswordEditPage } from './PasswordEditPage'
+import PasswordEditPage from './PasswordEditPage'
+export { PasswordEditPage }

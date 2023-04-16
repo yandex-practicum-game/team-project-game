@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import s from './ForumPage.module.scss'
 import { Button } from '../../components/Button'
 import { IForum, mockForumList } from './mock'
+import { withAuth } from '../../hocs/withAuth'
 
-export const ForumPage = () => {
+const ForumPage = () => {
   const navigate = useNavigate()
 
   const goBack = function () {
@@ -34,3 +35,5 @@ export const ForumPage = () => {
     </div>
   )
 }
+
+export default withAuth(ForumPage)
