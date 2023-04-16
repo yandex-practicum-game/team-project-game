@@ -7,6 +7,7 @@ import { LeaderBoardCard } from '../../components/LeaderBoardCard'
 import { API_CONFIG } from '../../api/config'
 import avatarPlaceholder from '../../assets/images/avatarPlaceholder.svg'
 import { withAuth } from '../../hocs/withAuth'
+import { Layout } from '../../components/Layout'
 
 export const LeaderboardPage = () => {
   const navigate = useNavigate()
@@ -16,30 +17,32 @@ export const LeaderboardPage = () => {
   }
 
   return (
-    <div className={s.LeaderboardPage}>
-      <div className={s.LeaderboardPage__container}>
-        <h2 className={s.LeaderboardPage__title}>Leaderboard</h2>
-        <ul className={s.LeaderboardPage__list}>
-          {mockLeadersList &&
-            mockLeadersList.map((user, index) => (
-              <LeaderBoardCard
-                position={index + 1}
-                score={user.score}
-                avatar={
-                  user.avatar
-                    ? `${API_CONFIG.RESOURCES_URL}${user.avatar}`
-                    : avatarPlaceholder
-                }
-                userName={
-                  user.displayName || `${user.firstName} ${user.secondName}`
-                }
-                key={'leader' + index}
-              />
-            ))}
-        </ul>
-        <Button text="Go back" onClick={goBack} />
+    <Layout>
+      <div className={s.LeaderboardPage}>
+        <div className={s.LeaderboardPage__container}>
+          <h2 className={s.LeaderboardPage__title}>Leaderboard</h2>
+          <ul className={s.LeaderboardPage__list}>
+            {mockLeadersList &&
+              mockLeadersList.map((user, index) => (
+                <LeaderBoardCard
+                  position={index + 1}
+                  score={user.score}
+                  avatar={
+                    user.avatar
+                      ? `${API_CONFIG.RESOURCES_URL}${user.avatar}`
+                      : avatarPlaceholder
+                  }
+                  userName={
+                    user.displayName || `${user.firstName} ${user.secondName}`
+                  }
+                  key={'leader' + index}
+                />
+              ))}
+          </ul>
+          <Button text="Go back" onClick={goBack} />
+        </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 
