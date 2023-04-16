@@ -11,6 +11,7 @@ import { useActions } from '../../hooks/useActions'
 import { Spinner } from '../../components/Spinner'
 import { API_CONFIG } from '../../constants/apiConfig'
 import { useAlert } from 'react-alert'
+import { withAuth } from '../../hocs/withAuth'
 
 export const LeaderboardPage = () => {
   const navigate = useNavigate()
@@ -87,3 +88,5 @@ export const LeaderboardPage = () => {
     </div>
   )
 }
+
+export default withAuth(LeaderboardPage)

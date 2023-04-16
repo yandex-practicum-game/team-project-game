@@ -8,11 +8,12 @@ import { EVENTS } from './core/Events'
 import { PATHNAMES } from '../../constants/pathnames'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
+import { withAuth } from '../../hocs/withAuth'
 
 const width = window.innerWidth
 const height = window.innerHeight
 
-export const GamePage = () => {
+const GamePage = () => {
   const nav = useNavigate()
   const ref = useRef<HTMLCanvasElement | null>(null)
 
@@ -58,6 +59,11 @@ export const GamePage = () => {
         <h1>Canvas not supported</h1>
       </canvas>
       <div className={s.score}>SCORE: {game.score}</div>
+      <div className={s.fullscreenHint}>
+        Press <strong>F</strong> to set fullscreen mode
+      </div>
     </div>
   )
 }
+
+export default withAuth(GamePage)

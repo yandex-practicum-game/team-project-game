@@ -1,1 +1,2 @@
-export { GameOver } from './GameOver'
+import GameOver from './GameOver'
+export { GameOver }

@@ -2,8 +2,9 @@ import { GameWrapper } from '../../components/GameWrapper'
 import s from './StartGame.module.scss'
 import { Button } from '../../components/Button'
 import { PATHNAMES } from '../../constants/pathnames'
+import { withAuth } from '../../hocs/withAuth'
 
-export const StartGame = () => {
+const StartGame = () => {
   return (
     <GameWrapper>
       <h1 className={s.title}>Galaxian</h1>
@@ -28,3 +29,5 @@ export const StartGame = () => {
     </GameWrapper>
   )
 }
+
+export default withAuth(StartGame)

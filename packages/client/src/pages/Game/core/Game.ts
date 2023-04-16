@@ -63,6 +63,14 @@ export class Game {
       return
     }
 
+    if (e.code === KEYS.KEY_F) {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen()
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen()
+      }
+    }
+
     if (e.key === KEYS.ARROW_LEFT) {
       this.player.moveLeft()
     }

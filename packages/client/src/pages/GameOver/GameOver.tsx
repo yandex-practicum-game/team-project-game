@@ -13,8 +13,9 @@ import { LeaderData } from '../../types/leaderboard.types'
 import { useActions } from '../../hooks/useActions'
 import { useState } from 'react'
 import { useAlert } from 'react-alert'
+import { withAuth } from '../../hocs/withAuth'
 
-export const GameOver = () => {
+const GameOver = () => {
   const score = useAppSelector(state => state.game.score)
   const { data: user } = useGetUserQuery(null)
   const [hint, setHint] = useState('')
@@ -87,3 +88,5 @@ export const GameOver = () => {
     </GameWrapper>
   )
 }
+
+export default withAuth(GameOver)

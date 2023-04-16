@@ -10,8 +10,9 @@ import { useGetUserQuery, useLogoutMutation } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
 import { API_CONFIG } from '../../constants/apiConfig'
+import { withAuth } from '../../hocs/withAuth'
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const navigate = useNavigate()
   const { data: user, isLoading } = useGetUserQuery(null)
   const [logout] = useLogoutMutation()
@@ -62,3 +63,5 @@ export const ProfilePage = () => {
     </main>
   )
 }
+
+export default withAuth(ProfilePage)
