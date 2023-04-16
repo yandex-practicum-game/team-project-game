@@ -9,7 +9,6 @@ import { PATHNAMES } from '../../constants/pathnames'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
 import { withAuth } from '../../hocs/withAuth'
-import { Layout } from '../../components/Layout'
 
 const width = window.innerWidth
 const height = window.innerHeight

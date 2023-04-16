@@ -54,39 +54,41 @@ export const LeaderboardPage = () => {
   }
 
   return (
-    <div className={s.LeaderboardPage}>
-      <div className={s.LeaderboardPage__container}>
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <h2 className={s.LeaderboardPage__title}>Leaderboard</h2>
-            <ul className={s.LeaderboardPage__list}>
-              {leadersList.length > 0 &&
-                leadersList.map((user, index) => (
-                  <LeaderBoardCard
-                    position={index + 1}
-                    score={user.score}
-                    avatar={
-                      user.avatar
-                        ? `${API_CONFIG.RESOURCES_URL}${user.avatar}`
-                        : avatarPlaceholder
-                    }
-                    userName={user.login}
-                    key={user.id}
-                  />
-                ))}
-              {leadersList.length === 0 && (
-                <p className={s.LeaderboardPage__hint}>
-                  Leaderboard is empty now. Be first!
-                </p>
-              )}
-            </ul>
-            <Button text="Go back" onClick={goBack} />
-          </>
-        )}
+    <Layout>
+      <div className={s.LeaderboardPage}>
+        <div className={s.LeaderboardPage__container}>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <h2 className={s.LeaderboardPage__title}>Leaderboard</h2>
+              <ul className={s.LeaderboardPage__list}>
+                {leadersList.length > 0 &&
+                  leadersList.map((user, index) => (
+                    <LeaderBoardCard
+                      position={index + 1}
+                      score={user.score}
+                      avatar={
+                        user.avatar
+                          ? `${API_CONFIG.RESOURCES_URL}${user.avatar}`
+                          : avatarPlaceholder
+                      }
+                      userName={user.login}
+                      key={user.id}
+                    />
+                  ))}
+                {leadersList.length === 0 && (
+                  <p className={s.LeaderboardPage__hint}>
+                    Leaderboard is empty now. Be first!
+                  </p>
+                )}
+              </ul>
+              <Button text="Go back" onClick={goBack} />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </Layout>
   )
 }
 
