@@ -15,6 +15,7 @@ export const Header = () => {
       { name: 'Change password', path: PATHNAMES.PASSWORD_EDIT },
       { name: 'Forum', path: PATHNAMES.FORUM },
       { name: 'Leaderboard', path: PATHNAMES.LEADERBOARD },
+      { name: 'About game', path: PATHNAMES.GALAXIAN },
       { name: 'Game', path: PATHNAMES.GAME },
       { name: 'Error 404', path: PATHNAMES.ERROR_404 },
       { name: 'Error 500', path: PATHNAMES.ERROR_500 },
