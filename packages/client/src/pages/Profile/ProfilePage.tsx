@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import s from './ProfilePage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { InfoRow } from '../../components/InfoRow'
@@ -10,10 +10,11 @@ import { Spinner } from '../../components/Spinner'
 import { useGetUserQuery, useLogoutMutation } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
-import { withAuth, WithAuthProps } from '../../hocs/withAuth'
+import { withAuth } from '../../hocs/withAuth'
 
-const ProfilePage: FC<WithAuthProps> = ({ user, isLoading }) => {
+const ProfilePage = () => {
   const navigate = useNavigate()
+  const { data: user, isLoading } = useGetUserQuery(null)
   const [logout] = useLogoutMutation()
   const avatarPath = useMemo(
     () => API_CONFIG.RESOURCES_URL + user?.avatar,
