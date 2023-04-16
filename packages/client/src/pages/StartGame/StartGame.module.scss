@@ -9,6 +9,7 @@
   font-size: 54px;
   text-align: center;
 }
+
 .description {
   color: $text-color;
   margin-bottom: 3rem;
@@ -17,11 +18,13 @@
   font-size: 3rem;
   text-align: center;
 }
+
 .actions {
   display: flex;
   flex-direction: row;
   gap: 1rem;
 }
+
 .button {
   min-width: 205px;
   text-align: center;
