@@ -4,7 +4,6 @@ import s from './LeaderboardPage.module.scss'
 import { Button } from '../../components/Button'
 import { LeaderBoardCard } from '../../components/LeaderBoardCard'
 import avatarPlaceholder from '../../assets/images/avatarPlaceholder.svg'
-import { LeaderData } from '../../types/leaderboard.types'
 import { TEXTS } from '../../constants/requests'
 import { useGetLeadersMutation } from '../../store/lidearboard.api'
 import { useAppSelector } from '../../hooks/useAppSelector'
@@ -25,7 +24,7 @@ export const LeaderboardPage = () => {
       return
     }
 
-    ;(async () => {
+    const fetchLeaders = async () => {
       try {
         const leaderData = await getLeaders({
           ratingFieldName: 'score',
@@ -37,13 +36,15 @@ export const LeaderboardPage = () => {
           return
         }
 
-        const leaders: LeaderData[] = leaderData.map(leader => leader.data)
+        const leaders = leaderData.map(leader => leader.data)
 
         actions.setLeaders(leaders)
       } catch {
         alert.show(TEXTS.ERROR)
       }
-    })()
+    }
+
+    fetchLeaders()
   }, [])
 
   const goBack = function () {
