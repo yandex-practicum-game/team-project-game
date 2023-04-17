@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Crawl } from './components/Crawl'
-import { Greeting } from './components/Greeting'
 import { useAnyKeyListener } from '../../hooks/useAnyKeyListener'
+import { StartGame } from '../StartGame'
 
 export const PresentationPage = () => {
   const [value, setValue] = useState(false)
@@ -12,5 +12,5 @@ export const PresentationPage = () => {
 
   useAnyKeyListener(toggleValue)
 
-  return value ? <Crawl /> : <Greeting />
+  return value ? <StartGame /> : <Crawl />
 }

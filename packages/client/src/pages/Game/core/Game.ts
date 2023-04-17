@@ -14,6 +14,10 @@ export class Game {
     w: window.innerWidth,
     h: window.innerHeight,
   }
+  private listeners!: {
+    keydown: (e: KeyboardEvent) => void
+    keyup: (e: KeyboardEvent) => void
+  }
 
   private constructor(private emitter: Emitter) {}
 
@@ -40,7 +44,7 @@ export class Game {
     this.enemy = new Enemy(this.emitter, ctx, this.player, this.board)
 
     // навешиваем слушаетелей на кнопки
-    this.addKeyListenter()
+    this.addKeyListenters()
 
     // подписываемся на стоп игру
     const stopGame = () => {
@@ -52,9 +56,16 @@ export class Game {
   }
 
   // устанавливает слушатели на кнопки-стрелки
-  private addKeyListenter() {
-    document.addEventListener('keydown', this.keyDownCallback.bind(this))
-    document.addEventListener('keyup', this.keyUpCallback.bind(this))
+  private addKeyListenters() {
+    this.listeners.keydown = this.keyDownCallback.bind(this)
+    this.listeners.keyup = this.keyUpCallback.bind(this)
+    document.addEventListener('keydown', this.listeners.keydown)
+    document.addEventListener('keyup', this.listeners.keyup)
+  }
+
+  private removeKeyListenters() {
+    document.removeEventListener('keydown', this.listeners.keydown)
+    document.removeEventListener('keyup', this.listeners.keyup)
   }
 
   // при нажатии кнопки влево/вправо
@@ -64,11 +75,7 @@ export class Game {
     }
 
     if (e.code === KEYS.KEY_F) {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen()
-      } else if (document.exitFullscreen) {
-        document.exitFullscreen()
-      }
+      this.enableToogleFullscreen()
     }
 
     if (e.key === KEYS.ARROW_LEFT) {
@@ -92,6 +99,7 @@ export class Game {
   }
 
   private stop() {
+    this.removeKeyListenters()
     this.isStart = false
     this.player.stop()
     this.enemy.stop()
@@ -99,5 +107,13 @@ export class Game {
     this.enemy.rockets.forEach(rocket => {
       rocket.stop()
     })
+  }
+
+  private enableToogleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen()
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen()
+    }
   }
 }

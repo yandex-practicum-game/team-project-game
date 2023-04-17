@@ -15,7 +15,7 @@ import { PresentationPage } from '../pages/PresentationPage'
 import { GamePage } from '../pages/Game/index'
 
 export const routes: RouteObject[] = [
-  { path: PATHNAMES.HOME, element: <HomePage /> },
+  { path: PATHNAMES.HOME, element: <StartGame /> },
   { path: PATHNAMES.LOGIN, element: <LoginPage /> },
   { path: PATHNAMES.REGISTRATION, element: <RegistrationPage /> },
   { path: PATHNAMES.GALAXIAN, element: <StartGame /> },

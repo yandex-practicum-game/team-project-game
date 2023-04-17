@@ -3,10 +3,12 @@ import { LeaderData } from '../types/leaderboard.types'
 
 export interface ILeadersState {
   leadersList: Array<LeaderData>
+  isMount: boolean
 }
 
 const initialState: ILeadersState = {
   leadersList: [],
+  isMount: false,
 }
 
 export const leaderboardSlice = createSlice({
@@ -18,6 +20,9 @@ export const leaderboardSlice = createSlice({
       { payload }: PayloadAction<Array<LeaderData>>
     ) => {
       state.leadersList = payload
+    },
+    setIsMount: (state, action: PayloadAction<boolean>) => {
+      state.isMount = action.payload
     },
   },
 })

@@ -18,6 +18,7 @@ export const LeaderboardPage = () => {
   const navigate = useNavigate()
   const [getLeaders, { isLoading }] = useGetLeadersMutation()
   const leadersList = useAppSelector(state => state.leaderboard.leadersList)
+  const isMount = useAppSelector(state => state.leaderboard.isMount)
   const actions = useActions()
   const alert = useAlert()
 
@@ -42,11 +43,18 @@ export const LeaderboardPage = () => {
 
         actions.setLeaders(leaders)
       } catch {
-        alert.show(TEXTS.ERROR)
+        if (isMount) {
+          alert.show(TEXTS.ERROR)
+        }
       }
     }
 
     fetchLeaders()
+    actions.setIsMount(true)
+
+    return () => {
+      actions.setIsMount(false)
+    }
   }, [])
 
   const goBack = function () {

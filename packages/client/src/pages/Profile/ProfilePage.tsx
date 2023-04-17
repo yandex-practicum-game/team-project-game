@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo } from 'react'
 import s from './ProfilePage.module.scss'
+
+import React, { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { InfoRow } from '../../components/InfoRow'
 import { Button } from '../../components/Button'
@@ -14,14 +15,19 @@ import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
 
 const ProfilePage = () => {
+  const { data: user, isLoading } = useGetUserQuery(null, {
+    refetchOnMountOrArgChange: true,
+  })
+
   const navigate = useNavigate()
-  const { data: user, isLoading } = useGetUserQuery(null)
+  const alert = useAlert()
+
   const [logout] = useLogoutMutation()
+
   const avatarPath = useMemo(
     () => API_CONFIG.RESOURCES_URL + user?.avatar,
     [user?.avatar]
   )
-  const alert = useAlert()
 
   const onLogout = useCallback(async () => {
     try {
