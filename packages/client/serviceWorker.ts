@@ -2,7 +2,7 @@
 export type {}
 declare const self: ServiceWorkerGlobalScope
 
-const CACHE_NAME = 'cache-v2'
+const CACHE_NAME = 'cache-v15'
 const URLS = [
   '/',
   '/login',
@@ -19,31 +19,17 @@ const URLS = [
   '/game',
 ]
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache')
-        return cache.addAll(URLS)
-      })
-      .catch(err => {
-        console.log(err)
-        throw err
-      })
-  )
+self.addEventListener('install', async () => {
+  const cache = await caches.open(CACHE_NAME)
+  await cache.addAll(URLS)
 })
 
-self.addEventListener('activate', event => {
-  console.log('activate')
-  event.waitUntil(
-    caches.keys().then(cachesNames => {
-      return Promise.all(
-        cachesNames
-          .filter(name => name !== CACHE_NAME)
-          .map(name => caches.delete(name))
-      )
-    })
+self.addEventListener('activate', async () => {
+  const cacheNames = await caches.keys()
+  return Promise.all(
+    cacheNames
+      .filter(name => name !== CACHE_NAME)
+      .map(name => caches.delete(name))
   )
 })
 
@@ -69,13 +55,12 @@ self.addEventListener('fetch', event => {
           // Можно задавать дополнительные параметры запроса, если ответ вернулся некорректный.
           .then(response => {
             // Если что-то пошло не так, выдаём в основной поток результат, но не кладём его в кеш
-            if (
-              !response ||
-              response.status !== 200 ||
-              response.type !== 'basic'
-            ) {
-              return response
-            }
+            // if (
+            //   !response ||
+            //   response.status !== 200
+            // ) {
+            //   return response
+            // }
 
             const responseToCache = response.clone()
             // Получаем доступ к кешу по CACHE_NAME
