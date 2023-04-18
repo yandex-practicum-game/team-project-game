@@ -19,59 +19,59 @@ const URLS = [
   '/game',
 ]
 
-self.addEventListener('install', async () => {
+self.addEventListener('install', async event => {
+  console.log('Service Worker installed')
+  try {
+    const cache = await caches.open(CACHE_NAME)
+    await cache.addAll(URLS)
+    // Кеш установлен
+    self.skipWaiting()
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+self.addEventListener('activate', async event => {
+  console.log('Service Worker activated')
+  try {
+    const cacheNames = await caches.keys()
+    await Promise.all(
+      cacheNames.map(function (cacheName) {
+        if (cacheName !== CACHE_NAME) {
+          return caches.delete(cacheName)
+        }
+      })
+    )
+    // Новый кеш активирован
+    self.clients.claim()
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+async function fetchRequest(request: Request) {
   const cache = await caches.open(CACHE_NAME)
-  await cache.addAll(URLS)
-})
+  const cachedResponse = await cache.match(request)
+  if (cachedResponse) {
+    // Если есть, возвращаем его из кеша
+    return cachedResponse
+  } else {
+    // Иначе делаем запрос к серверу и кешируем полученный ответ
+    const response = await fetch(request)
+    await cache.put(request, response.clone())
+    // Уведомляем пользователя о новом кеше
+    self.registration.showNotification('Космическое обновление', {
+      body: 'Доступен новый контент. Пожалуйста, обновите страницу!',
+    })
+    return response
+  }
+}
 
-self.addEventListener('activate', async () => {
-  const cacheNames = await caches.keys()
-  return Promise.all(
-    cacheNames
-      .filter(name => name !== CACHE_NAME)
-      .map(name => caches.delete(name))
-  )
-})
-
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', async event => {
   if (
     event.request.url.startsWith('chrome-extension') ||
     event.request.url.includes('extension')
-    // !(event.request.url.indexOf('http') === 0)
   )
     return
-  event.respondWith(
-    // Пытаемся найти ответ на такой запрос в кеше
-    caches.match(event.request).then(response => {
-      // Если ответ найден, выдаём его
-      if (response) {
-        return response
-      }
-
-      const fetchRequest = event.request.clone()
-      // В противном случае делаем запрос на сервер
-      return (
-        fetch(fetchRequest)
-          // Можно задавать дополнительные параметры запроса, если ответ вернулся некорректный.
-          .then(response => {
-            // Если что-то пошло не так, выдаём в основной поток результат, но не кладём его в кеш
-            // if (
-            //   !response ||
-            //   response.status !== 200
-            // ) {
-            //   return response
-            // }
-
-            const responseToCache = response.clone()
-            // Получаем доступ к кешу по CACHE_NAME
-            caches.open(CACHE_NAME).then(cache => {
-              // Записываем в кеш ответ, используя в качестве ключа запрос
-              cache.put(event.request, responseToCache)
-            })
-            // Отдаём в основной поток ответ
-            return response
-          })
-      )
-    })
-  )
+  event.respondWith(fetchRequest(event.request))
 })

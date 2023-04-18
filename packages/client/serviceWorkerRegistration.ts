@@ -1,17 +1,24 @@
-export function serviceWorkerRegistration() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register(`/serviceWorker.ts`)
-        .then(registration => {
-          console.log(
-            'ServiceWorker registration successful with scope: ',
-            registration.scope
+export async function serviceWorkerRegistration() {
+  window.addEventListener('load', async () => {
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.register(
+          'serviceWorker.ts'
+        )
+        console.log('Сервисный работник зарегистрирован:', registration)
+
+        if (!('Notification' in window)) {
+          console.error(
+            'Этот браузер не поддерживает уведомления на рабочем столе'
           )
-        })
-        .catch(error => {
-          console.log('ServiceWorker registration failed: ', error)
-        })
-    })
-  }
+          return
+        }
+
+        const permission = await Notification.requestPermission()
+        console.log('Статус разрешения:', permission)
+      } catch (error) {
+        console.log('Ошибка регистрации сервис-воркера:', error)
+      }
+    }
+  })
 }
