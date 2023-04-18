@@ -2,7 +2,7 @@
 export type {}
 declare const self: ServiceWorkerGlobalScope
 
-const CACHE_NAME = 'cache-v15'
+const CACHE_NAME = 'cache-v1'
 const URLS = [
   '/',
   '/login',
@@ -44,6 +44,9 @@ self.addEventListener('activate', async event => {
     )
     // Новый кеш активирован
     self.clients.claim()
+    self.registration.showNotification('Космическое обновление', {
+      body: 'Доступен новый контент. Пожалуйста, обновите страницу!',
+    })
   } catch (error) {
     console.error(error)
   }
@@ -60,9 +63,6 @@ async function fetchRequest(request: Request) {
     const response = await fetch(request)
     await cache.put(request, response.clone())
     // Уведомляем пользователя о новом кеше
-    self.registration.showNotification('Космическое обновление', {
-      body: 'Доступен новый контент. Пожалуйста, обновите страницу!',
-    })
     return response
   }
 }
