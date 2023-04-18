@@ -57,6 +57,7 @@ export class Game {
 
   // устанавливает слушатели на кнопки-стрелки
   private addKeyListenters() {
+    this.listeners = {} as Game['listeners']
     this.listeners.keydown = this.keyDownCallback.bind(this)
     this.listeners.keyup = this.keyUpCallback.bind(this)
     document.addEventListener('keydown', this.listeners.keydown)
