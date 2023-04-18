@@ -1,28 +1,21 @@
-import React, {
-  BaseSyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
 import s from './ProfileEditPage.module.scss'
+import * as Yup from 'yup'
+
+import { useMemo, useRef, useState } from 'react'
+import { BaseSyntheticEvent, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { UserResponse } from '../../types/auth.types'
 import { Avatar } from '../../components/Avatar'
-import * as Yup from 'yup'
 import { Input } from '../../components/Input'
 import { Formik } from 'formik'
 import { Spinner } from '../../components/Spinner'
 import { PATHNAMES } from '../../constants/pathnames'
 import { OverlayBlur } from '../../components/OverlayBlur'
 import { Modal } from '../../components/Modal'
-import {
-  useGetUserQuery,
-  useChangeUserAvatarMutation,
-  useChangeUserDataMutation,
-} from '../../store/base.api'
+import { useGetUserQuery } from '../../store/base.api'
+import { useChangeUserDataMutation } from '../../store/base.api'
+import { useChangeUserAvatarMutation } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
 import { API_CONFIG } from '../../constants/apiConfig'
@@ -53,21 +46,27 @@ const validationSchema = Yup.object().shape({
 })
 
 const ProfileEditPage = () => {
-  const [error] = useState('')
-  const { data: user, isLoading } = useGetUserQuery(null)
-  const [changeUserData] = useChangeUserDataMutation()
-  const [changeUserAvatar] = useChangeUserAvatarMutation()
-  const [title, setTitle] = useState('Upload file')
-  const [showDescription, setShowDescription] = useState(false)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [modalError, setModalError] = useState(false)
-  const [file, setFile] = useState<File | undefined>(undefined)
+  const { data: user, isLoading } = useGetUserQuery(null, {
+    refetchOnMountOrArgChange: true,
+  })
+
+  const navigate = useNavigate()
   const alert = useAlert()
 
   const popupElemRef = useRef<HTMLInputElement>(null)
   const inputElemRef = useRef<HTMLInputElement>(null)
 
-  const navigate = useNavigate()
+  const [changeUserData, { isLoading: isLoadChangeUser }] =
+    useChangeUserDataMutation()
+
+  const [changeUserAvatar, { isLoading: isLoadChangePhoto }] =
+    useChangeUserAvatarMutation()
+
+  const [title, setTitle] = useState('Upload file')
+  const [showDescription, setShowDescription] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [modalError, setModalError] = useState(false)
+  const [file, setFile] = useState<File>()
 
   const avatarPath = useMemo(
     () => API_CONFIG.RESOURCES_URL + user?.avatar,
@@ -144,7 +143,7 @@ const ProfileEditPage = () => {
   return (
     <Layout>
       <main className={s.profilePageEdit}>
-        {isLoading ? (
+        {isLoading || isLoadChangeUser || isLoadChangePhoto ? (
           <Spinner />
         ) : (
           <div className={s.profilePageEdit__container}>
@@ -179,7 +178,7 @@ const ProfileEditPage = () => {
                             name={'email'}
                             placeholder={'Email Address'}
                             type={'email'}
-                            value={values.email}
+                            value={values?.email}
                             onChange={handleChange}
                           />
                           <Input
@@ -188,7 +187,7 @@ const ProfileEditPage = () => {
                             name={'login'}
                             placeholder={'Login'}
                             type={'text'}
-                            value={values.login}
+                            value={values?.login}
                             onChange={handleChange}
                           />
                           <Input
@@ -197,7 +196,7 @@ const ProfileEditPage = () => {
                             name={'display_name'}
                             placeholder={'Display name'}
                             type={'text'}
-                            value={values.display_name ?? ''}
+                            value={values?.display_name ?? ''}
                             onChange={handleChange}
                           />
                           <Input
@@ -206,7 +205,7 @@ const ProfileEditPage = () => {
                             name={'phone'}
                             placeholder={'Phone number'}
                             type={'number'}
-                            value={values.phone}
+                            value={values?.phone}
                             onChange={handleChange}
                           />
                           <Input
@@ -215,7 +214,7 @@ const ProfileEditPage = () => {
                             name={'first_name'}
                             placeholder={'Name'}
                             type={'text'}
-                            value={values.first_name}
+                            value={values?.first_name}
                             onChange={handleChange}
                           />
                           <Input
@@ -224,11 +223,10 @@ const ProfileEditPage = () => {
                             name={'second_name'}
                             placeholder={'Surname'}
                             type={'text'}
-                            value={values.second_name}
+                            value={values?.second_name}
                             onChange={handleChange}
                           />
                         </form>
-                        {error && <span className={s.regError}>{error}</span>}
                       </>
                     )
                   }}
