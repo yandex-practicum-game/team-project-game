@@ -5,19 +5,19 @@ export async function serviceWorkerRegistration() {
         const registration = await navigator.serviceWorker.register(
           'serviceWorker.ts'
         )
-        console.log('Сервисный работник зарегистрирован:', registration)
+        console.log('Service worker registered:', registration)
 
         if (!('Notification' in window)) {
           console.error(
-            'Этот браузер не поддерживает уведомления на рабочем столе'
+            'This browser does not support desktop notifications'
           )
           return
         }
 
         const permission = await Notification.requestPermission()
-        console.log('Статус разрешения:', permission)
+        console.log('Permission status:', permission)
       } catch (error) {
-        console.log('Ошибка регистрации сервис-воркера:', error)
+        console.log('Service worker registration error:', error)
       }
     }
   })
