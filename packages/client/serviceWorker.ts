@@ -44,8 +44,9 @@ self.addEventListener('activate', async event => {
     )
     // Новый кеш активирован
     self.clients.claim()
-    self.registration.showNotification('Космическое обновление', {
-      body: 'Доступен новый контент. Пожалуйста, обновите страницу!',
+    // Уведомляем пользователя о новом кеше
+    self.registration.showNotification('Cosmic news', {
+      body: 'New content available. Please refresh the page!',
     })
   } catch (error) {
     console.error(error)
@@ -62,7 +63,7 @@ async function fetchRequest(request: Request) {
     // Иначе делаем запрос к серверу и кешируем полученный ответ
     const response = await fetch(request)
     await cache.put(request, response.clone())
-    // Уведомляем пользователя о новом кеше
+   
     return response
   }
 }
