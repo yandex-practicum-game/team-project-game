@@ -8,7 +8,9 @@ export async function serviceWorkerRegistration() {
         console.log('Service worker registered:', registration)
 
         if (!('Notification' in window)) {
-          console.error('This browser does not support desktop notifications')
+          console.error(
+            'This browser does not support desktop notifications'
+          )
           return
         }
 
