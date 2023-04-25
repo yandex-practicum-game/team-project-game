@@ -11,7 +11,7 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 import { serviceWorkerRegistration } from '../serviceWorkerRegistration'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+export const App = () => (
   <React.StrictMode>
     <Provider store={store}>
       <AlertProvider template={AlertTemplate}>
@@ -21,4 +21,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </React.StrictMode>
 )
 
-serviceWorkerRegistration()
+ReactDOM.hydrateRoot(document.getElementById('root') as HTMLElement, <App />)
+
+if (process.env.NODE_ENV === 'production') {
+  serviceWorkerRegistration()
+}

@@ -19,7 +19,8 @@ const URLS = [
   '/game',
 ]
 
-self.addEventListener('install', async event => {
+
+self.addEventListener('install', async () => {
   console.log('Service Worker installed')
   try {
     const cache = await caches.open(CACHE_NAME)
@@ -31,7 +32,7 @@ self.addEventListener('install', async event => {
   }
 })
 
-self.addEventListener('activate', async event => {
+self.addEventListener('activate', async () => {
   console.log('Service Worker activated')
   try {
     const cacheNames = await caches.keys()
@@ -63,7 +64,7 @@ async function fetchRequest(request: Request) {
     // Иначе делаем запрос к серверу и кешируем полученный ответ
     const response = await fetch(request)
     await cache.put(request, response.clone())
-   
+
     return response
   }
 }
