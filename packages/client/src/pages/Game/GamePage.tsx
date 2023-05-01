@@ -10,8 +10,8 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
 import { withAuth } from '../../hocs/withAuth'
 
-const width = window.innerWidth
-const height = window.innerHeight
+const width = globalThis.innerWidth || 1000
+const height = globalThis.innerHeight || 800
 
 const GamePage = () => {
   const nav = useNavigate()
@@ -29,16 +29,16 @@ const GamePage = () => {
     }
 
     const startGame = () => {
-      const interval = window.setInterval(() => {
+      const interval = globalThis.setInterval(() => {
         actions.accrueScore()
       }, 1000)
       actions.resetScore()
-      actions.setScoreInterval(interval)
+      actions.setScoreInterval(interval as unknown as number)
     }
 
     const stopGame = () => {
       nav(PATHNAMES.GAMEOVER)
-      window.clearInterval(game.scoreInterval)
+      globalThis.clearInterval(game.scoreInterval)
     }
 
     emitter.on(EVENTS.START_GAME, startGame)
@@ -47,7 +47,7 @@ const GamePage = () => {
     Game.init(context, emitter)
 
     return () => {
-      window.clearInterval(game.scoreInterval)
+      globalThis.clearInterval(game.scoreInterval)
       emitter.off(EVENTS.START_GAME, startGame)
       emitter.off(EVENTS.STOP_GAME, stopGame)
     }

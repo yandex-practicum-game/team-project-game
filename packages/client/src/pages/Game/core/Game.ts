@@ -11,8 +11,8 @@ export class Game {
   private player!: Player
   private enemy!: Enemy
   private board = {
-    w: window.innerWidth,
-    h: window.innerHeight,
+    w: globalThis.innerWidth || 1000,
+    h: globalThis.innerHeight || 1000,
   }
   private listeners!: {
     keydown: (e: KeyboardEvent) => void
