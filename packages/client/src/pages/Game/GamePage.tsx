@@ -9,9 +9,10 @@ import { PATHNAMES } from '../../constants/pathnames'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
 import { withAuth } from '../../hocs/withAuth'
+import { DEFAULT_INNER_HEIGHT, DEFAULT_INNER_WIDTH } from './GamePage.constants'
 
-const width = globalThis.innerWidth || 1000
-const height = globalThis.innerHeight || 800
+const width = globalThis.innerWidth || DEFAULT_INNER_WIDTH
+const height = globalThis.innerHeight || DEFAULT_INNER_HEIGHT
 
 const GamePage = () => {
   const nav = useNavigate()

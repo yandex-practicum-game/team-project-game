@@ -1,4 +1,8 @@
 import { KEYS } from '../../../constants/keys'
+import {
+  DEFAULT_INNER_HEIGHT,
+  DEFAULT_INNER_WIDTH,
+} from '../GamePage.constants'
 import { Emitter } from './Emitter'
 import { Enemy } from './Enemy'
 import { EVENTS } from './Events'
@@ -11,8 +15,8 @@ export class Game {
   private player!: Player
   private enemy!: Enemy
   private board = {
-    w: globalThis.innerWidth || 1000,
-    h: globalThis.innerHeight || 1000,
+    w: globalThis.innerWidth || DEFAULT_INNER_WIDTH,
+    h: globalThis.innerHeight || DEFAULT_INNER_HEIGHT,
   }
   private listeners!: {
     keydown: (e: KeyboardEvent) => void
