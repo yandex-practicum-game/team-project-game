@@ -3,6 +3,7 @@ import { baseApi } from './base.api'
 import { gameSlice } from './game'
 import { leaderboardApi } from './lidearboard.api'
 import { leaderboardSlice } from './lidearboard.slice'
+import { oauthApi } from './oauth.api'
 
 export const store = configureStore({
   reducer: {
@@ -10,11 +11,13 @@ export const store = configureStore({
     [gameSlice.name]: gameSlice.reducer,
     [leaderboardApi.reducerPath]: leaderboardApi.reducer,
     [leaderboardSlice.name]: leaderboardSlice.reducer,
+    [oauthApi.reducerPath]: oauthApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
       .concat(baseApi.middleware)
-      .concat(leaderboardApi.middleware),
+      .concat(leaderboardApi.middleware)
+      .concat(oauthApi.middleware),
 })
 
 export const actions = {

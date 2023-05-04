@@ -28,3 +28,8 @@ export type UserResponse = {
 export type ReasonResponse = {
   reason: string
 }
+
+export type OAuthLoginRequest = {
+  code: string
+  redirect_uri: string
+}
