@@ -2,9 +2,6 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { createServer as createViteServer } from 'vite'
 import type { ViteDevServer } from 'vite'
-import { installGlobals } from '@remix-run/node'
-
-installGlobals()
 
 dotenv.config()
 

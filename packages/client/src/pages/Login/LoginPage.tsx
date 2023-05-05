@@ -55,9 +55,15 @@ export const LoginPage = () => {
   const loginOAuth = useCallback(async () => {
     setLoginError('')
     try {
-      const id = await fetchServiceId(API_CONFIG.REDIRECT_URI)
+      const redirectUri =
+        process.env.NODE_ENV === 'production'
+          ? API_CONFIG.REDIRECT_URI
+          : API_CONFIG.REDIRECT_URI_DEV
+
+      const id = await fetchServiceId(redirectUri)
+
       window.open(
-        `https://oauth.yandex.ru/authorize?response_type=code&client_id=${id.data?.service_id}&redirect_uri=${API_CONFIG.REDIRECT_URI}`,
+        `https://oauth.yandex.ru/authorize?response_type=code&client_id=${id.data?.service_id}&redirect_uri=${redirectUri}`,
         '_self'
       )
     } catch {

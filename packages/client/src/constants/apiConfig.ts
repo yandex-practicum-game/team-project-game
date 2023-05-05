@@ -3,5 +3,6 @@ export enum API_CONFIG {
   RESOURCES_URL = 'https://ya-praktikum.tech/api/v2/resources',
   OAUTH_URL = 'https://ya-praktikum.tech/api/v2/oauth',
   TEAM_NAME = 'team5_quack_attack',
-  REDIRECT_URI = 'http://localhost:3000',
+  REDIRECT_URI = 'https://galaxian-game.vercel.app',
+  REDIRECT_URI_DEV = 'http://localhost:3000',
 }

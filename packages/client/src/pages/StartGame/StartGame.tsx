@@ -16,12 +16,16 @@ const StartGame = () => {
 
   const oAuthHandler = async () => {
     const code = new URLSearchParams(window.location.search).get('code')
+    const redirect_uri =
+      process.env.NODE_ENV === 'production'
+        ? API_CONFIG.REDIRECT_URI
+        : API_CONFIG.REDIRECT_URI_DEV
 
     if (!code) {
       return
     }
 
-    await oAuthSignIn({ code, redirect_uri: API_CONFIG.REDIRECT_URI })
+    await oAuthSignIn({ code, redirect_uri })
   }
 
   return (
