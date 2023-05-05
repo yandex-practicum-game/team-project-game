@@ -35,6 +35,7 @@ export const baseApi = createApi({
         headers: { 'Content-Type': 'application/json' },
         responseHandler: response => response.text(),
       }),
+      invalidatesTags: ['User'],
     }),
     changeUserData: build.mutation({
       query: (data: UserUpdateRequest) => ({

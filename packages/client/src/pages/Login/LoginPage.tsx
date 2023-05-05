@@ -111,12 +111,17 @@ export const LoginPage = () => {
                     {loginError && (
                       <span className={s.loginError}>{loginError}</span>
                     )}
-                    <Button text={'ENTER'} type="submit" form={'login-form'} />
+                    <Button
+                      text={'Sign in'}
+                      type="submit"
+                      form={'login-form'}
+                    />
                   </>
                 )
               }}
             </Formik>
             <Button
+              className={s.oauthButton}
               text={'Sign in with Yandex'}
               type="button"
               onClick={loginOAuth}
