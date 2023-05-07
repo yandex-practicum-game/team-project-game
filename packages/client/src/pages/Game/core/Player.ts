@@ -13,16 +13,16 @@ export class Player {
   constructor(
     private ctx: CanvasRenderingContext2D,
     private board: {
-      w: number
-      h: number
+      width: number
+      height: number
     }
   ) {
     this.renderPlayer()
   }
 
   renderPlayer() {
-    this.x = this.board.w / 2 - this.w / 2
-    this.y = this.board.h - 100
+    this.x = this.board.width / 2 - this.w / 2
+    this.y = this.board.height - 100
 
     this.image.src = playerImage
     this.image.onload = () => {
@@ -74,7 +74,7 @@ export class Player {
 
   // проверка на правый край экрана
   isRightEdgeScreen() {
-    if (this.x >= this.board.w - this.w) {
+    if (this.x >= this.board.width - this.w) {
       return true
     }
   }

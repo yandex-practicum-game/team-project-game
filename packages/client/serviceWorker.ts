@@ -19,7 +19,6 @@ const URLS = [
   '/game',
 ]
 
-
 self.addEventListener('install', async () => {
   console.log('Service Worker installed')
   try {

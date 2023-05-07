@@ -22,8 +22,8 @@ export class Enemy {
     private ctx: CanvasRenderingContext2D,
     private player: Player,
     private board: {
-      w: number
-      h: number
+      width: number
+      height: number
     }
   ) {
     this.renderEnemy() // рисуем противника
@@ -33,7 +33,7 @@ export class Enemy {
 
   // отрисовка противника
   renderEnemy() {
-    this.x = this.board.w / 2 - 275
+    this.x = this.board.width / 2 - 275
     this.y = 30
 
     this.image.src = enemyImage
@@ -133,7 +133,7 @@ export class Enemy {
 
   // проверка на правый край экрана
   isRightEdgeScreen() {
-    if (this.x >= this.board.w - this.w) {
+    if (this.x >= this.board.width - this.w) {
       return true
     }
   }

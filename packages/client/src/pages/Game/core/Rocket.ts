@@ -14,8 +14,8 @@ export class Rocket {
   constructor(
     private ctx: CanvasRenderingContext2D,
     private board: {
-      w: number
-      h: number
+      width: number
+      height: number
     },
     private owner: Enemy,
     private startX: number
@@ -46,7 +46,7 @@ export class Rocket {
 
   // запуск ракеты
   launch() {
-    if (this.y > this.board.h + 5) {
+    if (this.y > this.board.height + 5) {
       this.setStartPoint()
     }
 
