@@ -15,7 +15,7 @@ const width = globalThis.innerWidth || DEFAULT_INNER_WIDTH
 const height = globalThis.innerHeight || DEFAULT_INNER_HEIGHT
 
 const GamePage = () => {
-  const nav = useNavigate()
+  const navigate = useNavigate()
   const ref = useRef<HTMLCanvasElement | null>(null)
 
   const game = useAppSelector(state => state.game)
@@ -38,7 +38,7 @@ const GamePage = () => {
     }
 
     const stopGame = () => {
-      nav(PATHNAMES.GAMEOVER)
+      navigate(PATHNAMES.GAMEOVER)
       globalThis.clearInterval(game.scoreInterval)
     }
 
