@@ -2,10 +2,23 @@ import { GameWrapper } from '../../components/GameWrapper'
 import s from './StartGame.module.scss'
 import { Button } from '../../components/Button'
 import { PATHNAMES } from '../../constants/pathnames'
-import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
+import { useOAuthSignInMutation } from '../../store/oauth.api'
+import { useEffect } from 'react'
 
 const StartGame = () => {
+  const [oAuthSignIn] = useOAuthSignInMutation()
+
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get('code')
+
+    if (!code) {
+      return
+    }
+
+    oAuthSignIn({ code })
+  }, [])
+
   return (
     <Layout>
       <GameWrapper>
@@ -33,4 +46,4 @@ const StartGame = () => {
   )
 }
 
-export default withAuth(StartGame)
+export default StartGame

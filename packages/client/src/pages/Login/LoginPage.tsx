@@ -12,6 +12,7 @@ import { Formik } from 'formik'
 import { useGetUserQuery, useSignInMutation } from '../../store/base.api'
 import { TEXTS } from '../../constants/requests'
 import { Layout } from '../../components/Layout'
+import { useLazyGetServiceIdQuery } from '../../store/oauth.api'
 
 type UserData = {
   login: string
@@ -35,6 +36,7 @@ const validationSchema = Yup.object().shape({
 export const LoginPage = () => {
   const [loginError, setLoginError] = useState('')
   const { isLoading: isGetUserLoading } = useGetUserQuery(null)
+  const [fetchServiceId, { isError: isOAuthError }] = useLazyGetServiceIdQuery()
   const [signIn, { isLoading: isLoginLoading }] = useSignInMutation()
   const navigate = useNavigate()
 
@@ -45,6 +47,16 @@ export const LoginPage = () => {
       await signIn(userData).unwrap()
       navigate('/')
     } catch {
+      setLoginError(TEXTS.ERROR)
+    }
+  }, [])
+
+  const loginOAuth = useCallback(async () => {
+    setLoginError('')
+
+    fetchServiceId(null)
+
+    if (isOAuthError) {
       setLoginError(TEXTS.ERROR)
     }
   }, [])
@@ -95,12 +107,21 @@ export const LoginPage = () => {
                     {loginError && (
                       <span className={s.loginError}>{loginError}</span>
                     )}
-                    <Button text={'ENTER'} type="submit" form={'login-form'} />
+                    <Button
+                      text={'Sign in'}
+                      type="submit"
+                      form={'login-form'}
+                    />
                   </>
                 )
               }}
             </Formik>
-
+            <Button
+              className={s.oauthButton}
+              text={'Sign in with Yandex'}
+              type="button"
+              onClick={loginOAuth}
+            />
             <Link className={s.registrationLink} to={PATHNAMES.REGISTRATION}>
               Don't you have an account yet?
             </Link>
