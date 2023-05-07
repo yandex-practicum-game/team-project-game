@@ -5,28 +5,19 @@ import { PATHNAMES } from '../../constants/pathnames'
 import { Layout } from '../../components/Layout'
 import { useOAuthSignInMutation } from '../../store/oauth.api'
 import { useEffect } from 'react'
-import { API_CONFIG } from '../../constants/apiConfig'
 
 const StartGame = () => {
   const [oAuthSignIn] = useOAuthSignInMutation()
 
   useEffect(() => {
-    oAuthHandler()
-  }, [])
-
-  const oAuthHandler = async () => {
     const code = new URLSearchParams(window.location.search).get('code')
-    const redirect_uri =
-      process.env.NODE_ENV === 'production'
-        ? API_CONFIG.REDIRECT_URI
-        : API_CONFIG.REDIRECT_URI_DEV
 
     if (!code) {
       return
     }
 
-    await oAuthSignIn({ code, redirect_uri })
-  }
+    oAuthSignIn({ code })
+  }, [])
 
   return (
     <Layout>

@@ -13,7 +13,6 @@ import { useGetUserQuery, useSignInMutation } from '../../store/base.api'
 import { TEXTS } from '../../constants/requests'
 import { Layout } from '../../components/Layout'
 import { useLazyGetServiceIdQuery } from '../../store/oauth.api'
-import { API_CONFIG } from '../../constants/apiConfig'
 
 type UserData = {
   login: string
@@ -37,7 +36,7 @@ const validationSchema = Yup.object().shape({
 export const LoginPage = () => {
   const [loginError, setLoginError] = useState('')
   const { isLoading: isGetUserLoading } = useGetUserQuery(null)
-  const [fetchServiceId] = useLazyGetServiceIdQuery()
+  const [fetchServiceId, { isError: isOAuthError }] = useLazyGetServiceIdQuery()
   const [signIn, { isLoading: isLoginLoading }] = useSignInMutation()
   const navigate = useNavigate()
 
@@ -54,19 +53,10 @@ export const LoginPage = () => {
 
   const loginOAuth = useCallback(async () => {
     setLoginError('')
-    try {
-      const redirectUri =
-        process.env.NODE_ENV === 'production'
-          ? API_CONFIG.REDIRECT_URI
-          : API_CONFIG.REDIRECT_URI_DEV
 
-      const id = await fetchServiceId(redirectUri)
+    fetchServiceId(null)
 
-      window.open(
-        `https://oauth.yandex.ru/authorize?response_type=code&client_id=${id.data?.service_id}&redirect_uri=${redirectUri}`,
-        '_self'
-      )
-    } catch {
+    if (isOAuthError) {
       setLoginError(TEXTS.ERROR)
     }
   }, [])
