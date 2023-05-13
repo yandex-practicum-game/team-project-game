@@ -25,3 +25,5 @@ export function render(url: string) {
     </Provider>
   )
 }
+
+export { store }
