@@ -1,9 +1,10 @@
 ### Запуск проекта
+
 ```
   1. запустить Docker
   2. в файл .env добавить DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
   3. выполнить yarn bootstrap
-  4. если postgres не установлен локально, запустить postgres в контейнере: docker compose up postgres 
+  4. если postgres не установлен локально, запустить postgres в контейнере: docker compose up postgres
   5. сгенерировать таблицы базы данных: npx prisma migrate dev
   6. запустить сервер: yarn dev:server
 ```
