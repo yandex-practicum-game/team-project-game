@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
 import type { ViteDevServer } from 'vite'
-import { createServer } from 'vite'
 
 import * as fs from 'fs'
 import * as path from 'path'
@@ -10,29 +9,18 @@ async function useServerRender(
   res: Response,
   next: NextFunction
 ) {
-  let vite: ViteDevServer | undefined
-
+  const vite = req.app.locals.settings.vite as ViteDevServer
   const url = req.originalUrl
-  const isDev = () => process.env.NODE_ENV === 'development'
+  const isDev = process.env.NODE_ENV === 'development'
 
   const distPath = path.resolve('../client/dist/')
   const srcPath = path.resolve('../client')
   const ssrClientPath = path.resolve('../client/dist-ssr/client.cjs')
 
   try {
-    if (isDev()) {
-      vite = await createServer({
-        server: { middlewareMode: true },
-        root: srcPath,
-        appType: 'custom',
-      })
-
-      req.app.use(vite.middlewares)
-    }
-
     let template: string
 
-    if (!isDev()) {
+    if (!isDev) {
       template = fs.readFileSync(path.resolve(distPath, 'index.html'), 'utf-8')
     } else {
       template = fs.readFileSync(path.resolve(srcPath, 'index.html'), 'utf-8')
@@ -43,7 +31,7 @@ async function useServerRender(
     let render: (url: string) => Promise<string>
     let store: { getState: () => unknown }
 
-    if (!isDev()) {
+    if (!isDev) {
       render = (await import(ssrClientPath)).render
       store = (await import(ssrClientPath)).store
     } else {
@@ -65,7 +53,7 @@ async function useServerRender(
 
     res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
   } catch (e) {
-    if (isDev()) {
+    if (isDev) {
       vite!.ssrFixStacktrace(e as Error)
     }
     next(e)

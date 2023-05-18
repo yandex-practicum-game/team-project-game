@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "build": "npm run clean && tsc --p ./tsconfig.prod.json",
-    "preview": "node ./dist/index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.ts",
+    "preview": "node ./dist/src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest .",

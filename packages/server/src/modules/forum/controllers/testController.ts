@@ -1,8 +1,7 @@
-import prisma from './../modules/prisma'
+import prisma from '../../prisma'
 import type { Request, Response } from 'express'
 
 async function testController(req: Request, res: Response) {
-  console.log('req:', req)
   try {
     const count = await prisma.testEntity.count()
 
