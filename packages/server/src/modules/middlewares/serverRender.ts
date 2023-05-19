@@ -4,11 +4,12 @@ import type { ViteDevServer } from 'vite'
 import * as fs from 'fs'
 import * as path from 'path'
 
-async function useServerRender(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+async function serverRender(req: Request, res: Response, next: NextFunction) {
+  if (req.url.startsWith('/api')) {
+    next()
+    return
+  }
+
   const vite = req.app.locals.settings.vite as ViteDevServer
   const url = req.originalUrl
   const isDev = process.env.NODE_ENV === 'development'
@@ -60,4 +61,4 @@ async function useServerRender(
   }
 }
 
-export default useServerRender
+export default serverRender

@@ -7,8 +7,8 @@ import path from 'path'
 import prisma from './modules/prisma'
 import postgres from './modules/postgres'
 
-import useStaticFiles from './modules/middlewares/useStaticFiles'
-import useServerRender from './modules/middlewares/useServerRender'
+import staticFiles from './modules/middlewares/staticFiles'
+import serverRender from './modules/middlewares/serverRender'
 
 import testController from './modules/forum/controllers/testController'
 
@@ -62,16 +62,10 @@ postgres.pool
     app.use(cors())
 
     if (!isDev) {
-      app.use('/assets', useStaticFiles)
+      app.use('/assets', staticFiles)
     }
 
-    app.use((req, res, next) => {
-      if (!req.url.startsWith('/api')) {
-        useServerRender(req, res, next)
-      } else {
-        next()
-      }
-    })
+    app.use(serverRender)
 
     console.log('➜ 🎸 Init middlewares ...')
     return app
