@@ -25,7 +25,6 @@ async function serverRender(req: Request, res: Response, next: NextFunction) {
       template = fs.readFileSync(path.resolve(distPath, 'index.html'), 'utf-8')
     } else {
       template = fs.readFileSync(path.resolve(srcPath, 'index.html'), 'utf-8')
-
       template = await vite!.transformIndexHtml(url, template)
     }
 
