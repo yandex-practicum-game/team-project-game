@@ -60,11 +60,7 @@ postgres.pool
   // * MIDDLEWARES
   .then(app => {
     app.use(cors())
-
-    if (!isDev) {
-      app.use('/assets', staticFiles)
-    }
-
+    app.use('/assets', staticFiles())
     app.use(serverRender)
 
     console.log('➜ 🎸 Init middlewares ...')
