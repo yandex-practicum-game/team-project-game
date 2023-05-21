@@ -10,8 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TestEntity {
-  id    Int     @id @default(autoincrement())
-  name  String?
+model Forum {
+  id    Int    @id @default(autoincrement())
+  title String
+
+  Topic Topic[]
 }
 
+model Topic {
+  id      Int    @id @default(autoincrement())
+  title   String
+  forum   Forum  @relation(fields: [forumId], references: [id])
+  forumId Int
+
+  @@index([forumId])
+}
+
+model Comment {
+  id       Int       @id @default(autoincrement())
+  owner    String
+  content  String
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId Int?
+  comments Comment[] @relation("CommentToComment")
+
+  @@index([parentId])
+}
