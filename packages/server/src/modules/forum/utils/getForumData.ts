@@ -12,7 +12,7 @@ function getForumData(skip: number, take: number) {
     LEFT JOIN "Comment" AS c ON c."topicId" = t."id"
     GROUP BY f."id"
     OFFSET ${skip}
-    LIMIT ${Number(take)}
+    LIMIT ${take}
   `
 }
 
