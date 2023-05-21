@@ -7,13 +7,13 @@ import path from 'path'
 import prisma from './modules/prisma'
 import postgres from './modules/postgres'
 
-import staticFiles from './modules/middlewares/staticFiles'
-import serverRender from './modules/middlewares/serverRender'
+import staticMiddleware from './modules/middlewares/static.middleware'
+import ssrMiddleware from './modules/middlewares/ssr.middleware'
+import proxyMiddleware from './modules/middlewares/proxy.middleware'
 
 import routerForum from './modules/forum/forum.router'
 
 const isDev = process.env.NODE_ENV === 'development'
-const port = Number(process.env.SERVER_PORT) || 3001
 const srcPath = path.resolve('../client')
 
 postgres
@@ -55,8 +55,9 @@ postgres
   // * MIDDLEWARES
   .then(app => {
     app.use(cors())
-    app.use('/assets', staticFiles())
-    app.use(serverRender)
+    app.use('/assets', staticMiddleware())
+    app.use(ssrMiddleware)
+    app.use('/api/v2', proxyMiddleware())
 
     console.log('➜ 🎸 Init middlewares ...')
     return app
@@ -71,7 +72,7 @@ postgres
   })
 
   .then(app => {
-    app.listen(3001, () => {
-      console.log(`➜ 🎸 Server is listening on port: ${port}`)
+    app.listen(3000, () => {
+      console.log(`➜ 🎸 Server is listening on port: ${3000}`)
     })
   })
