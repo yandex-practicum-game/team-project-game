@@ -18,7 +18,7 @@ import { useChangeUserDataMutation } from '../../store/base.api'
 import { useChangeUserAvatarMutation } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
-import { API_CONFIG } from '../../constants/apiConfig'
+import { RESOURCES_URL } from '../../constants/apiConfig'
 import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
 
@@ -68,10 +68,7 @@ const ProfileEditPage = () => {
   const [modalError, setModalError] = useState(false)
   const [file, setFile] = useState<File>()
 
-  const avatarPath = useMemo(
-    () => API_CONFIG.RESOURCES_URL + user?.avatar,
-    [user?.avatar]
-  )
+  const avatarPath = useMemo(() => RESOURCES_URL + user?.avatar, [user?.avatar])
 
   const onBack = function () {
     navigate(-1)

@@ -1,6 +1,8 @@
 import { createServer } from 'vite'
+import { srcPath } from './constants/path'
 
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -11,14 +13,11 @@ import postgres from './modules/postgres'
 import staticMiddleware from './modules/middlewares/static.middleware'
 import ssrMiddleware from './modules/middlewares/ssr.middleware'
 import proxyMiddleware from './modules/middlewares/proxy.middleware'
-import authMiddleware from './modules/middlewares/auth.middleware'
 
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
-
-const isDev = process.env.NODE_ENV === 'development'
-const srcPath = path.resolve('../client')
+import { isDev } from './constants/env'
 
 postgres
   // * CONNECT POSTGRES
@@ -59,12 +58,13 @@ postgres
   // * MIDDLEWARES
   .then(app => {
     app.use(cors())
-
-    app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(bodyParser.json())
+    app.use(cookieParser())
 
     app.use('/assets', staticMiddleware())
     app.use('/api/v2', proxyMiddleware())
+
+    app.use(bodyParser.urlencoded({ extended: true }))
+    app.use(bodyParser.json())
 
     app.use(ssrMiddleware)
 

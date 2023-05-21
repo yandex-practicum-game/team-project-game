@@ -7,7 +7,6 @@ interface Req extends Request {
 
 const authMiddleware = async (req: Req, res: Response, next: NextFunction) => {
   try {
-    console.log('req.cookies:', req.cookies)
     const authCookie = req.cookies?.authCookie
     const uuid = req.cookies?.uuid
 

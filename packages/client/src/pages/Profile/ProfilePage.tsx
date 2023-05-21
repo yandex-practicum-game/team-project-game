@@ -10,7 +10,7 @@ import { Spinner } from '../../components/Spinner'
 import { useGetUserQuery, useLogoutMutation } from '../../store/base.api'
 import { useAlert } from 'react-alert'
 import { TEXTS } from '../../constants/requests'
-import { API_CONFIG } from '../../constants/apiConfig'
+import { RESOURCES_URL } from '../../constants/apiConfig'
 import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
 
@@ -24,10 +24,7 @@ const ProfilePage = () => {
 
   const [logout] = useLogoutMutation()
 
-  const avatarPath = useMemo(
-    () => API_CONFIG.RESOURCES_URL + user?.avatar,
-    [user?.avatar]
-  )
+  const avatarPath = useMemo(() => RESOURCES_URL + user?.avatar, [user?.avatar])
 
   const onLogout = useCallback(async () => {
     try {
