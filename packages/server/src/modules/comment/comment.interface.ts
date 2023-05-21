@@ -1,4 +1,4 @@
 export interface GetCommentsQueryParams {
-  page?: number
-  take?: number
+  page?: string
+  take?: string
 }
