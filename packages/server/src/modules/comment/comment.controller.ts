@@ -10,7 +10,7 @@ export default class CommentController {
     req: Request<unknown, unknown, Omit<Required<Comment>, 'id'>, unknown>,
     res: Response
   ) {
-    const { content, owner, parentId, topicId } = req.body
+    const { content, userId, parentId, topicId } = req.body
 
     try {
       if (!parentId) {
@@ -18,7 +18,7 @@ export default class CommentController {
           data: {
             topic: { connect: { id: topicId } },
             content: content,
-            owner: owner,
+            userId: userId,
           },
         })
         res.status(201).json(comment)
@@ -39,7 +39,7 @@ export default class CommentController {
         data: {
           topic: { connect: { id: parentComment?.topicId } },
           content: content,
-          owner: owner,
+          userId: userId,
           parent: { connect: { id: parentId } },
         },
       })
@@ -64,9 +64,9 @@ export default class CommentController {
         prisma.comment.count(),
       ])
 
-      const tree = buildCommentTree(comments)
+      const commentsTree = buildCommentTree(comments)
 
-      res.status(200).json({ comments, tree, total })
+      res.status(200).json({ comments: commentsTree, total })
     } catch (error) {
       console.error('[Error] CommentController getAll: ', error)
       res.status(500).json({ error: 'Could not get a comments' })
@@ -90,9 +90,12 @@ export default class CommentController {
     req: Request<unknown, unknown, Comment, unknown>,
     res: Response
   ) {
-    const { id, ...data } = req.body
+    const { id, userId, ...data } = req.body
     try {
-      const comment = await prisma.comment.update({ where: { id }, data })
+      const comment = await prisma.comment.updateMany({
+        where: { id, userId },
+        data,
+      })
       res.status(200).json(comment)
     } catch (error) {
       console.error('[Error] CommentController update: ', error)
@@ -101,12 +104,16 @@ export default class CommentController {
   }
 
   static async delete(
-    req: Request<Pick<Comment, 'id'>, unknown, unknown, unknown>,
+    req: Request<Pick<Comment, 'id'>, unknown, Comment, unknown>,
     res: Response
   ) {
-    const { id } = req.params
     try {
-      const comment = await prisma.comment.delete({ where: { id } })
+      const comment = await prisma.comment.deleteMany({
+        where: {
+          id: Number(req.params.id),
+          userId: req.body.userId,
+        },
+      })
       res.status(200).json(comment)
     } catch (error) {
       console.error('[Error] CommentController delete: ', error)

@@ -2,16 +2,20 @@ import prisma from '../prisma'
 
 import type { Forum } from '@prisma/client'
 import type { Request, Response } from 'express'
-import type { ForumsData, GetForumsQueryParams } from './forum.interface'
+import type { ForumsData, ForumsQueryParams } from './forum.interface'
 
 export default class ForumController {
   static async create(
     req: Request<unknown, unknown, Omit<Forum, 'id'>, unknown>,
     res: Response
   ) {
-    const { title } = req.body
     try {
-      const forum = await prisma.forum.create({ data: { title } })
+      const forum = await prisma.forum.create({
+        data: {
+          title: req.body.title,
+          userId: req.body.userId,
+        },
+      })
       res.status(201).json(forum)
     } catch (error) {
       console.error('[Error] ForumController create: ', error)
@@ -20,7 +24,7 @@ export default class ForumController {
   }
 
   static async getAll(
-    req: Request<unknown, unknown, unknown, GetForumsQueryParams>,
+    req: Request<unknown, unknown, { userId: string }, ForumsQueryParams>,
     res: Response
   ) {
     const { page = 1, take = 10 } = req.query
@@ -66,9 +70,12 @@ export default class ForumController {
     req: Request<unknown, unknown, Forum, unknown>,
     res: Response
   ) {
-    const { id, ...data } = req.body
+    const { id, userId, ...data } = req.body
     try {
-      const forum = await prisma.forum.update({ where: { id }, data })
+      const forum = await prisma.forum.updateMany({
+        where: { id, userId },
+        data,
+      })
       res.status(200).json(forum)
     } catch (error) {
       console.error('[Error] ForumController update: ', error)
@@ -77,12 +84,16 @@ export default class ForumController {
   }
 
   static async delete(
-    req: Request<Pick<Forum, 'id'>, unknown, unknown, unknown>,
+    req: Request<Pick<Forum, 'id'>, unknown, Forum, unknown>,
     res: Response
   ) {
-    const { id } = req.params
     try {
-      const forum = await prisma.forum.delete({ where: { id } })
+      const forum = await prisma.forum.deleteMany({
+        where: {
+          id: Number(req.params.id),
+          userId: req.body.userId,
+        },
+      })
       res.status(200).json(forum)
     } catch (error) {
       console.error('[Error] ForumController delete: ', error)

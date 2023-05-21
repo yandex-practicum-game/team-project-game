@@ -1,4 +1,4 @@
-export interface GetForumsQueryParams {
+export interface ForumsQueryParams {
   page?: number
   take?: number
 }

@@ -9,11 +9,12 @@ export default class TopicController {
     req: Request<unknown, unknown, Omit<Topic, 'id'>, unknown>,
     res: Response
   ) {
-    const { title, forumId } = req.body
+    const { title, forumId, userId } = req.body
     try {
       const topic = await prisma.topic.create({
         data: {
           title: title,
+          userId: userId,
           forum: { connect: { id: forumId } },
         },
       })
@@ -61,9 +62,12 @@ export default class TopicController {
     req: Request<unknown, unknown, Topic, unknown>,
     res: Response
   ) {
-    const { id, ...data } = req.body
+    const { id, userId, ...data } = req.body
     try {
-      const topic = await prisma.topic.update({ where: { id }, data })
+      const topic = await prisma.topic.updateMany({
+        where: { id, userId },
+        data,
+      })
       res.status(200).json(topic)
     } catch (error) {
       console.error('[Error] TopicController update: ', error)
@@ -72,12 +76,16 @@ export default class TopicController {
   }
 
   static async delete(
-    req: Request<Pick<Topic, 'id'>, unknown, unknown, unknown>,
+    req: Request<Pick<Topic, 'id'>, unknown, Topic, unknown>,
     res: Response
   ) {
-    const { id } = req.params
     try {
-      const topic = await prisma.topic.delete({ where: { id } })
+      const topic = await prisma.topic.deleteMany({
+        where: {
+          id: Number(req.params.id),
+          userId: req.body.userId,
+        },
+      })
       res.status(200).json(topic)
     } catch (error) {
       console.error('[Error] TopicController delete: ', error)

@@ -11,8 +11,9 @@ datasource db {
 }
 
 model Forum {
-  id    Int    @id @default(autoincrement())
-  title String
+  id     Int    @id @default(autoincrement())
+  title  String
+  userId Int
 
   Topic Topic[]
 }
@@ -20,6 +21,7 @@ model Forum {
 model Topic {
   id      Int       @id @default(autoincrement())
   title   String
+  userId  Int
   forum   Forum     @relation(fields: [forumId], references: [id])
   forumId Int
   Comment Comment[]
@@ -29,7 +31,7 @@ model Topic {
 
 model Comment {
   id       Int       @id @default(autoincrement())
-  owner    String
+  userId   Int
   content  String
   parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
   parentId Int?

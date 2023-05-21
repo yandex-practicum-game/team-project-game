@@ -1,7 +1,17 @@
+/*
+  Warnings:
+
+  - Added the required column `userId` to the `Forum` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE "Forum" ADD COLUMN     "userId" INTEGER NOT NULL;
+
 -- CreateTable
 CREATE TABLE "Topic" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "forumId" INTEGER NOT NULL,
 
     CONSTRAINT "Topic_pkey" PRIMARY KEY ("id")
@@ -10,7 +20,7 @@ CREATE TABLE "Topic" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
-    "owner" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
     "parentId" INTEGER,
     "topicId" INTEGER NOT NULL,

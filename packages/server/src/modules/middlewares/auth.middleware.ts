@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from 'express'
 import axios from 'axios'
 
-interface Req extends Request {
-  userId?: string
-}
-
-const authMiddleware = async (req: Req, res: Response, next: NextFunction) => {
+const authMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const authCookie = req.cookies?.authCookie
     const uuid = req.cookies?.uuid
@@ -26,7 +26,7 @@ const authMiddleware = async (req: Req, res: Response, next: NextFunction) => {
       },
     })
 
-    req.userId = resp.data.id
+    req.body.userId = resp.data.id
 
     next()
   } catch (error) {
