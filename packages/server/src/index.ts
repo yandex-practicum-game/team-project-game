@@ -10,20 +10,15 @@ import postgres from './modules/postgres'
 import staticFiles from './modules/middlewares/staticFiles'
 import serverRender from './modules/middlewares/serverRender'
 
-import testController from './modules/forum/controllers/testController'
+import routerForum from './modules/forum/forum.router'
 
 const isDev = process.env.NODE_ENV === 'development'
 const port = Number(process.env.SERVER_PORT) || 3001
 const srcPath = path.resolve('../client')
 
-postgres.pool
-  .connect()
-
+postgres
   // * CONNECT POSTGRES
-  .then(async client => {
-    client.release()
-    console.log('➜ 🎸 Postgres connected ...')
-  })
+  .dbConnect()
 
   // * CONNECT PRISMA
   .then(async () => {
@@ -69,7 +64,7 @@ postgres.pool
 
   // * ROUTES
   .then(app => {
-    app.get('/api/test', testController)
+    app.use('/api', routerForum)
 
     console.log('➜ 🎸 Init routes ...')
     return app
