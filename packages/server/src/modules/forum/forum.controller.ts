@@ -1,9 +1,9 @@
 import prisma from '../prisma'
+import getForumData from './queries/getForumData'
 
 import type { Forum } from '@prisma/client'
 import type { Request, Response } from 'express'
 import type { ForumsQueryParams } from './forum.interface'
-import getForumData from './utils/getForumData'
 
 export default class ForumController {
   static async create(
