@@ -2,7 +2,8 @@ import prisma from '../prisma'
 
 import type { Forum } from '@prisma/client'
 import type { Request, Response } from 'express'
-import type { ForumsData, ForumsQueryParams } from './forum.interface'
+import type { ForumsQueryParams } from './forum.interface'
+import getForumData from './utils/getForumData'
 
 export default class ForumController {
   static async create(
@@ -32,18 +33,7 @@ export default class ForumController {
 
     try {
       const [forums, total] = await Promise.all([
-        prisma.$queryRaw<ForumsData[]>`    
-          SELECT 
-            f."id", f."title",
-            COUNT(DISTINCT t."id")::int AS "topicsCount",
-            COUNT(DISTINCT c."id")::int AS "commentsCount"
-          FROM "Forum" AS f
-          LEFT JOIN "Topic" AS t ON t."forumId" = f."id"
-          LEFT JOIN "Comment" AS c ON c."topicId" = t."id"
-          GROUP BY f."id"
-          OFFSET ${skip}
-          LIMIT ${Number(take)}
-        `,
+        getForumData(skip, Number(take)),
         prisma.forum.count(),
       ])
       res.status(200).json({ forums, total })
