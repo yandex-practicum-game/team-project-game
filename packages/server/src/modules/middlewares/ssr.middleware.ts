@@ -4,7 +4,7 @@ import type { ViteDevServer } from 'vite'
 import * as fs from 'fs'
 import * as path from 'path'
 
-async function serverRender(req: Request, res: Response, next: NextFunction) {
+async function ssrMiddleware(req: Request, res: Response, next: NextFunction) {
   if (req.url.startsWith('/api')) {
     next()
     return
@@ -60,4 +60,4 @@ async function serverRender(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default serverRender
+export default ssrMiddleware

@@ -4,10 +4,10 @@ import path from 'path'
 const distPath = path.resolve('../client/dist/')
 const isDev = process.env.NODE_ENV === 'development'
 
-const staticFiles = () => {
+const staticMiddleware = () => {
   if (isDev) {
     return () => undefined
   }
   return express.static(path.resolve(distPath, 'assets'))
 }
-export default staticFiles
+export default staticMiddleware

@@ -7,29 +7,18 @@ import path from 'path'
 import prisma from './modules/prisma'
 import postgres from './modules/postgres'
 
-import staticFiles from './modules/middlewares/staticFiles'
-import serverRender from './modules/middlewares/serverRender'
+import staticMiddleware from './modules/middlewares/static.middleware'
+import ssrMiddleware from './modules/middlewares/ssr.middleware'
+import proxyMiddleware from './modules/middlewares/proxy.middleware'
 
-import getForums from './modules/forum/getForums'
-import createForum from './modules/forum/createForum'
-
-import createTopic from './modules/topic/createTopic'
-import getTopics from './modules/topic/getTopics'
-import getComments from './modules/comment/getComments'
-import createComment from './modules/comment/createComment'
+import routerForum from './modules/forum/forum.router'
 
 const isDev = process.env.NODE_ENV === 'development'
-const port = Number(process.env.SERVER_PORT) || 3001
 const srcPath = path.resolve('../client')
 
-postgres.pool
-  .connect()
-
+postgres
   // * CONNECT POSTGRES
-  .then(async client => {
-    client.release()
-    console.log('➜ 🎸 Postgres connected ...')
-  })
+  .dbConnect()
 
   // * CONNECT PRISMA
   .then(async () => {
@@ -66,8 +55,9 @@ postgres.pool
   // * MIDDLEWARES
   .then(app => {
     app.use(cors())
-    app.use('/assets', staticFiles())
-    app.use(serverRender)
+    app.use('/assets', staticMiddleware())
+    app.use(ssrMiddleware)
+    app.use('/api/v2', proxyMiddleware())
 
     console.log('➜ 🎸 Init middlewares ...')
     return app
@@ -75,22 +65,14 @@ postgres.pool
 
   // * ROUTES
   .then(app => {
-    // forum
-    app.get('/api/forums', getForums)
-    app.post('/api/forums', createForum)
-    // topic
-    app.get('/api/topics', getTopics)
-    app.post('/api/topics', createTopic)
-    // comments
-    app.get('/api/comments', getComments)
-    app.post('/api/comments', createComment)
+    app.use('/api', routerForum)
 
     console.log('➜ 🎸 Init routes ...')
     return app
   })
 
   .then(app => {
-    app.listen(port, () => {
-      console.log(`➜ 🎸 Server is listening on port: ${port}`)
+    app.listen(3000, () => {
+      console.log(`➜ 🎸 Server is listening on port: ${3000}`)
     })
   })
