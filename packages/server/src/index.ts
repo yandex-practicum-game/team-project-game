@@ -1,11 +1,11 @@
 import { createServer } from 'vite'
 import { srcPath } from './constants/path'
+import { isDev } from './constants/env'
 
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import cors from 'cors'
-import path from 'path'
 
 import prisma from './modules/prisma'
 import postgres from './modules/postgres'
@@ -17,7 +17,6 @@ import proxyMiddleware from './modules/middlewares/proxy.middleware'
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
-import { isDev } from './constants/env'
 
 postgres
   // * CONNECT POSTGRES
