@@ -30,11 +30,11 @@ export default class TopicController {
     res: Response
   ) {
     const { page = 1, take = 10 } = req.query
-    const skip = (page - 1) * take
+    const skip = (Number(page) - 1) * Number(take)
 
     try {
       const [topics, total] = await Promise.all([
-        prisma.topic.findMany({ skip, take }),
+        prisma.topic.findMany({ skip, take: Number(take) }),
         prisma.topic.count(),
       ])
 

@@ -1,6 +1,6 @@
 export interface ForumsQueryParams {
-  page?: number
-  take?: number
+  page?: string
+  take?: string
 }
 export interface ForumsData {
   forums: ForumData[]

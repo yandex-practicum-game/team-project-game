@@ -28,7 +28,7 @@ export default class ForumController {
     res: Response
   ) {
     const { page = 1, take = 10 } = req.query
-    const skip = (page - 1) * take
+    const skip = (Number(page) - 1) * Number(take)
 
     try {
       const [forums, total] = await Promise.all([
@@ -42,7 +42,7 @@ export default class ForumController {
           LEFT JOIN "Comment" AS c ON c."topicId" = t."id"
           GROUP BY f."id"
           OFFSET ${skip}
-          LIMIT ${take}
+          LIMIT ${Number(take)}
         `,
         prisma.forum.count(),
       ])

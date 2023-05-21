@@ -56,11 +56,11 @@ export default class CommentController {
     res: Response
   ) {
     const { page = 1, take = 10 } = req.query
-    const skip = (page - 1) * take
+    const skip = (Number(page) - 1) * Number(take)
 
     try {
       const [comments, total] = await Promise.all([
-        prisma.comment.findMany({ skip, take }),
+        prisma.comment.findMany({ skip, take: Number(take) }),
         prisma.comment.count(),
       ])
 

@@ -1,4 +1,4 @@
 export interface GetTopicsQueryParams {
-  page?: number
-  take?: number
+  page?: string
+  take?: string
 }
