@@ -18,10 +18,11 @@ model Forum {
 }
 
 model Topic {
-  id      Int    @id @default(autoincrement())
+  id      Int       @id @default(autoincrement())
   title   String
-  forum   Forum  @relation(fields: [forumId], references: [id])
+  forum   Forum     @relation(fields: [forumId], references: [id])
   forumId Int
+  Comment Comment[]
 
   @@index([forumId])
 }
@@ -33,6 +34,9 @@ model Comment {
   parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
   parentId Int?
   comments Comment[] @relation("CommentToComment")
+  topic    Topic     @relation(fields: [topicId], references: [id])
+  topicId  Int
 
   @@index([parentId])
+  @@index([topicId])
 }
