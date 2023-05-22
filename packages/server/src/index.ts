@@ -4,28 +4,17 @@ import express from 'express'
 import cors from 'cors'
 import path from 'path'
 
-import prisma from './modules/prisma'
-import postgres from './modules/postgres'
-
 import staticMiddleware from './modules/middlewares/static.middleware'
 import ssrMiddleware from './modules/middlewares/ssr.middleware'
 import proxyMiddleware from './modules/middlewares/proxy.middleware'
 
 import routerForum from './modules/forum/forum.router'
+import dbConnect from './db'
 
 const isDev = process.env.NODE_ENV === 'development'
 const srcPath = path.resolve('../client')
 
-postgres
-  // * CONNECT POSTGRES
-  .dbConnect()
-
-  // * CONNECT PRISMA
-  .then(async () => {
-    await prisma.$connect()
-    console.log('➜ 🎸 Prisma connected ...')
-  })
-
+dbConnect()
   // * CREATE APP
   .then(async () => {
     const app = express()
