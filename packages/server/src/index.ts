@@ -7,9 +7,6 @@ import cookieParser from 'cookie-parser'
 import express from 'express'
 import cors from 'cors'
 
-import prisma from './modules/prisma'
-import postgres from './modules/postgres'
-
 import staticMiddleware from './modules/middlewares/static.middleware'
 import ssrMiddleware from './modules/middlewares/ssr.middleware'
 import proxyMiddleware from './modules/middlewares/proxy.middleware'
@@ -17,17 +14,9 @@ import proxyMiddleware from './modules/middlewares/proxy.middleware'
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
+import dbConnect from './db'
 
-postgres
-  // * CONNECT POSTGRES
-  .dbConnect()
-
-  // * CONNECT PRISMA
-  .then(async () => {
-    await prisma.$connect()
-    console.log('➜ 🎸 Prisma connected ...')
-  })
-
+dbConnect()
   // * CREATE APP
   .then(async () => {
     const app = express()

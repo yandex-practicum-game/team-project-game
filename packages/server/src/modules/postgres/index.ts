@@ -19,20 +19,4 @@ const client = new Client({
   port: Number(POSTGRES_PORT),
 })
 
-const dbConnect = async () => {
-  try {
-    await client.connect()
-
-    const res = await client.query('SELECT NOW()')
-    console.log('  ➜ 🎸 Connected to the database at:', res?.rows?.[0].now)
-    client.end()
-
-    return client
-  } catch (e) {
-    console.error(e)
-  }
-
-  return null
-}
-
-export default { pool, dbConnect }
+export default { pool, client }
