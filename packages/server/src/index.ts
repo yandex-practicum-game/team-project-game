@@ -1,6 +1,7 @@
 import { createServer } from 'vite'
 import { srcPath } from './constants/path'
 import { isDev } from './constants/env'
+import { v1 } from './constants/api'
 
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -14,6 +15,7 @@ import proxyMiddleware from './modules/middlewares/proxy.middleware'
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
+
 import dbConnect from './db'
 
 dbConnect()
@@ -62,9 +64,9 @@ dbConnect()
 
   // * ROUTES
   .then(app => {
-    app.use('/api', routerForum)
-    app.use('/api', routerTopic)
-    app.use('/api', routerComment)
+    app.use(v1, routerForum)
+    app.use(v1, routerTopic)
+    app.use(v1, routerComment)
 
     console.log('➜ 🎸 Init routes ...')
     return app

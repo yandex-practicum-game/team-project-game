@@ -14,12 +14,6 @@ const ForumPage = () => {
     navigate(-1)
   }
 
-  useEffect(() => {
-    axios.get('/api/forums', { withCredentials: true }).then(res => {
-      console.log(res.data)
-    })
-  }, [])
-
   return (
     <Layout>
       <div className={s.ForumPage}>

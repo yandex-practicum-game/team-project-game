@@ -1,4 +1,4 @@
-import prisma from '../prisma'
+import TopicService from './topic.service'
 
 import type { Topic } from '@prisma/client'
 import type { Request, Response } from 'express'
@@ -9,15 +9,9 @@ export default class TopicController {
     req: Request<unknown, unknown, Omit<Topic, 'id'>, unknown>,
     res: Response
   ) {
-    const { title, forumId, userId } = req.body
     try {
-      const topic = await prisma.topic.create({
-        data: {
-          title: title,
-          userId: userId,
-          forum: { connect: { id: forumId } },
-        },
-      })
+      const topic = await TopicService.create(req.body)
+
       res.status(201).json(topic)
     } catch (error) {
       console.error('[Error] TopicController create: ', error)
@@ -29,15 +23,9 @@ export default class TopicController {
     req: Request<unknown, unknown, unknown, GetTopicsQueryParams>,
     res: Response
   ) {
-    const { page = 1, take = 10 } = req.query
-    const skip = (Number(page) - 1) * Number(take)
-
     try {
-      const [topics, total] = await Promise.all([
-        prisma.topic.findMany({ skip, take: Number(take) }),
-        prisma.topic.count(),
-      ])
-
+      const { page = '1', take = '10' } = req.query
+      const [topics, total] = await TopicService.getAll(take, page)
       res.status(200).json({ topics, total })
     } catch (error) {
       console.error('[Error] TopicController getAll: ', error)
@@ -46,12 +34,14 @@ export default class TopicController {
   }
 
   static async getOne(
-    req: Request<Pick<Topic, 'id'>, unknown, unknown, unknown>,
+    req: Request<{ id: string }, unknown, unknown, unknown>,
     res: Response
   ) {
-    const { id } = req.params
     try {
-      const topic = await prisma.topic.findUnique({ where: { id } })
+      if (!req.params.id) {
+        res.status(400).json({ error: 'Id not specified' })
+      }
+      const topic = await TopicService.getOne(req.params.id)
       res.status(200).json(topic)
     } catch (error) {
       res.status(500).json(error)
@@ -62,12 +52,15 @@ export default class TopicController {
     req: Request<unknown, unknown, Topic, unknown>,
     res: Response
   ) {
-    const { id, userId, ...data } = req.body
     try {
-      const topic = await prisma.topic.updateMany({
-        where: { id, userId },
-        data,
-      })
+      const { id, userId, ...data } = req.body
+
+      if (!id) {
+        res.status(400).json({ error: 'Id not specified' })
+      }
+
+      const topic = await TopicService.update(id, userId, data)
+
       res.status(200).json(topic)
     } catch (error) {
       console.error('[Error] TopicController update: ', error)
@@ -76,16 +69,16 @@ export default class TopicController {
   }
 
   static async delete(
-    req: Request<Pick<Topic, 'id'>, unknown, Topic, unknown>,
+    req: Request<{ id: string }, unknown, Topic, unknown>,
     res: Response
   ) {
     try {
-      const topic = await prisma.topic.deleteMany({
-        where: {
-          id: Number(req.params.id),
-          userId: req.body.userId,
-        },
-      })
+      if (!req.params.id) {
+        res.status(400).json({ error: 'Id not specified' })
+      }
+
+      const topic = await TopicService.delete(req.params.id, req.body.userId)
+
       res.status(200).json(topic)
     } catch (error) {
       console.error('[Error] TopicController delete: ', error)
