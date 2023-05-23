@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import s from './ForumPage.module.scss'
 import { Button } from '../../components/Button'
 import { IForum, mockForumList } from './mock'
 import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
+import axios from 'axios'
 
 const ForumPage = () => {
   const navigate = useNavigate()

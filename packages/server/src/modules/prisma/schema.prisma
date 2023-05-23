@@ -11,7 +11,34 @@ datasource db {
 }
 
 model Forum {
-  id    Int    @id @default(autoincrement())
-  title String
+  id     Int    @id @default(autoincrement())
+  title  String
+  userId Int
+
+  Topic Topic[]
 }
 
+model Topic {
+  id      Int       @id @default(autoincrement())
+  title   String
+  userId  Int
+  forum   Forum     @relation(fields: [forumId], references: [id])
+  forumId Int
+  Comment Comment[]
+
+  @@index([forumId])
+}
+
+model Comment {
+  id       Int       @id @default(autoincrement())
+  userId   Int
+  content  String
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId Int?
+  comments Comment[] @relation("CommentToComment")
+  topic    Topic     @relation(fields: [topicId], references: [id])
+  topicId  Int
+
+  @@index([parentId])
+  @@index([topicId])
+}

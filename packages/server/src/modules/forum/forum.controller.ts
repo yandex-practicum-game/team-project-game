@@ -1,17 +1,15 @@
-import prisma from '../prisma'
-
+import ForumService from './forum.service'
 import type { Forum } from '@prisma/client'
 import type { Request, Response } from 'express'
-import type { GetForumsQueryParams } from './forum.interface'
+import type { ForumsQueryParams } from './forum.interface'
 
-export class ForumController {
+export default class ForumController {
   static async create(
     req: Request<unknown, unknown, Omit<Forum, 'id'>, unknown>,
     res: Response
   ) {
-    const { title } = req.body
     try {
-      const forum = await prisma.forum.create({ data: { title } })
+      const forum = await ForumService.create(req.body.title, req.body.userId)
       res.status(201).json(forum)
     } catch (error) {
       console.error('[Error] ForumController create: ', error)
@@ -20,18 +18,12 @@ export class ForumController {
   }
 
   static async getAll(
-    req: Request<unknown, unknown, unknown, GetForumsQueryParams>,
+    req: Request<unknown, unknown, { userId: string }, ForumsQueryParams>,
     res: Response
   ) {
-    const { page = 1, take = 10 } = req.query
-    const skip = (page - 1) * take
-
     try {
-      const [forums, total] = await Promise.all([
-        prisma.forum.findMany({ skip, take }),
-        prisma.forum.count(),
-      ])
-
+      const { page = '1', take = '10' } = req.query
+      const [forums, total] = await ForumService.getAll(take, page)
       res.status(200).json({ forums, total })
     } catch (error) {
       console.error('[Error] ForumController getAll: ', error)
@@ -40,12 +32,14 @@ export class ForumController {
   }
 
   static async getOne(
-    req: Request<Pick<Forum, 'id'>, unknown, unknown, unknown>,
+    req: Request<{ id: string }, unknown, unknown, unknown>,
     res: Response
   ) {
-    const { id } = req.params
     try {
-      const forum = await prisma.forum.findUnique({ where: { id } })
+      if (!req.params.id) {
+        res.status(400).json({ error: 'Id not specified' })
+      }
+      const forum = await ForumService.getOne(req.params.id)
       res.status(200).json(forum)
     } catch (error) {
       res.status(500).json(error)
@@ -56,9 +50,15 @@ export class ForumController {
     req: Request<unknown, unknown, Forum, unknown>,
     res: Response
   ) {
-    const { id, ...data } = req.body
     try {
-      const forum = await prisma.forum.update({ where: { id }, data })
+      const { id, userId, ...data } = req.body
+
+      if (!id) {
+        res.status(400).json({ error: 'Id not specified' })
+      }
+
+      const forum = await ForumService.update(id, userId, data)
+
       res.status(200).json(forum)
     } catch (error) {
       console.error('[Error] ForumController update: ', error)
@@ -67,12 +67,14 @@ export class ForumController {
   }
 
   static async delete(
-    req: Request<Pick<Forum, 'id'>, unknown, unknown, unknown>,
+    req: Request<{ id: string }, unknown, Forum, unknown>,
     res: Response
   ) {
-    const { id } = req.params
     try {
-      const forum = await prisma.forum.delete({ where: { id } })
+      if (!req.params.id) {
+        res.status(400).json({ error: 'Id not specified' })
+      }
+      const forum = await ForumService.delete(req.params.id, req.body.userId)
       res.status(200).json(forum)
     } catch (error) {
       console.error('[Error] ForumController delete: ', error)

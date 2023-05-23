@@ -1,6 +1,9 @@
 import type { NextFunction, Request, Response } from 'express'
 import type { ViteDevServer } from 'vite'
 
+import { isDev } from '../../constants/env'
+import { srcPath, distPath, ssrClientPath } from '../../constants/path'
+
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -12,11 +15,6 @@ async function ssrMiddleware(req: Request, res: Response, next: NextFunction) {
 
   const vite = req.app.locals.settings.vite as ViteDevServer
   const url = req.originalUrl
-  const isDev = process.env.NODE_ENV === 'development'
-
-  const distPath = path.resolve('../client/dist/')
-  const srcPath = path.resolve('../client')
-  const ssrClientPath = path.resolve('../client/dist-ssr/client.cjs')
 
   try {
     let template: string

@@ -1,7 +1,11 @@
 import { Router } from 'express'
-import { ForumController } from './forum.controller'
+
+import ForumController from './forum.controller'
+import authMiddleware from '../middlewares/auth.middleware'
 
 const routerForum = Router()
+
+routerForum.use(authMiddleware)
 
 routerForum.post('/forums', ForumController.create)
 routerForum.get('/forums', ForumController.getAll)

@@ -1,8 +1,8 @@
 import express from 'express'
 import path from 'path'
 
-const distPath = path.resolve('../client/dist/')
-const isDev = process.env.NODE_ENV === 'development'
+import { isDev } from '../../constants/env'
+import { distPath } from '../../constants/path'
 
 const staticMiddleware = () => {
   if (isDev) {

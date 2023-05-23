@@ -9,7 +9,7 @@ import { useGetLeadersMutation } from '../../store/lidearboard.api'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
 import { Spinner } from '../../components/Spinner'
-import { API_CONFIG } from '../../constants/apiConfig'
+import { RESOURCES_URL } from '../../constants/apiConfig'
 import { useAlert } from 'react-alert'
 import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
@@ -78,7 +78,7 @@ export const LeaderboardPage = () => {
                       score={user.score}
                       avatar={
                         user.avatar
-                          ? `${API_CONFIG.RESOURCES_URL}${user.avatar}`
+                          ? `${RESOURCES_URL}${user.avatar}`
                           : avatarPlaceholder
                       }
                       userName={user.login}
