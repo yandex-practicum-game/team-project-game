@@ -1,10 +1,11 @@
 export enum API_CONFIG {
-  BASE_URL = 'https://ya-praktikum.tech/api/v2',
-  OAUTH_URL = 'https://ya-praktikum.tech/api/v2/oauth',
   TEAM_NAME = 'team5_quack_attack',
 
   REDIRECT_URI_PROD = 'https://galaxian-game.vercel.app',
   REDIRECT_URI_DEV = 'http://localhost:3000',
+
+  OAUTH_URL_PROD = 'https://galaxian-game.vercel.app/api/v2/oauth',
+  OAUTH_URL_DEV = 'http://localhost:3000/api/v2/oauth',
 
   BASE_URI_PROD = 'https://galaxian-game.vercel.app/api/v2',
   BASE_URI_DEV = 'http://localhost:3000/api/v2',
@@ -27,3 +28,8 @@ export const RESOURCES_URL =
   process.env.NODE_ENV === 'production'
     ? API_CONFIG.RESOURCES_URL_PROD
     : API_CONFIG.RESOURCES_URL_DEV
+
+export const OAUTH_URL =
+  process.env.NODE_ENV === 'production'
+    ? API_CONFIG.OAUTH_URL_PROD
+    : API_CONFIG.OAUTH_URL_DEV

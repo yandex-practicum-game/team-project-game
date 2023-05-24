@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { API_CONFIG, REDIRECT_URI } from '../constants/apiConfig'
+import { OAUTH_URL, REDIRECT_URI } from '../constants/apiConfig'
 import { OAuthLoginRequest } from '../types/auth.types'
 
 export const oauthApi = createApi({
   reducerPath: 'oauthApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: API_CONFIG.OAUTH_URL,
+    baseUrl: OAUTH_URL,
     credentials: 'include',
   }),
   endpoints: build => ({
