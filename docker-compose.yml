@@ -28,6 +28,11 @@ services:
             - "${SERVER_PORT}:${SERVER_PORT}"
         environment:
           SERVER_PORT: ${SERVER_PORT}
+        depends_on:
+          - postgres
+        command: ./wait-for.sh postgres:${POSTGRES_PORT} -- npx prisma migrate dev
+        networks:
+          - awesome
 
     postgres:
       image: postgres:14     
@@ -39,4 +44,10 @@ services:
         POSTGRES_DB: ${POSTGRES_DB}
       volumes:
         - ./tmp/pgdata:/var/lib/postgresql/data
+      networks:
+        - awesome
+
+networks:
+  awesome:
+    driver: bridge
 
