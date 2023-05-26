@@ -1,20 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, {
+  BaseSyntheticEvent,
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import Pagination from 'react-js-pagination'
+
 import { useNavigate } from 'react-router-dom'
 import s from './ForumPage.module.scss'
 import { Button } from '../../components/Button'
-import { IForum, mockForumList } from './mock'
 import { withAuth } from '../../hocs/withAuth'
 import { Layout } from '../../components/Layout'
-import { useGetForumsMutation } from '../../store/forum.api'
+import {
+  useCreateForumMutation,
+  useGetForumsMutation,
+} from '../../store/forum.api'
 import { ForumData, ForumRequestParams } from '../../types/forum.types'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useActions } from '../../hooks/useActions'
 import { Spinner } from '../../components/Spinner'
 import { TEXTS } from '../../constants/requests'
 import { useAlert } from 'react-alert'
+import { OverlayBlur } from '../../components/OverlayBlur'
+import { Modal } from '../../components/Modal'
+import { Input } from '../../components/Input'
 
 const ForumPage = () => {
   const actions = useActions()
+  const alert = useAlert()
+
+  const popupElemRef = useRef<HTMLInputElement>(null)
 
   const navigate = useNavigate()
   const [params, setParams] = useState<ForumRequestParams>({
@@ -22,38 +39,92 @@ const ForumPage = () => {
     take: 10,
   })
   const [getForums, { isLoading }] = useGetForumsMutation()
+  const [createForum] = useCreateForumMutation()
   const { forums, total } = useAppSelector(state => state.forum)
   const isMount = useAppSelector(state => state.forum.isMount)
-  const alert = useAlert()
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [showDescription, setShowDescription] = useState(false)
+  const [modalError, setModalError] = useState(false)
+  const [forumName, setForumName] = useState('')
 
   const goBack = function () {
     navigate(-1)
+  }
+
+  const fetchForums = async ({ page = 1, take = 10 }) => {
+    try {
+      const forumData = await getForums({ page, take }).unwrap()
+
+      if (!forumData) {
+        return
+      }
+
+      actions.setForums(forumData.forums)
+      actions.setTotal(forumData.total)
+    } catch {
+      if (isMount) {
+        alert.show(TEXTS.ERROR)
+      }
+    }
+  }
+
+  const fetchNewForums = async () => {
+    try {
+      const newForumData = await createForum(forumName).unwrap()
+
+      if (!newForumData) {
+        return
+      }
+
+      actions.addNewForum({ ...newForumData, topicsCount: 0, commentsCount: 0 })
+      setIsModalVisible(false)
+      setForumName('')
+    } catch {
+      if (isMount) {
+        alert.show(TEXTS.ERROR)
+      }
+    }
+  }
+
+  const handleAddForumButtonClick = useCallback(() => {
+    setModalError(false)
+    setIsModalVisible(true)
+  }, [])
+
+  const handleOverlayClick = useCallback((event: BaseSyntheticEvent) => {
+    const contains =
+      popupElemRef.current === event.target ||
+      popupElemRef.current?.contains(event.target)
+    if (!contains) {
+      setIsModalVisible(false)
+      setShowDescription(false)
+    }
+  }, [])
+
+  const handleModalSubmit = useCallback(async () => {
+    fetchNewForums()
+  }, [forumName])
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setForumName(value)
+  }
+
+  const handlePageChange = (number: number) => {
+    const newParams = {
+      ...params,
+      page: number,
+    }
+    setParams(newParams)
+    fetchForums(newParams)
   }
 
   useEffect(() => {
     if (forums.length !== 0) {
       return
     }
-    const fetchForums = async () => {
-      try {
-        const forumData = await getForums({
-          page: params.page,
-          take: params.take,
-        }).unwrap()
 
-        if (!forumData) {
-          return
-        }
-
-        actions.setForums(forumData.forums)
-        actions.setTotal(forumData.total)
-      } catch {
-        if (isMount) {
-          alert.show(TEXTS.ERROR)
-        }
-      }
-    }
-    fetchForums()
+    fetchForums(params)
     actions.setIsMount(true)
 
     return () => {
@@ -76,22 +147,62 @@ const ForumPage = () => {
                   <p>topics</p>
                   <p>answers</p>
                 </li>
-                {forums.map((forum: ForumData) => (
-                  <li className={s.ForumPage__item} key={forum.id}>
-                    <p>{forum.title}</p>
-                    <p>{forum.topicsCount}</p>
-                    <p>{forum.commentsCount}</p>
-                  </li>
-                ))}
+                {forums
+                  .map((forum: ForumData) => (
+                    <li className={s.ForumPage__item} key={forum.id}>
+                      <p>{forum.title}</p>
+                      <p>{forum.topicsCount}</p>
+                      <p>{forum.commentsCount}</p>
+                    </li>
+                  ))
+                  .reverse()}
               </ul>
               <div className={s.ForumPage__buttons}>
                 <Button text="Go back" onClick={goBack} />
-                <Button text="Add forum" />
+                <Button text="Add forum" onClick={handleAddForumButtonClick} />
               </div>
             </>
           )}
+          <Pagination
+            activePage={params.page}
+            itemsCountPerPage={params.take}
+            totalItemsCount={total}
+            pageRangeDisplayed={5}
+            onChange={e => handlePageChange(e)}
+            innerClass={s.ForumPage__pagination}
+            linkClass={s.ForumPage__button}
+            activeLinkClass={s.ForumPage__buttonActive}
+            disabledClass={s.ForumPage__buttonDisabled}
+          />
         </div>
       </div>
+      {isModalVisible && (
+        <OverlayBlur onClick={handleOverlayClick}>
+          <Modal
+            ref={popupElemRef}
+            onClick={handleModalSubmit}
+            title={'Add forum'}
+            buttonText="Create Forum"
+            showDescription={showDescription}
+            descriptionText="">
+            <div style={{ maxWidth: '100%' }}>
+              <Input
+                label=""
+                name={'forumName'}
+                placeholder={'new forum name'}
+                type={'text'}
+                value={forumName}
+                onChange={handleOnChange}
+                style={{ maxWidth: '100%' }}
+              />
+            </div>
+
+            {modalError && (
+              <p className={s.ForumPage__errorMessage}>Couldn't save avatar!</p>
+            )}
+          </Modal>
+        </OverlayBlur>
+      )}
     </Layout>
   )
 }

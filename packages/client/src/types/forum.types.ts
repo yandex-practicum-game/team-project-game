@@ -5,6 +5,12 @@ export type ForumData = {
   commentsCount: number
 }
 
+export type NewForumQueryResponse = {
+  id: number
+  title: string
+  userId: number
+}
+
 export type ForumQueryResponse = {
   forums: ForumData[]
   total: number
