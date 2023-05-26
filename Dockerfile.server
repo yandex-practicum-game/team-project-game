@@ -14,7 +14,6 @@ COPY . .
 
 RUN yarn lerna bootstrap
 # RUN apt update && apt install -y netcat
-RUN apt-get update && apt-get install -y netcat
 # RUN chmod +x /app/packages/server/wait-for.sh
 RUN rm -rf /app/packages/server/dist/ && yarn build --scope=server
 
@@ -26,8 +25,10 @@ COPY --from=builder /app/packages/server/dist/ /app/
 COPY --from=builder /app/packages/server/wait-for.sh /app/wait-for.sh
 RUN chmod +x /app/wait-for.sh
 COPY --from=builder /app/packages/server/package.json /app/package.json
+RUN apt-get update && apt-get install -y netcat
 RUN yarn install --production=true
 
 EXPOSE $SERVER_PORT
 # CMD [ "node", "/app/src/index.js" ]
-CMD ["/app/wait-for.sh", "postgres:${POSTGRES_PORT}", "--", "npx", "prisma", "migrate", "dev", "node", "/app/src/index.js"]
+# CMD ["/app/wait-for.sh", "postgres:${POSTGRES_PORT}", "--", "npx", "prisma", "migrate", "dev", "node", "/app/src/index.js"]
+CMD ["/app/wait-for.sh", "postgres:${POSTGRES_PORT}", "--", "node", "/app/src/index.js"]
