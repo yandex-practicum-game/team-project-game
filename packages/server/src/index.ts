@@ -15,10 +15,18 @@ import proxyMiddleware from './modules/middlewares/proxy.middleware'
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
+import routerUserTheme from './modules/userTheme/user-theme.router'
+import routerSiteThemes from './modules/siteThemes/site-themes.router'
 
 import dbConnect from './db'
+import setDBInitialState from './initialState'
 
 dbConnect()
+  // * CREATE INITIAL THEMES
+  .then(async () => {
+    setDBInitialState()
+  })
+
   // * CREATE APP
   .then(async () => {
     const app = express()
@@ -64,9 +72,11 @@ dbConnect()
 
   // * ROUTES
   .then(app => {
+    app.use(v1, routerSiteThemes)
     app.use(v1, routerForum)
     app.use(v1, routerTopic)
     app.use(v1, routerComment)
+    app.use(v1, routerUserTheme)
 
     console.log('➜ 🎸 Init routes ...')
     return app
