@@ -13,12 +13,11 @@ export default class SiteThemesController {
   }
 
   static async getAll(
-    req: Request<unknown, unknown, unknown, GetSiteThemesQueryParams>,
+    req: Request<unknown, unknown, unknown, unknown>,
     res: Response
   ) {
     try {
-      const { page = '1', take = '10' } = req.query
-      const [siteThemes, total] = await SiteThemesService.getAll(take, page)
+      const [siteThemes, total] = await SiteThemesService.getAll()
       res.status(200).json({ siteThemes, total })
     } catch (error) {
       console.error('[Error] SiteThemesController getAll: ', error)

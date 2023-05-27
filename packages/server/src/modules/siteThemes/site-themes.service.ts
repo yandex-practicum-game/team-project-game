@@ -21,11 +21,9 @@ export default class SiteThemesService {
     }
   }
 
-  static async getAll(take: string, page: string) {
-    const skip = (Number(page) - 1) * Number(take)
-
+  static async getAll() {
     const [siteThemes, total] = await Promise.all([
-      prisma.siteThemes.findMany({ skip, take: Number(take) }),
+      prisma.siteThemes.findMany(),
       prisma.siteThemes.count(),
     ])
 
