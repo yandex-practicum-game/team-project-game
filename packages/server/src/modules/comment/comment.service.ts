@@ -39,12 +39,18 @@ export default class CommentService {
     return comment
   }
 
-  static async getAll(take: string, page: string) {
+  static async getAll(topicId: string, take: string, page: string) {
     const skip = (Number(page) - 1) * Number(take)
 
     const [comments, total] = await Promise.all([
-      prisma.comment.findMany({ skip, take: Number(take) }),
-      prisma.comment.count(),
+      prisma.comment.findMany({
+        skip,
+        take: Number(take),
+        where: { topicId: Number(topicId) },
+      }),
+      prisma.comment.count({
+        where: { topicId: Number(topicId) },
+      }),
     ])
 
     const commentsTree = buildCommentTree(comments)
