@@ -44,6 +44,9 @@ export default class CommentService {
 
     const [comments, total] = await Promise.all([
       prisma.comment.findMany({
+        include: {
+          emojis: true,
+        },
         skip,
         take: Number(take),
         where: { topicId: Number(topicId) },

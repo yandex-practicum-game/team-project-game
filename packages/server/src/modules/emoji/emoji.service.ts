@@ -8,22 +8,22 @@ export default class EmojiService {
       await prisma.emoji.createMany({
         data: [
           {
-            content: 'asda',
+            content: '👌',
           },
           {
-            content: 'asda',
+            content: '👈',
           },
           {
-            content: 'asda',
+            content: '😏',
           },
           {
-            content: 'asda',
+            content: '🥸',
           },
           {
-            content: 'asda',
+            content: '🤪',
           },
           {
-            content: 'asda',
+            content: '🥶',
           },
         ],
       })
