@@ -38,7 +38,18 @@ model Comment {
   comments Comment[] @relation("CommentToComment")
   topic    Topic     @relation(fields: [topicId], references: [id])
   topicId  Int
+  emoji    Emoji?     @relation(fields: [emojiId], references: [id])
+  emojiId  Int?
 
+  @@index([emojiId])
   @@index([parentId])
   @@index([topicId])
+}
+
+
+model Emoji {
+  id Int @id @default(autoincrement())
+  content String
+
+  Comment Comment[]
 }

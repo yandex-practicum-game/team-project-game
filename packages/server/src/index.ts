@@ -17,8 +17,12 @@ import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
 
 import dbConnect from './db'
+import EmojiController from './modules/emoji/emoji.controller'
 
 dbConnect()
+  .then(async () => {
+    await EmojiController.create()
+  })
   // * CREATE APP
   .then(async () => {
     const app = express()
