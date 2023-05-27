@@ -30,7 +30,10 @@ services:
           SERVER_PORT: ${SERVER_PORT}
         depends_on:
           - postgres
-        command: ["node", "/app/src/index.js"]
+        volumes:
+          - ./.env:/app/.env
+          - ./packages/server/src/modules/prisma:/app/prisma
+        command: ["sh", "-c", "npx prisma migrate dev && npx prisma generate && node /app/src/index.js"]
         networks:
           - awesome
 
