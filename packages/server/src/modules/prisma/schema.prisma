@@ -40,7 +40,6 @@ model Comment {
   topicId  Int
   emojis   Emoji[]   @relation("CommentToEmoji")
 
-
   @@index([parentId])
   @@index([topicId])
 }
@@ -50,9 +49,7 @@ model Emoji {
   id      Int    @id @default(autoincrement())
   content String
 
-
   comments Comment[] @relation("CommentToEmoji")
-
 
   @@index([content])
 }
