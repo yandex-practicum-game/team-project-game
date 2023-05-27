@@ -16,12 +16,16 @@ export default class TopicService {
     return topic
   }
 
-  static async getAll(take: string, page: string) {
+  static async getAll(id: string, take: string, page: string) {
     const skip = (Number(page) - 1) * Number(take)
 
     const [topics, total] = await Promise.all([
-      prisma.topic.findMany({ skip, take: Number(take) }),
-      prisma.topic.count(),
+      prisma.topic.findMany({
+        skip,
+        take: Number(take),
+        where: { forumId: Number(id) },
+      }),
+      prisma.topic.count({ where: { forumId: Number(id) } }),
     ])
 
     return [topics, total]
