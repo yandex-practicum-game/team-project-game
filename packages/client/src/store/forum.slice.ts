@@ -5,12 +5,14 @@ export interface IForumState {
   forums: ForumData[]
   total: number
   isMount: boolean
+  currentForum: number | null
 }
 
 const initialState: IForumState = {
   forums: [],
   total: 0,
   isMount: false,
+  currentForum: null,
 }
 
 export const forumSlice = createSlice({
@@ -28,6 +30,9 @@ export const forumSlice = createSlice({
     },
     addNewForum: (state, action: PayloadAction<ForumData>) => {
       state.forums.push(action.payload)
+    },
+    setForumId: (state, action: PayloadAction<number>) => {
+      state.currentForum = action.payload
     },
   },
 })

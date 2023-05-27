@@ -1,4 +1,4 @@
-import React, {
+import {
   BaseSyntheticEvent,
   ChangeEvent,
   useCallback,
@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import Pagination from 'react-js-pagination'
 
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import s from './ForumPage.module.scss'
 import { Button } from '../../components/Button'
 import { withAuth } from '../../hocs/withAuth'
@@ -38,9 +38,10 @@ const ForumPage = () => {
     page: 1,
     take: 10,
   })
+  const [total, setTotal] = useState<number>(0)
   const [getForums, { isLoading }] = useGetForumsMutation()
   const [createForum] = useCreateForumMutation()
-  const { forums, total } = useAppSelector(state => state.forum)
+  const { forums } = useAppSelector(state => state.forum)
   const isMount = useAppSelector(state => state.forum.isMount)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [showDescription, setShowDescription] = useState(false)
@@ -51,16 +52,16 @@ const ForumPage = () => {
     navigate(-1)
   }
 
-  const fetchForums = async ({ page = 1, take = 10 }) => {
+  const fetchForums = async (params: ForumRequestParams) => {
     try {
-      const forumData = await getForums({ page, take }).unwrap()
+      const forumData = await getForums(params).unwrap()
 
       if (!forumData) {
         return
       }
 
       actions.setForums(forumData.forums)
-      actions.setTotal(forumData.total)
+      setTotal(forumData.total)
     } catch {
       if (isMount) {
         alert.show(TEXTS.ERROR)
@@ -77,6 +78,7 @@ const ForumPage = () => {
       }
 
       actions.addNewForum({ ...newForumData, topicsCount: 0, commentsCount: 0 })
+
       setIsModalVisible(false)
       setForumName('')
     } catch {
@@ -119,14 +121,14 @@ const ForumPage = () => {
     fetchForums(newParams)
   }
 
-  useEffect(() => {
-    if (forums.length !== 0) {
-      return
-    }
+  const handleCLickForum = (forumId: number) => {
+    actions.setForumId(forumId)
+  }
 
-    fetchForums(params)
+  useEffect(() => {
     actions.setIsMount(true)
 
+    fetchForums(params)
     return () => {
       actions.setIsMount(false)
     }
@@ -136,23 +138,29 @@ const ForumPage = () => {
     <Layout>
       <div className={s.ForumPage}>
         <div className={s.ForumPage__container}>
-          <h2 className={s.ForumPage__title}>Forum</h2>
+          <h2 className={s.ForumPage__title}>Forum List</h2>
           {isLoading ? (
             <Spinner />
           ) : (
             <>
               <ul className={s.ForumPage__list}>
                 <li className={s.ForumPage__item}>
-                  <p>forums {total}</p>
+                  <p>total: {total}</p>
                   <p>topics</p>
                   <p>answers</p>
                 </li>
                 {forums
                   .map((forum: ForumData) => (
-                    <li className={s.ForumPage__item} key={forum.id}>
-                      <p>{forum.title}</p>
-                      <p>{forum.topicsCount}</p>
-                      <p>{forum.commentsCount}</p>
+                    <li
+                      key={forum.id}
+                      onClick={() => handleCLickForum(forum.id)}>
+                      <Link
+                        to={`/forums/${forum.id}`}
+                        className={s.ForumPage__item}>
+                        <p>{forum.title}</p>
+                        <p>{forum.topicsCount}</p>
+                        <p>{forum.commentsCount}</p>
+                      </Link>
                     </li>
                   ))
                   .reverse()}
