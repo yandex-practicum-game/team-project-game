@@ -8,7 +8,7 @@ const routerComment = Router()
 routerComment.use(authMiddleware)
 
 routerComment.post('/comments', CommentController.create)
-routerComment.get('/comments', CommentController.getAll)
+routerComment.get('/topics/:topicId/comments', CommentController.getAll)
 routerComment.get('/comments/:id', CommentController.getOne)
 routerComment.put('/comments', CommentController.update)
 routerComment.delete('/comments/:id', CommentController.delete)

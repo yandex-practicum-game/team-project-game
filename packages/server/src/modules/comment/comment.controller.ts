@@ -24,12 +24,13 @@ export default class CommentController {
   }
 
   static async getAll(
-    req: Request<unknown, unknown, unknown, GetCommentsQueryParams>,
+    req: Request<{ topicId: string }, unknown, unknown, GetCommentsQueryParams>,
     res: Response
   ) {
     try {
       const { page = '1', take = '10' } = req.query
-      const [comments, total] = await CommentService.getAll(take, page)
+      const { topicId } = req.params
+      const [comments, total] = await CommentService.getAll(topicId, take, page)
 
       res.status(200).json({ comments, total })
     } catch (error) {

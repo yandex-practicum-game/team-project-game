@@ -20,12 +20,12 @@ export default class TopicController {
   }
 
   static async getAll(
-    req: Request<{ id: string }, unknown, unknown, GetTopicsQueryParams>,
+    req: Request<{ forumId: string }, unknown, unknown, GetTopicsQueryParams>,
     res: Response
   ) {
     try {
       const { page = '1', take = '10' } = req.query
-      const { id: forumId } = req.params
+      const { forumId } = req.params
 
       const [topics, total] = await TopicService.getAll(forumId, take, page)
       res.status(200).json({ topics, total })
