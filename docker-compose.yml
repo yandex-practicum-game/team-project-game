@@ -30,7 +30,7 @@ services:
           SERVER_PORT: ${SERVER_PORT}
         depends_on:
           - postgres
-        # command: ./wait-for.sh postgres:${POSTGRES_PORT} -- npx prisma migrate dev
+        command: ["node", "/app/src/index.js"]
         networks:
           - awesome
 
