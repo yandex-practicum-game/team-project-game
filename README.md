@@ -66,7 +66,6 @@
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`
 
-Чтобы server смог подключиться к postgres внутри контейнера, замените в .env POSTGRES_HOST на 'postgres'.
 
 `docker compose up` - запустит три сервиса
 1. nginx, раздающий клиентскую статику (client)
