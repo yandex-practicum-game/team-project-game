@@ -5,7 +5,7 @@ const { POSTGRES_DB, POSTGRES_PORT } = process.env
 
 const pool = new Pool({
   user: POSTGRES_USER,
-  host: 'localhost',
+  host: 'postgres',
   database: POSTGRES_DB,
   password: POSTGRES_PASSWORD,
   port: Number(POSTGRES_PORT),
@@ -13,7 +13,7 @@ const pool = new Pool({
 
 const client = new Client({
   user: POSTGRES_USER,
-  host: 'localhost',
+  host: 'postgres',
   database: POSTGRES_DB,
   password: POSTGRES_PASSWORD,
   port: Number(POSTGRES_PORT),
