@@ -21,8 +21,7 @@
   },
   "devDependencies": {
     "@evilmartians/lefthook": "^1.1.1",
-    "lerna": "^5.4.3",
-    "typescript": "^5.0.4"
+    "lerna": "^5.4.3"
   },
   "prisma": {
     "schema": "packages/server/src/modules/prisma/schema.prisma"
