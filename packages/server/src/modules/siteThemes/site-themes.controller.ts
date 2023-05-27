@@ -1,14 +1,14 @@
 import SiteThemesService from './site-themes.service'
 
 import type { Request, Response } from 'express'
-import type { GetSiteThemesQueryParams } from './site-themes.interface'
 
 export default class SiteThemesController {
   static async createInitial() {
     try {
       await SiteThemesService.create()
+      console.log('➜ 🎸 Initial themes is set')
     } catch (error) {
-      console.error('[Error] SiteThemesController create: ', error)
+      console.error('[Error] SiteThemesController createInitial: ', error)
     }
   }
 
