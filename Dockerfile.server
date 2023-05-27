@@ -14,15 +14,11 @@ COPY . .
 
 RUN yarn lerna bootstrap
 RUN rm -rf /app/packages/server/dist/ && rm -rf /app/packages/client/dist-ssr/ && rm -rf /app/packages/client/dist/ && yarn build
-# RUN rm -rf /app/packages/server/dist/ && yarn build --scope=server
 
 
 FROM node:$NODE_VERSION-buster-slim as production
 WORKDIR /app
 
-# RUN rm -rf /app/packages/server/node_modules
-# RUN rm -rf /app/packages/client/node_modules
-# COPY --from=builder /app/packages /app/
 COPY --from=builder /app/packages/server/dist /app/server
 COPY --from=builder /app/packages/client/dist /app/client/dist
 COPY --from=builder /app/packages/client/dist-ssr /app/client/dist-ssr
