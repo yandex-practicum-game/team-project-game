@@ -19,15 +19,12 @@ import routerUserTheme from './modules/userTheme/user-theme.router'
 import routerSiteThemes from './modules/siteThemes/site-themes.router'
 
 import dbConnect from './db'
-import SiteThemesController from './modules/siteThemes/site-themes.controller'
+import setInitialState from './initialState'
 
 dbConnect()
-  // * CREATE INITIAL THEMES
-  .then(async () => {
-    await SiteThemesController.createInitial()
-    console.log('➜ 🎸 Initial themes is set')
-  })
 
+// * CREATE INITIAL THEMES
+setInitialState()
   // * CREATE APP
   .then(async () => {
     const app = express()
