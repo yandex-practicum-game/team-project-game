@@ -1,18 +1,24 @@
 import prisma from '../prisma'
-import type { SiteThemes } from '@prisma/client'
 
 export default class SiteThemesService {
-  static async create(data: Omit<SiteThemes, 'id'>) {
-    const { theme, description } = data
+  static async create() {
+    const count = await prisma.siteThemes.count()
 
-    const siteTheme = await prisma.siteThemes.create({
-      data: {
-        theme: theme,
-        description: description,
-      },
-    })
-
-    return siteTheme
+    // если нет тем, то создаем начальный набор тем
+    if (count === 0) {
+      await prisma.siteThemes.createMany({
+        data: [
+          {
+            theme: 'light',
+            description: 'classic light',
+          },
+          {
+            theme: 'dark',
+            description: 'classic dark',
+          },
+        ],
+      })
+    }
   }
 
   static async getAll(take: string, page: string) {
@@ -24,31 +30,5 @@ export default class SiteThemesService {
     ])
 
     return [siteThemes, total]
-  }
-
-  static async getOne(id: string) {
-    const siteTheme = await prisma.siteThemes.findUnique({
-      where: {
-        id: Number(id),
-      },
-    })
-    return siteTheme
-  }
-
-  static async update(id: number, data: Omit<SiteThemes, 'id'>) {
-    const siteTheme = await prisma.siteThemes.updateMany({
-      where: { id },
-      data,
-    })
-    return siteTheme
-  }
-
-  static async delete(id: string) {
-    const siteTheme = await prisma.siteThemes.deleteMany({
-      where: {
-        id: Number(id),
-      },
-    })
-    return siteTheme
   }
 }

@@ -48,6 +48,8 @@ model UserTheme {
   theme     SiteThemes      @relation(fields: [themeId], references: [id])
   themeId   Int
   userId    Int
+
+  @@index([userId])
 }
 
 model SiteThemes {

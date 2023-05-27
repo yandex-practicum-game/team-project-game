@@ -16,32 +16,22 @@ export default class UserThemeService {
   }
 
   static async getOne(id: number) {
-    const userTheme = await prisma.userTheme.findMany({
+    const userThemesSearchRes = await prisma.userTheme.findMany({
       where: {
         userId: id,
       },
     })
-    return userTheme
+
+    if (userThemesSearchRes.length === 0) {
+      return await this.create({ userId: id, themeId: 1 })
+    }
+    return userThemesSearchRes[0]
   }
 
-  static async update(
-    id: number,
-    userId: number,
-    data: Omit<UserTheme, 'id' | 'userId'>
-  ) {
+  static async update(userId: number, data: Omit<UserTheme, 'id' | 'userId'>) {
     const userTheme = await prisma.userTheme.updateMany({
-      where: { id, userId },
+      where: { userId },
       data,
-    })
-    return userTheme
-  }
-
-  static async delete(id: string, userId: number) {
-    const userTheme = await prisma.userTheme.deleteMany({
-      where: {
-        id: Number(id),
-        userId: userId,
-      },
     })
     return userTheme
   }
