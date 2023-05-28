@@ -96,7 +96,7 @@ const TopicPage = () => {
       }
 
       actions.addNewTopic(newTopicData)
-
+      setTotal(total => total + 1)
       setIsModalVisible(false)
       setTopicName('')
     } catch {
@@ -117,7 +117,7 @@ const TopicPage = () => {
 
     const newParams = {
       page: 1,
-      take: 10,
+      take: 5,
       forumId: Number(paramId) || 0,
     }
 
@@ -167,19 +167,20 @@ const TopicPage = () => {
                 <li className={s.TopicPage__item}>
                   <p>total {total}</p>
                 </li>
-                {topics
-                  .map((topic: TopicData) => (
-                    <li
-                      key={topic.id}
-                      onClick={() => handleCLickTopic(topic.id)}>
-                      <Link
-                        to={`/forums/${paramId}/${topic.id}`}
-                        className={s.TopicPage__item}>
-                        <p>{topic.title}</p>
-                      </Link>
-                    </li>
-                  ))
-                  .reverse()}
+                {topics.map(
+                  (topic: TopicData, index: number) =>
+                    index < 5 && (
+                      <li
+                        key={topic.id}
+                        onClick={() => handleCLickTopic(topic.id)}>
+                        <Link
+                          to={`/forums/${paramId}/${topic.id}`}
+                          className={s.TopicPage__item}>
+                          <p>{topic.title}</p>
+                        </Link>
+                      </li>
+                    )
+                )}
               </ul>
               <div className={s.TopicPage__buttons}>
                 <Button text="Go back" onClick={goBack} />

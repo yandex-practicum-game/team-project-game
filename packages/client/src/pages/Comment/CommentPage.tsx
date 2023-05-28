@@ -75,7 +75,7 @@ const CommentPage = () => {
       }
 
       actions.addNewComment(newCommentData)
-
+      setTotal(total => total + 1)
       setIsModalVisible(false)
       setcommentText('')
     } catch {
@@ -92,7 +92,7 @@ const CommentPage = () => {
 
     const newParams = {
       page: 1,
-      take: 10,
+      take: 5,
       topicId: Number(paramId) || 0,
     }
     setParams(newParams)
@@ -160,14 +160,15 @@ const CommentPage = () => {
                   <p>total {total}</p>
                   <p>comments</p>
                 </li>
-                {comments
-                  .map((comment: CommentData) => (
-                    <li className={s.CommentPage__item} key={comment.id}>
-                      <p>{comment.userId}</p>
-                      <p>{comment.content}</p>
-                    </li>
-                  ))
-                  .reverse()}
+                {comments.map(
+                  (comment: CommentData, index: number) =>
+                    index < 5 && (
+                      <li className={s.CommentPage__item} key={comment.id}>
+                        <p>{comment.userId}</p>
+                        <p>{comment.content}</p>
+                      </li>
+                    )
+                )}
               </ul>
               <div className={s.CommentPage__buttons}>
                 <Button text="Go back" onClick={goBack} />
@@ -196,8 +197,8 @@ const CommentPage = () => {
           <Modal
             ref={popupElemRef}
             onClick={handleModalSubmit}
-            title={'Add forum'}
-            buttonText="Create Forum"
+            title={'Add comment'}
+            buttonText="Create Comment"
             showDescription={showDescription}
             descriptionText="">
             <div style={{ maxWidth: '100%' }}>

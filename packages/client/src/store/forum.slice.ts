@@ -29,7 +29,7 @@ export const forumSlice = createSlice({
       state.isMount = action.payload
     },
     addNewForum: (state, action: PayloadAction<ForumData>) => {
-      state.forums.push(action.payload)
+      state.forums.unshift(action.payload)
     },
     setForumId: (state, action: PayloadAction<number>) => {
       state.currentForum = action.payload

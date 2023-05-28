@@ -29,7 +29,7 @@ export const topicSlice = createSlice({
       state.isMount = action.payload
     },
     addNewTopic: (state, action: PayloadAction<TopicData>) => {
-      state.topics.push(action.payload)
+      state.topics.unshift(action.payload)
     },
     setTopicId: (state, action: PayloadAction<number>) => {
       state.currentTopic = action.payload

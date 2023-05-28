@@ -8,7 +8,7 @@ import {
 } from 'react'
 import Pagination from 'react-js-pagination'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import s from './ForumPage.module.scss'
 import { Button } from '../../components/Button'
 import { withAuth } from '../../hocs/withAuth'
@@ -28,6 +28,7 @@ import { Modal } from '../../components/Modal'
 import { Input } from '../../components/Input'
 
 const ForumPage = () => {
+  const location = useLocation()
   const actions = useActions()
   const alert = useAlert()
 
@@ -36,7 +37,7 @@ const ForumPage = () => {
   const navigate = useNavigate()
   const [params, setParams] = useState<ForumRequestParams>({
     page: 1,
-    take: 10,
+    take: 5,
   })
   const [total, setTotal] = useState<number>(0)
   const [getForums, { isLoading }] = useGetForumsMutation()
@@ -78,7 +79,7 @@ const ForumPage = () => {
       }
 
       actions.addNewForum({ ...newForumData, topicsCount: 0, commentsCount: 0 })
-
+      setTotal(total => total + 1)
       setIsModalVisible(false)
       setForumName('')
     } catch {
@@ -105,6 +106,7 @@ const ForumPage = () => {
 
   const handleModalSubmit = useCallback(async () => {
     fetchNewForums()
+    // window.location.reload()
   }, [forumName])
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -149,21 +151,22 @@ const ForumPage = () => {
                   <p>topics</p>
                   <p>answers</p>
                 </li>
-                {forums
-                  .map((forum: ForumData) => (
-                    <li
-                      key={forum.id}
-                      onClick={() => handleCLickForum(forum.id)}>
-                      <Link
-                        to={`/forums/${forum.id}`}
-                        className={s.ForumPage__item}>
-                        <p>{forum.title}</p>
-                        <p>{forum.topicsCount}</p>
-                        <p>{forum.commentsCount}</p>
-                      </Link>
-                    </li>
-                  ))
-                  .reverse()}
+                {forums.map(
+                  (forum: ForumData, index: number) =>
+                    index < 5 && (
+                      <li
+                        key={forum.id}
+                        onClick={() => handleCLickForum(forum.id)}>
+                        <Link
+                          to={`/forums/${forum.id}`}
+                          className={s.ForumPage__item}>
+                          <p>{forum.title || 'MISSING TITLE'}</p>
+                          <p>{forum.topicsCount}</p>
+                          <p>{forum.commentsCount}</p>
+                        </Link>
+                      </li>
+                    )
+                )}
               </ul>
               <div className={s.ForumPage__buttons}>
                 <Button text="Go back" onClick={goBack} />

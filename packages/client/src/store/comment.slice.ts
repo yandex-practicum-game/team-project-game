@@ -32,7 +32,7 @@ export const commentSlice = createSlice({
       state.isMount = action.payload
     },
     addNewComment: (state, action: PayloadAction<CommentData>) => {
-      state.comments.push(action.payload)
+      state.comments.unshift(action.payload)
     },
     setCommentId: (state, action: PayloadAction<number>) => {
       state.currentComment = action.payload
