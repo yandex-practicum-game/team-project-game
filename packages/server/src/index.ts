@@ -21,42 +21,35 @@ import routerSiteThemes from './modules/siteThemes/site-themes.router'
 import dbConnect from './db'
 import EmojiController from './modules/emoji/emoji.controller'
 import SiteThemesController from './modules/siteThemes/site-themes.controller'
-
-import type { Controller } from './types'
-
-const dataBaseDispatcher = async (controller: Controller) => {
-  await controller.init()
-}
+import { dbInitializer } from './dbInitializer'
 
 ;(async function () {
   // * CONNECT DATA BASE
   await dbConnect()
 
   // * CREATE INITIAL THEMES
-  await dataBaseDispatcher(SiteThemesController)
+  await dbInitializer(SiteThemesController)
 
   // * INIT EMOJI MODEL
-  await dataBaseDispatcher(EmojiController)
+  await dbInitializer(EmojiController)
 
   // * CREATE APP
   const app = await express()
   console.log('➜ 🎸 Express server started ...')
 
   // * CREATE VITE SERVER
-  if (!isDev) {
-    return app
+  if (isDev) {
+    const vite = await createServer({
+      server: { middlewareMode: true },
+      root: srcPath,
+      appType: 'custom',
+    })
+
+    app.set('vite', vite)
+    app.use(vite.middlewares)
+
+    console.log('➜ 🎸 Vite server started ...')
   }
-
-  const vite = await createServer({
-    server: { middlewareMode: true },
-    root: srcPath,
-    appType: 'custom',
-  })
-
-  app.set('vite', vite)
-  app.use(vite.middlewares)
-
-  console.log('➜ 🎸 Vite server started ...')
 
   // * MIDDLEWARES
   app.use(cors())
