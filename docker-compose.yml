@@ -19,7 +19,7 @@ services:
         volumes:
           - ./.env:/app/.env
           - ./packages/server/src/modules/prisma:/app/prisma
-        command: ["sh", "-c", "npx prisma migrate dev && npx prisma generate && node /app/server/src/index.js"]
+        command: ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && node /app/server/src/index.js"]
         networks:
           - awesome
 

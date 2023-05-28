@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import UserThemeController from './user-theme.controller'
-import authMiddleware from '../middlewares/auth.middleware'
+import authMiddleware from '../../middlewares/auth.middleware'
 
 const routerUserTheme = Router()
 

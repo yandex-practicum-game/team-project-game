@@ -1,24 +1,12 @@
 import prisma from '../prisma'
 
 const EMOJI_LIST = [
-  {
-    content: '👌',
-  },
-  {
-    content: '👈',
-  },
-  {
-    content: '😏',
-  },
-  {
-    content: '🥸',
-  },
-  {
-    content: '🤪',
-  },
-  {
-    content: '🥶',
-  },
+  { content: '👌' },
+  { content: '👈' },
+  { content: '😏' },
+  { content: '😃' },
+  { content: '🤪' },
+  { content: '🥶' },
 ]
 
 export default class EmojiService {

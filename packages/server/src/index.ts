@@ -2,6 +2,7 @@ import { createServer } from 'vite'
 import { srcPath } from './constants/path'
 import { isDev } from './constants/env'
 import { v1 } from './constants/api'
+import { dbInitializer } from './dbInitializer'
 
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -15,26 +16,26 @@ import proxyMiddleware from './modules/middlewares/proxy.middleware'
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
 import routerComment from './modules/comment/comment.router'
-import routerUserTheme from './modules/userTheme/user-theme.router'
-import routerSiteThemes from './modules/siteThemes/site-themes.router'
+import routerUserTheme from './modules/theme/userTheme/user-theme.router'
+import routerSiteThemes from './modules/theme/siteThemes/site-themes.router'
+
+import SiteThemesController from './modules/theme/siteThemes/site-themes.controller'
+import EmojiController from './modules/emoji/emoji.controller'
 
 import dbConnect from './db'
-import EmojiController from './modules/emoji/emoji.controller'
-import SiteThemesController from './modules/siteThemes/site-themes.controller'
-import { dbInitializer } from './dbInitializer'
 
-;(async function () {
+async function start() {
+  const SERVER_PORT = process.env.SERVER_PORT
+
   // * CONNECT DATA BASE
   await dbConnect()
 
-  // * CREATE INITIAL THEMES
-  await dbInitializer(SiteThemesController)
-
-  // * INIT EMOJI MODEL
-  await dbInitializer(EmojiController)
+  // * CREATE INIT DATA IN DATABASE
+  await dbInitializer(SiteThemesController) //  CREATE THEMES
+  await dbInitializer(EmojiController) //  CREATE EMOJI
 
   // * CREATE APP
-  const app = await express()
+  const app = express()
   console.log('➜ 🎸 Express server started ...')
 
   // * CREATE VITE SERVER
@@ -75,9 +76,9 @@ import { dbInitializer } from './dbInitializer'
   console.log('➜ 🎸 Init routes ...')
 
   // * LISTENING SERVER
-  app.listen(3000, () => {
-    console.log(`➜ 🎸 Server is listening on port: ${3000}`)
+  app.listen(SERVER_PORT, () => {
+    console.log(`➜ 🎸 Server is listening on port: ${SERVER_PORT}`)
   })
+}
 
-  return app
-})()
+start()
