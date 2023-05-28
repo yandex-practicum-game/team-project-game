@@ -53,3 +53,21 @@ model Emoji {
 
   @@index([content])
 }
+
+model UserTheme {
+  id        Int             @id @default(autoincrement())
+  theme     SiteThemes      @relation(fields: [themeId], references: [id])
+  themeId   Int
+  userId    Int
+
+  @@index([userId])
+}
+
+model SiteThemes {
+  id          Int             @id @default(autoincrement())
+  theme       String          @unique
+  description String?
+  userThemes  UserTheme[]
+
+  @@index([theme])
+}

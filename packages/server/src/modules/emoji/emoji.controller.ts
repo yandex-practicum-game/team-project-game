@@ -1,7 +1,7 @@
 import EmojiService from './emoji.service'
 
 export default class EmojiController {
-  static async create() {
+  static async init() {
     try {
       await EmojiService.create()
     } catch (error) {

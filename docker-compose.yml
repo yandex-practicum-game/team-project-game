@@ -28,6 +28,14 @@ services:
             - "${SERVER_PORT}:${SERVER_PORT}"
         environment:
           SERVER_PORT: ${SERVER_PORT}
+        depends_on:
+          - postgres
+        volumes:
+          - ./.env:/app/.env
+          - ./packages/server/src/modules/prisma:/app/prisma
+        command: ["sh", "-c", "npx prisma migrate dev && npx prisma generate && node /app/server/src/index.js"]
+        networks:
+          - awesome
 
     postgres:
       image: postgres:14     
@@ -39,4 +47,10 @@ services:
         POSTGRES_DB: ${POSTGRES_DB}
       volumes:
         - ./tmp/pgdata:/var/lib/postgresql/data
+      networks:
+        - awesome
 
+networks:
+  awesome:
+    driver: bridge
+    
