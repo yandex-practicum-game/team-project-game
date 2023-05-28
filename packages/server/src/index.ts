@@ -27,7 +27,7 @@ import dbConnect from './db'
 async function start() {
   const SERVER_PORT = process.env.SERVER_PORT
 
-  // * CONNECT DATA BASE
+  // * CONNECT DATABASE
   await dbConnect()
 
   // * CREATE INIT DATA IN DATABASE
@@ -36,7 +36,6 @@ async function start() {
 
   // * CREATE APP
   const app = express()
-  console.log('➜ 🎸 Express server started ...')
 
   // * CREATE VITE SERVER
   if (isDev) {
@@ -48,23 +47,16 @@ async function start() {
 
     app.set('vite', vite)
     app.use(vite.middlewares)
-
-    console.log('➜ 🎸 Vite server started ...')
   }
 
   // * MIDDLEWARES
   app.use(cors())
   app.use(cookieParser())
-
   app.use('/assets', staticMiddleware())
   app.use('/api/v2', proxyMiddleware())
-
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(bodyParser.json())
-
   app.use(ssrMiddleware)
-
-  console.log('➜ 🎸 Init middlewares ...')
 
   // * ROUTES
   app.use(v1, routerSiteThemes)
@@ -72,8 +64,6 @@ async function start() {
   app.use(v1, routerTopic)
   app.use(v1, routerComment)
   app.use(v1, routerUserTheme)
-
-  console.log('➜ 🎸 Init routes ...')
 
   // * LISTENING SERVER
   app.listen(SERVER_PORT, () => {
