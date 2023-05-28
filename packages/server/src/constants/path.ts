@@ -1,5 +1,8 @@
 import path from 'path'
 
-export const srcPath = path.resolve('../client')
-export const distPath = path.resolve('../client/dist/')
-export const ssrClientPath = path.resolve('../client/dist-ssr/client.cjs')
+export const srcPath = path.resolve(__dirname, '../../../client')
+export const distPath = path.resolve(__dirname, '../../../client/dist/')
+export const ssrClientPath = path.resolve(
+  __dirname,
+  '../../../client/dist-ssr/client.cjs'
+)
