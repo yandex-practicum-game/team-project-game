@@ -19,27 +19,26 @@ import routerUserTheme from './modules/userTheme/user-theme.router'
 import routerSiteThemes from './modules/siteThemes/site-themes.router'
 
 import dbConnect from './db'
-import setDBInitialState from './initialState'
+import EmojiController from './modules/emoji/emoji.controller'
+import SiteThemesController from './modules/siteThemes/site-themes.controller'
+import { dbInitializer } from './dbInitializer'
 
-dbConnect()
+;(async function () {
+  // * CONNECT DATA BASE
+  await dbConnect()
+
   // * CREATE INITIAL THEMES
-  .then(async () => {
-    setDBInitialState()
-  })
+  await dbInitializer(SiteThemesController)
+
+  // * INIT EMOJI MODEL
+  await dbInitializer(EmojiController)
 
   // * CREATE APP
-  .then(async () => {
-    const app = express()
-    console.log('➜ 🎸 Express server started ...')
-    return app
-  })
+  const app = await express()
+  console.log('➜ 🎸 Express server started ...')
 
   // * CREATE VITE SERVER
-  .then(async app => {
-    if (!isDev) {
-      return app
-    }
-
+  if (isDev) {
     const vite = await createServer({
       server: { middlewareMode: true },
       root: srcPath,
@@ -50,40 +49,35 @@ dbConnect()
     app.use(vite.middlewares)
 
     console.log('➜ 🎸 Vite server started ...')
-    return app
-  })
+  }
 
   // * MIDDLEWARES
-  .then(app => {
-    app.use(cors())
-    app.use(cookieParser())
+  app.use(cors())
+  app.use(cookieParser())
 
-    app.use('/assets', staticMiddleware())
-    app.use('/api/v2', proxyMiddleware())
+  app.use('/assets', staticMiddleware())
+  app.use('/api/v2', proxyMiddleware())
 
-    app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.json())
 
-    app.use(ssrMiddleware)
+  app.use(ssrMiddleware)
 
-    console.log('➜ 🎸 Init middlewares ...')
-    return app
-  })
+  console.log('➜ 🎸 Init middlewares ...')
 
   // * ROUTES
-  .then(app => {
-    app.use(v1, routerSiteThemes)
-    app.use(v1, routerForum)
-    app.use(v1, routerTopic)
-    app.use(v1, routerComment)
-    app.use(v1, routerUserTheme)
+  app.use(v1, routerSiteThemes)
+  app.use(v1, routerForum)
+  app.use(v1, routerTopic)
+  app.use(v1, routerComment)
+  app.use(v1, routerUserTheme)
 
-    console.log('➜ 🎸 Init routes ...')
-    return app
+  console.log('➜ 🎸 Init routes ...')
+
+  // * LISTENING SERVER
+  app.listen(3000, () => {
+    console.log(`➜ 🎸 Server is listening on port: ${3000}`)
   })
 
-  .then(app => {
-    app.listen(3000, () => {
-      console.log(`➜ 🎸 Server is listening on port: ${3000}`)
-    })
-  })
+  return app
+})()

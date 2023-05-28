@@ -3,7 +3,7 @@ import SiteThemesService from './site-themes.service'
 import type { Request, Response } from 'express'
 
 export default class SiteThemesController {
-  static async createInitial() {
+  static async init() {
     try {
       await SiteThemesService.create()
       console.log('➜ 🎸 Initial themes is set')
