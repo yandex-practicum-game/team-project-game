@@ -96,7 +96,7 @@ const ForumPage = () => {
 
   const handleModalSubmit = useCallback(async () => {
     await fetchNewForums()
-  }, [])
+  }, [forumName])
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target

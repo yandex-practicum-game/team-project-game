@@ -108,7 +108,7 @@ const TopicPage = () => {
 
   const handleModalSubmit = useCallback(async () => {
     await fetchNewTopic()
-  }, [])
+  }, [topicName])
 
   useEffect(() => {
     if (!Number(paramId)) {
@@ -177,7 +177,7 @@ const TopicPage = () => {
                         <Link
                           to={`/forums/${paramId}/${topic.id}`}
                           className={s.TopicPage__item}>
-                          <p>{topic.title}</p>
+                          <p>{topic.title || 'MISSING TITLE'}</p>
                         </Link>
                       </li>
                     )
