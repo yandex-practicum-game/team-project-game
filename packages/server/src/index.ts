@@ -1,8 +1,11 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import { createServer } from 'vite'
 import { srcPath } from './constants/path'
 import { isDev } from './constants/env'
 import { v1 } from './constants/api'
-import { dbInitializer } from './dbInitializer'
+import { dbConnect, dbInitializer } from './db'
 
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -22,8 +25,6 @@ import routerSiteThemes from './modules/theme/siteThemes/site-themes.router'
 import SiteThemesController from './modules/theme/siteThemes/site-themes.controller'
 import EmojiController from './modules/emoji/emoji.controller'
 
-import dbConnect from './db'
-
 async function start() {
   const SERVER_PORT = process.env.SERVER_PORT
 
@@ -31,8 +32,7 @@ async function start() {
   await dbConnect()
 
   // * CREATE INIT DATA IN DATABASE
-  await dbInitializer(SiteThemesController) //  CREATE THEMES
-  await dbInitializer(EmojiController) //  CREATE EMOJI
+  await dbInitializer([SiteThemesController, EmojiController])
 
   // * CREATE APP
   const app = express()

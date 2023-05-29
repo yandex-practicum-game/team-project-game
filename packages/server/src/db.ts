@@ -1,7 +1,9 @@
+import { Controller } from './interfaces/controller'
+
 import pg from './modules/postgres'
 import prisma from './modules/prisma'
 
-const dbConnect = async () => {
+export const dbConnect = async () => {
   try {
     await pg.client.connect()
     console.log('  ➜ 🎸 Postgres connected to the database')
@@ -12,8 +14,9 @@ const dbConnect = async () => {
   } catch (error) {
     console.error('[Error] dbConnect: ', error)
   }
-
-  return null
 }
 
-export default dbConnect
+export const dbInitializer = async (contollers: Controller[]) => {
+  const inits = contollers.map(contoller => contoller.init)
+  await Promise.all(inits)
+}

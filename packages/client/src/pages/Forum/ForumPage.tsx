@@ -100,6 +100,7 @@ const ForumPage = () => {
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
+    console.log('value:', value)
     setForumName(value)
   }
 

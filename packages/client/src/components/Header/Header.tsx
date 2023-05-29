@@ -14,8 +14,6 @@ export const Header = () => {
       { name: 'Change profile', path: PATHNAMES.PROFILE_EDIT },
       { name: 'Change password', path: PATHNAMES.PASSWORD_EDIT },
       { name: 'Forum', path: PATHNAMES.FORUM },
-      { name: 'Topic', path: PATHNAMES.TOPIC },
-      { name: 'Comment', path: PATHNAMES.COMMENT },
       { name: 'Leaderboard', path: PATHNAMES.LEADERBOARD },
       { name: 'About game', path: PATHNAMES.GALAXIAN },
       { name: 'Game', path: PATHNAMES.GAME },
