@@ -1,7 +1,7 @@
 @import './../../styles/mixins.scss';
 @import './../../styles/variables.scss';
 
-.ForumPage {
+.CommentPage {
   min-height: 100vh;
   @include f-center;
   max-width: 1311px;
@@ -48,7 +48,7 @@
     font-size: 24px;
     line-height: 38px;
     display: grid;
-    grid-template-columns: 4fr 1fr 1fr;
+    grid-template-columns: 1fr 4fr;
     text-align: left;
 
     p {
@@ -58,6 +58,7 @@
 
       &:last-child {
         border-right: none;
+        text-align: right;
       }
     }
   }
