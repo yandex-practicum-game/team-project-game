@@ -8,7 +8,7 @@ import {
 } from 'react'
 import Pagination from 'react-js-pagination'
 
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import s from './ForumPage.module.scss'
 import { Button } from '../../components/Button'
 import { withAuth } from '../../hocs/withAuth'
@@ -28,12 +28,9 @@ import { Modal } from '../../components/Modal'
 import { Input } from '../../components/Input'
 
 const ForumPage = () => {
-  const location = useLocation()
   const actions = useActions()
   const alert = useAlert()
-
   const popupElemRef = useRef<HTMLInputElement>(null)
-
   const navigate = useNavigate()
   const [params, setParams] = useState<ForumRequestParams>({
     page: 1,
@@ -98,6 +95,7 @@ const ForumPage = () => {
     const contains =
       popupElemRef.current === event.target ||
       popupElemRef.current?.contains(event.target)
+
     if (!contains) {
       setIsModalVisible(false)
       setShowDescription(false)
@@ -105,9 +103,8 @@ const ForumPage = () => {
   }, [])
 
   const handleModalSubmit = useCallback(async () => {
-    fetchNewForums()
-    // window.location.reload()
-  }, [forumName])
+    await fetchNewForums()
+  }, [])
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -119,6 +116,7 @@ const ForumPage = () => {
       ...params,
       page: number,
     }
+
     setParams(newParams)
     fetchForums(newParams)
   }
@@ -129,8 +127,8 @@ const ForumPage = () => {
 
   useEffect(() => {
     actions.setIsMount(true)
-
     fetchForums(params)
+
     return () => {
       actions.setIsMount(false)
     }

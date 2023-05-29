@@ -62,18 +62,21 @@
       }
     }
   }
+
   &__buttons {
     display: flex;
     align-items: center;
     justify-content: space-between;
     column-gap: 2rem;
   }
+
   &__pagination {
     display: flex;
     margin-top: 2rem;
     font-size: 2rem;
     column-gap: 2rem;
   }
+
   &__button {
     background: #dbd2cd;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.52);
@@ -85,17 +88,21 @@
     line-height: 41px;
     padding: 0 1.5rem;
     text-decoration: none;
+
     &:hover {
       opacity: 0.7;
     }
   }
+
   &__buttonActive {
     color: #dbd2cd;
     background-color: rgba(34, 131, 137, 1);
   }
+
   &__buttonDisabled {
     opacity: 0.5;
     cursor: not-allowed;
+
     a {
       cursor: not-allowed;
     }

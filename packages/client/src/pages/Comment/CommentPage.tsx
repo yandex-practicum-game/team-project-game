@@ -111,11 +111,15 @@ const CommentPage = () => {
   }, [])
 
   const handlePageChange = (number: number) => {
-    if (!params) return
+    if (!params) {
+      return
+    }
+
     const newParams = {
       ...params,
       page: number,
     }
+
     setParams(newParams)
     fetchComments(newParams)
   }
@@ -124,6 +128,7 @@ const CommentPage = () => {
     const contains =
       popupElemRef.current === event.target ||
       popupElemRef.current?.contains(event.target)
+
     if (!contains) {
       setIsModalVisible(false)
       setShowDescription(false)
@@ -131,20 +136,21 @@ const CommentPage = () => {
   }, [])
 
   const handleModalSubmit = useCallback(async () => {
-    fetchNewComment()
-  }, [commentText])
+    await fetchNewComment()
+  }, [])
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setcommentText(value)
   }
 
-  if (!params)
+  if (!params) {
     return (
       <div className={s.CommentPage__spinner}>
         <Spinner />
       </div>
     )
+  }
 
   return (
     <Layout>

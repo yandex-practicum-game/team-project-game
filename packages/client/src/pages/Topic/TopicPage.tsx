@@ -36,7 +36,6 @@ const TopicPage = () => {
   const [createTopic] = useCreateTopicMutation()
   const [params, setParams] = useState<TopicRequestParams | null>(null)
   const [total, setTotal] = useState<number>(0)
-
   const isMount = useAppSelector(state => state.topic.isMount)
   const { topics } = useAppSelector(state => state.topic)
   const [modalError, setModalError] = useState(false)
@@ -78,6 +77,7 @@ const TopicPage = () => {
     const contains =
       popupElemRef.current === event.target ||
       popupElemRef.current?.contains(event.target)
+
     if (!contains) {
       setIsModalVisible(false)
       setShowDescription(false)
@@ -107,8 +107,8 @@ const TopicPage = () => {
   }
 
   const handleModalSubmit = useCallback(async () => {
-    fetchNewTopic()
-  }, [topicName])
+    await fetchNewTopic()
+  }, [])
 
   useEffect(() => {
     if (!Number(paramId)) {
@@ -122,7 +122,6 @@ const TopicPage = () => {
     }
 
     setParams(newParams)
-
     fetchTopics(newParams)
     actions.setIsMount(true)
 
@@ -142,9 +141,11 @@ const TopicPage = () => {
       ...params,
       page: number,
     }
+
     setParams(newParams)
     fetchTopics(newParams)
   }
+
   if (!params)
     return (
       <div className={s.TopicPage__spinner}>
