@@ -137,7 +137,7 @@ const CommentPage = () => {
 
   const handleModalSubmit = useCallback(async () => {
     await fetchNewComment()
-  }, [])
+  }, [commentText])
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
