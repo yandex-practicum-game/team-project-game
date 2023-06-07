@@ -14,6 +14,9 @@ services:
             - "${SERVER_PORT}:${SERVER_PORT}"
         environment:
           SERVER_PORT: ${SERVER_PORT}
+          LETSENCRYPT_HOST: ${APP_HOSTNAME}
+          VIRTUAL_HOST: ${APP_HOSTNAME}
+          VIRTUAL_PORT: ${SERVER_PORT}
         depends_on:
           - postgres
         volumes:
@@ -35,6 +38,45 @@ services:
         - ./tmp/pgdata:/var/lib/postgresql/data
       networks:
         - awesome
+
+    nginx-proxy:
+      image: nginxproxy/nginx-proxy
+      container_name: nginx-proxy
+      restart: always
+      ports:
+        - 80:80
+        - 443:443
+      depends_on:
+        - server
+      volumes:
+        - conf:/etc/nginx/conf.d
+        - vhost:/etc/nginx/vhost.d
+        - html:/usr/share/nginx/html
+        - certs:/etc/nginx/certs:ro
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+      networks:
+      - awesome
+
+    acme-companion:
+      image: nginxproxy/acme-companion
+      container_name: nginx-proxy-acme
+      restart: always
+      depends_on:
+        - nginx-proxy
+      volumes_from:
+        - nginx-proxy
+      volumes:
+        - certs:/etc/nginx/certs:rw
+        - acme:/etc/acme.sh
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+
+volumes:
+  volumes:
+  conf:
+  vhost:
+  html:
+  certs:
+  acme:
 
 networks:
   awesome:
