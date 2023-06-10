@@ -6,6 +6,8 @@ on:
       - main
       - test/actions
 
+permissions: write-all
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
