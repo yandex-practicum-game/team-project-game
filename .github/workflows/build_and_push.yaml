@@ -6,7 +6,7 @@ on:
       - main
       - test/actions
 
-permissions: read-all|write-all
+permissions: write-all
 
 jobs:
   build-and-push:
