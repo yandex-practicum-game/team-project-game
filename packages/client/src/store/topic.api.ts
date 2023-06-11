@@ -5,11 +5,12 @@ import {
   TopicQueryResponse,
   TopicRequestParams,
 } from '../types/topic.types'
+import { BASE_URL } from '../constants/apiConfig'
 
 export const topicApi = createApi({
   reducerPath: 'topicApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/api/v1',
+    baseUrl: BASE_URL,
     credentials: 'include',
   }),
   tagTypes: ['Topic'],

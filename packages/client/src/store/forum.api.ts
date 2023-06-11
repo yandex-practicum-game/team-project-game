@@ -1,15 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
-  ForumData,
   ForumQueryResponse,
   ForumRequestParams,
   NewForumQueryResponse,
 } from '../types/forum.types'
+import { BASE_URL } from '../constants/apiConfig'
 
 export const forumApi = createApi({
   reducerPath: 'forumApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/api/v1',
+    baseUrl: BASE_URL,
     credentials: 'include',
   }),
   tagTypes: ['Forum'],

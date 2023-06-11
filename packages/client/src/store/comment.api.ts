@@ -5,11 +5,12 @@ import {
   NewCommentQueryResponse,
   NewCommentRequest,
 } from '../types/comment.types'
+import { BASE_URL } from '../constants/apiConfig'
 
 export const commentApi = createApi({
   reducerPath: 'commentApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/api/v1',
+    baseUrl: BASE_URL,
     credentials: 'include',
   }),
   tagTypes: ['Comment'],
