@@ -1,0 +1,32 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.leaderboardItem {
+  min-width: 20rem;
+  height: 6rem;
+  border: 1px solid gray;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  color: $text-color;
+  font-size: 1.5rem;
+  gap: 1rem;
+  padding: 1rem;
+  justify-content: space-between;
+  cursor: default;
+
+  &__avatar {
+    max-width: 5rem;
+    max-height: 5rem;
+    border-radius: 50%;
+  }
+
+  &__info {
+    flex: 2;
+  }
+
+  &__name {
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+}

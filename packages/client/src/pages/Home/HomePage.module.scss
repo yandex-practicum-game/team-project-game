@@ -1,0 +1,12 @@
+.navbar {
+  display: flex;
+  padding: 21px 36px;
+
+  .navbar__item {
+    padding: 10px;
+  }
+
+  .navbar__item:not(:last-child) {
+    margin-right: 16px;
+  }
+}

@@ -1,0 +1,51 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.loginPage {
+  @include f-center;
+  display: flex;
+  height: 100vh;
+  font-family: 'Mina';
+
+  .loginForm {
+    @include f-center;
+    @include f-column;
+
+    padding: 6rem;
+
+    .title {
+      color: $text-color;
+      margin-bottom: 1.5rem;
+      text-shadow: 12px 4px 11px rgba(0, 0, 0, 0.25);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 34px;
+      text-align: center;
+    }
+
+    .form {
+      @include f-column;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      margin-top: 2rem;
+    }
+
+    .registrationLink {
+      color: $text-color;
+      padding: 1rem;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .loginError {
+      color: $error-color;
+      font-size: 1.5rem;
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .oauthButton {
+    margin-top: 1rem;
+  }
+}

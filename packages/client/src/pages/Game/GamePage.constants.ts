@@ -1,0 +1,2 @@
+export const DEFAULT_INNER_WIDTH = 1000
+export const DEFAULT_INNER_HEIGHT = 800
