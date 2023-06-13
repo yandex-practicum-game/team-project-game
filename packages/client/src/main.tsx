@@ -24,5 +24,5 @@ export const App = () => (
 ReactDOM.hydrateRoot(document.getElementById('root') as HTMLElement, <App />)
 
 if (process.env.NODE_ENV === 'production') {
-  // serviceWorkerRegistration()
+  serviceWorkerRegistration()
 }
