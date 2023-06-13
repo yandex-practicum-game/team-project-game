@@ -1,0 +1,43 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.LeaderboardPage {
+  min-height: 100vh;
+  @include f-center;
+
+  &__container {
+    @include f-center;
+    @include f-column;
+    text-align: center;
+    background: $underLayer;
+    box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 70px;
+    padding: 5rem;
+    min-width: 50%;
+    min-height: 40vh;
+  }
+
+  &__title {
+    color: $text-color;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 66rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  &__hint {
+    display: flex;
+    justify-content: center;
+    color: $text-color;
+    font-size: 2rem;
+  }
+}

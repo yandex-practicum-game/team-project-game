@@ -1,0 +1,37 @@
+@import './styles/main.scss';
+
+@font-face {
+  font-family: 'Mina';
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  // for all browser
+  src: url('./assets/fonts/Mina-Regular.eot');
+  src: url('./assets/fonts/Mina-Regular.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/Mina-Regular.woff2') format('woff2'),
+    url('./assets/fonts/Mina-Regular.woff') format('woff'),
+    url('./assets/fonts/Mina-Regular.ttf') format('truetype'),
+    url('./assets/fonts/Mina-Regular.svg#Mina-Regular') format('svg');
+}
+
+@font-face {
+  font-family: 'Mina';
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  // for all browser
+  src: url('./assets/fonts/Mina-Bold.eot');
+  src: url('./assets/fonts/Mina-Bold.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/Mina-Bold.woff2') format('woff2'),
+    url('./assets/fonts/Mina-Bold.woff') format('woff'),
+    url('./assets/fonts/Mina-Bold.ttf') format('truetype'),
+    url('./assets/fonts/Mina-Bold.svg#Mina-Bold') format('svg');
+}
+
+#root {
+  background-image: url('./assets/images/background.jpg');
+  background-size: cover;
+  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+}

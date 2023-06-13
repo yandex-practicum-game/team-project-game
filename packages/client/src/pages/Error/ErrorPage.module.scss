@@ -1,0 +1,29 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.errorPage {
+  min-height: 100vh;
+  @include f-center;
+
+  &__container {
+    @include f-center;
+    @include f-column;
+    text-align: center;
+    background: $underLayer;
+    box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 70px;
+    padding: 5rem;
+  }
+
+  &__title {
+    color: $text-color;
+    font-size: 8rem;
+    margin-bottom: 1rem;
+  }
+
+  &__subtitle {
+    color: $text-color;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+}

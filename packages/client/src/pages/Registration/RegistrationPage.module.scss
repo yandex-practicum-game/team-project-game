@@ -1,0 +1,40 @@
+@import './../../styles/mixins.scss';
+@import './../../styles/variables.scss';
+
+.registrationPage {
+  @include f-center;
+  min-height: 100vh;
+
+  .registrationForm {
+    @include f-center;
+    @include f-column;
+    background: $underLayer;
+    box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 70px;
+    padding: 6rem;
+
+    .title {
+      color: $text-color;
+      margin-bottom: 1.5rem;
+      text-shadow: 12px 4px 11px rgba(0, 0, 0, 0.25);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 34px;
+      text-align: center;
+    }
+
+    .form {
+      @include f-column;
+      font-size: 1.3rem;
+      margin-bottom: 3rem;
+      margin-top: 2rem;
+    }
+
+    .regError {
+      color: $error-color;
+      font-size: 1.5rem;
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+  }
+}

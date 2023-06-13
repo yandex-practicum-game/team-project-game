@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Forum {
+  id     Int    @id @default(autoincrement())
+  title  String
+  userId Int
+
+  Topic Topic[]
+}
+
+model Topic {
+  id      Int       @id @default(autoincrement())
+  title   String
+  userId  Int
+  forum   Forum     @relation(fields: [forumId], references: [id])
+  forumId Int
+  Comment Comment[]
+
+  @@index([forumId])
+}
+
+model Comment {
+  id       Int       @id @default(autoincrement())
+  userId   Int
+  content  String
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId Int?
+  comments Comment[] @relation("CommentToComment")
+  topic    Topic     @relation(fields: [topicId], references: [id])
+  topicId  Int
+  emojis   Emoji[]   @relation("CommentToEmoji")
+
+  @@index([parentId])
+  @@index([topicId])
+}
+
+
+model Emoji {
+  id      Int    @id @default(autoincrement())
+  content String
+
+  comments Comment[] @relation("CommentToEmoji")
+
+  @@index([content])
+}
+
+model UserTheme {
+  id        Int             @id @default(autoincrement())
+  theme     SiteThemes      @relation(fields: [themeId], references: [id])
+  themeId   Int
+  userId    Int
+
+  @@index([userId])
+}
+
+model SiteThemes {
+  id          Int             @id @default(autoincrement())
+  theme       String          @unique
+  description String?
+  userThemes  UserTheme[]
+
+  @@index([theme])
+}
