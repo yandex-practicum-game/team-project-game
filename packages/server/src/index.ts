@@ -15,6 +15,7 @@ import cors from 'cors'
 import staticMiddleware from './modules/middlewares/static.middleware'
 import ssrMiddleware from './modules/middlewares/ssr.middleware'
 import proxyMiddleware from './modules/middlewares/proxy.middleware'
+import cspMiddleware from './modules/middlewares/cspMiddleware'
 
 import routerForum from './modules/forum/forum.router'
 import routerTopic from './modules/topic/topic.router'
@@ -52,6 +53,8 @@ async function start() {
   // * MIDDLEWARES
   app.use(cors())
   app.use(cookieParser())
+  app.use(cspMiddleware())
+
   app.use('/assets', staticMiddleware())
   app.use('/api/v2', proxyMiddleware())
   app.use(bodyParser.urlencoded({ extended: true }))
