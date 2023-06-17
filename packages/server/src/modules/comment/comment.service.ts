@@ -4,7 +4,7 @@ import type { Comment } from '@prisma/client'
 
 export default class CommentService {
   static async create(data: Omit<Required<Comment>, 'id'>) {
-    const { content, userId, parentId, topicId } = data
+    const { content, userId, parentId, topicId, username } = data
 
     if (!parentId) {
       const comment = await prisma.comment.create({
@@ -12,6 +12,7 @@ export default class CommentService {
           topic: { connect: { id: topicId } },
           content: content,
           userId: userId,
+          username: username,
         },
       })
 

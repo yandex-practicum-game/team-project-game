@@ -19,9 +19,6 @@ services:
           VIRTUAL_PORT: ${SERVER_PORT}
         depends_on:
           - postgres
-        volumes:
-          - ./.env:/app/.env
-          - ./packages/server/src/modules/prisma:/app/prisma
         command: ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && node /app/server/src/index.js"]
         networks:
           - awesome

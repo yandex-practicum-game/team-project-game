@@ -27,11 +27,16 @@ const authMiddleware = async (
     })
 
     req.body.userId = resp.data.id
+    req.body.username = resp.data.login
 
     next()
   } catch (error) {
     console.error('[Error] authMiddleware:', error)
-    next(error)
+    res
+      .status(401)
+      .clearCookie('authCookie')
+      .clearCookie('uuid')
+      .json({ error: 'authenticate error' })
   }
 }
 

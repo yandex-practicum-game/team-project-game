@@ -32,6 +32,7 @@ model Topic {
 model Comment {
   id       Int       @id @default(autoincrement())
   userId   Int
+  username String    @default("")
   content  String
   parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
   parentId Int?
@@ -44,7 +45,6 @@ model Comment {
   @@index([topicId])
 }
 
-
 model Emoji {
   id      Int    @id @default(autoincrement())
   content String
@@ -55,17 +55,17 @@ model Emoji {
 }
 
 model UserTheme {
-  id        Int             @id @default(autoincrement())
-  theme     SiteThemes      @relation(fields: [themeId], references: [id])
-  themeId   Int
-  userId    Int
+  id      Int        @id @default(autoincrement())
+  theme   SiteThemes @relation(fields: [themeId], references: [id])
+  themeId Int
+  userId  Int
 
   @@index([userId])
 }
 
 model SiteThemes {
-  id          Int             @id @default(autoincrement())
-  theme       String          @unique
+  id          Int         @id @default(autoincrement())
+  theme       String      @unique
   description String?
   userThemes  UserTheme[]
 

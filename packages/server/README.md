@@ -13,6 +13,7 @@
   POSTGRES_HOST=postgres
   POSTGRES_PORT=5432
   DATABASE_URL="postgresql://postgres:postgres@${POSTGRES_HOST}:5432/postgres"
+  APP_HOSTNAME=thequackattack-galaxiangame-24.ya-praktikum.tech
 ```
 
 2. docker-compose build
@@ -31,6 +32,7 @@
   POSTGRES_HOST=localhost
   POSTGRES_PORT=5432
   DATABASE_URL="postgresql://postgres:postgres@${POSTGRES_HOST}:5432/postgres"
+  APP_HOSTNAME=localhost
 ```
 
 2. выполнить команду yarn bootstrap

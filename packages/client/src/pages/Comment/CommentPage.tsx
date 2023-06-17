@@ -170,7 +170,7 @@ const CommentPage = () => {
                   (comment: CommentData, index: number) =>
                     index < 5 && (
                       <li className={s.CommentPage__item} key={comment.id}>
-                        <p>{comment.userId}</p>
+                        <p>{comment.username}</p>
                         <p>{comment.content}</p>
                       </li>
                     )
