@@ -1,6 +1,7 @@
 export type CommentData = {
   id: number
   userId: number
+  username: number
   content: string
   parentId: number | null
   topicId: number
@@ -10,6 +11,7 @@ export type CommentData = {
 export type NewCommentQueryResponse = {
   id: number
   userId: number
+  username: number
   content: string
   parentId: number | null
   topicId: number

@@ -53,7 +53,7 @@ async function start() {
   // * MIDDLEWARES
   app.use(cors())
   app.use(cookieParser())
-  app.use(cspMiddleware())
+  // app.use(cspMiddleware())
 
   app.use('/assets', staticMiddleware())
   app.use('/api/v2', proxyMiddleware())
