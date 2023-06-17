@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { SigninRequest } from '../types/auth.types'
+import { SigninRequest, SingupRequest } from '../types/auth.types'
 import { ChangePasswordRequest, UserUpdateRequest } from '../types/user.types'
 import { BASE_URL } from '../constants/apiConfig'
 
@@ -25,6 +25,16 @@ export const baseApi = createApi({
         headers: { 'Content-Type': 'application/json' },
         body: data,
         responseHandler: response => response.text(),
+      }),
+      invalidatesTags: ['User'],
+    }),
+    signUp: build.mutation({
+      query: (data: SingupRequest) => ({
+        url: '/auth/signup',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: data,
+        responseHandler: response => response.json(),
       }),
       invalidatesTags: ['User'],
     }),
@@ -73,6 +83,7 @@ export const baseApi = createApi({
 export const {
   useGetUserQuery,
   useSignInMutation,
+  useSignUpMutation,
   useLogoutMutation,
   useChangeUserDataMutation,
   useChangeUserAvatarMutation,
