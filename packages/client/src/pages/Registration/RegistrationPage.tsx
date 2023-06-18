@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { Formik } from 'formik'
 import { Button } from '../../components/Button'
@@ -7,18 +7,14 @@ import { Input } from '../../components/Input'
 import s from './RegistrationPage.module.scss'
 import * as Yup from 'yup'
 import { Layout } from '../../components/Layout'
+import { TEXTS } from '../../constants/requests'
+import { useNavigate } from 'react-router-dom'
+import { useGetUserQuery, useSignUpMutation } from '../../store/base.api'
+import { SingupRequest } from '../../types/auth.types'
+import { PATHNAMES } from '../../constants/pathnames'
+import { Spinner } from '../../components/Spinner'
 
-type UserData = {
-  email: string
-  login: string
-  first_name: string
-  second_name: string
-  phone: string
-  password: string
-  confirm_password: string
-}
-
-const userData: UserData = {
+const userData: SingupRequest = {
   email: '',
   login: '',
   first_name: '',
@@ -44,7 +40,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[A-ZА-ЯЁ][^\d^\s][a-zа-яё-]*/, 'Invalid second name'),
   phone: Yup.string()
     .required('required')
-    .matches(/^[\+]?[0-9]{10,15}$/, 'Invalid phone'),
+    .matches(/^[0-9]{10,15}$/, 'Invalid phone'),
   password: Yup.string()
     .required('required')
     .matches(/^(?=^.{8,40}$)(?=.*\d)(?=.*[A-Z]).*$/, 'Invalid password'),
@@ -54,11 +50,32 @@ const validationSchema = Yup.object().shape({
 })
 
 export const RegistrationPage = () => {
-  const [error] = useState('')
+  const navigate = useNavigate()
+  const { data: user, isLoading: isLoadGetUser } = useGetUserQuery({})
+  const [signUp, { isLoading: isLoadCreateUser }] = useSignUpMutation()
+  const [error, setError] = useState('')
 
-  const createAccount = useCallback((userData: UserData) => {
-    console.log('userData:', userData)
+  const createAccount = useCallback(async (userData: SingupRequest) => {
+    setError('')
+    if (userData.password !== userData.confirm_password) {
+      setError('password not match')
+      return
+    }
+    try {
+      await signUp(userData).unwrap()
+      navigate(PATHNAMES.HOME)
+    } catch (err: any) {
+      setError(err.data?.reason || TEXTS.ERROR)
+    }
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      navigate(PATHNAMES.HOME)
+    }
+  }, [user])
+
+  const isLoading = isLoadGetUser || isLoadCreateUser
 
   return (
     <Layout>
@@ -100,7 +117,7 @@ export const RegistrationPage = () => {
                       error={errors.phone}
                       name={'phone'}
                       placeholder={'Phone number'}
-                      type={'number'}
+                      type={'text'}
                       value={values.phone}
                       onChange={handleChange}
                     />
@@ -142,7 +159,11 @@ export const RegistrationPage = () => {
                     />
                   </form>
                   {error && <span className={s.regError}>{error}</span>}
-                  <Button text="CREATE" type="submit" form={'reg-form'} />
+                  {isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <Button text="CREATE" type="submit" form={'reg-form'} />
+                  )}
                 </>
               )
             }}

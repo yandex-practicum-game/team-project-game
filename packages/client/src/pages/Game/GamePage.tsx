@@ -22,12 +22,15 @@ const GamePage = () => {
   const actions = useActions()
 
   useEffect(() => {
-    const context = ref.current?.getContext('2d')
+    const { current } = ref
+    const context = current?.getContext('2d')
     const emitter = Emitter.getInstance()
 
-    if (!context) {
+    if (!context || !current) {
       return
     }
+
+    current.requestPointerLock()
 
     const startGame = () => {
       const interval = globalThis.setInterval(() => {
